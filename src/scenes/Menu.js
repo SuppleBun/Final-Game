@@ -4,7 +4,9 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-
+        this.load.audio('brake', './assets/brake_sfx.wav');
+        this.load.audio('drift', './assets/drift_sfx.wav');
+        this.load.audio('engine', './assets/engine_sfx.wav');
     }
 
     create() {
