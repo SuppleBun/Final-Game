@@ -9,7 +9,7 @@ class Play extends Phaser.Scene {
 
     create() {
         this.add.text(20, 20, "Play Scene");
-        this.add.text(20, 20, "press 1 to go back to menu");
+        this.add.text(20, 40, "press 1 to go back to menu");
 
         // Add player
         this.player = this.physics.add.sprite(100, 100, 'player').setOrigin(0,0);

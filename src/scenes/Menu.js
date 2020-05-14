@@ -38,14 +38,20 @@ class Menu extends Phaser.Scene {
 
         this.add.text(centerX, centerY - textSpacer, 'Final Game Project', menuConfig).setOrigin(0.5);
         this.add.text(centerX, centerY - textSpacer/3, 'press 1 to go to play scene', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY - textSpacer/9, 'press 2 to go to tutorial scene', menuConfig).setOrigin(0.5);
 
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        keyTWO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
     }
 
     update(){
         if(Phaser.Input.Keyboard.JustDown(keyONE)){
             this.scene.start("playScene");
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(keyTWO)){
+            this.scene.start("tutorialScene");
         }
     }
 }
