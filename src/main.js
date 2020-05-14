@@ -1,11 +1,12 @@
 let config = {
-    type: Phaser.CANVAS,
+    type: Phaser.AUTO,
+    parent: "game",
     width: 640,
     height: 480,
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false, // allows to see the hitbox of sprites
+            debug: true, // allows to see the hitbox of sprites
             gravity: { y: 0}
         }
     },
@@ -18,6 +19,10 @@ let game = new Phaser.Game(config);
 game.setting = {
 
 }
+
+// global variables
+const centerX = game.config.width / 2;
+const centerY = game.config.height / 2;
 
 // reserve some keyboard variables
 let keyONE, keyTWO, keyTHREE, keyFOUR;

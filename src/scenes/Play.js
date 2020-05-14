@@ -12,7 +12,11 @@ class Play extends Phaser.Scene {
         this.add.text(20, 40, "press 1 to go back to menu");
 
         // Add player
-        this.player = this.physics.add.sprite(100, 100, 'player').setOrigin(0,0);
+        this.player = this.physics.add.sprite(centerX, centerY, 'player').setOrigin(0,0);
+
+        // Add camera
+        this.camera = this.cameras.main.setViewport(0, 0, game.config.width, game.config.height);
+        this.camera.startFollow(this.player);
 
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
