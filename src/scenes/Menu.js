@@ -4,17 +4,17 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-        this.load.audio('brake_sfx', './assets/brake.wav');
-        this.load.audio('drift_sfx', './assets/drift.wav');
-        this.load.audio('engine_sfx', './assets/engine.wav');
-        this.load.audio('raceStart_sfx', './assets/raceStart.wav');
-        this.load.audio('powerUp_sfx', './assets/engine.wav');
-        this.load.audio('collision_sfx', './assets/collision.wav');
-        this.load.audio('mainMenuBgm', './assets/mainMenuBgm.wav');
-        this.load.audio('stageOneBgm', './assets/stageOneBgm.wav');
-        this.load.audio('stageTwoBgm', './assets/stageTwoBgm.wav');
-        this.load.audio('stageThreeBgm', './assets/stageThreeBgm.wav');
-        this.load.audio('stageFourBgm', './assets/stageFourBgm.wav');
+        this.load.audio('brake_sfx', './assets/sound/brake.wav');
+        this.load.audio('drift_sfx', './assets/sound/drift.wav');
+        this.load.audio('engine_sfx', './assets/sound/engine.wav');
+        this.load.audio('raceStart_sfx', './assets/sound/raceStart.wav');
+        this.load.audio('powerUp_sfx', './assets/sound/engine.wav');
+        this.load.audio('collision_sfx', './assets/sound/collision.wav');
+        this.load.audio('mainMenuBgm', './assets/sound/mainMenuBgm.wav');
+        this.load.audio('stageOneBgm', './assets/sound/stageOneBgm.wav');
+        this.load.audio('stageTwoBgm', './assets/sound/stageTwoBgm.wav');
+        this.load.audio('stageThreeBgm', './assets/sound/stageThreeBgm.wav');
+        this.load.audio('stageFourBgm', './assets/sound/stageFourBgm.wav');
     }
 
     create() {
