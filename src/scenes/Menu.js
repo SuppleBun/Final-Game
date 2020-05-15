@@ -10,11 +10,8 @@ class Menu extends Phaser.Scene {
         this.load.audio('raceStart_sfx', './assets/sound/raceStart.wav');
         this.load.audio('powerUp_sfx', './assets/sound/engine.wav');
         this.load.audio('collision_sfx', './assets/sound/collision.wav');
-        this.load.audio('mainMenuBgm', './assets/sound/mainMenuBgm.wav');
-        this.load.audio('stageOneBgm', './assets/sound/stageOneBgm.wav');
-        this.load.audio('stageTwoBgm', './assets/sound/stageTwoBgm.wav');
-        this.load.audio('stageThreeBgm', './assets/sound/stageThreeBgm.wav');
-        this.load.audio('stageFourBgm', './assets/sound/stageFourBgm.wav');
+        this.load.audio('bgm', './assets/sound/bgm.wav');
+        
     }
 
     create() {
