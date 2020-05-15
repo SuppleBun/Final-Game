@@ -4,17 +4,22 @@ class Play extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('player', './assets/image/Player(top-down).png');
-        this.load.image('computer1', './assets/image/computer1.png');
-        this.load.image('waypoint', './assets/image/waypoint.png');
+        this.load.image('player1', './assets/image/Player1.png');
+        this.load.image('player2', './assets/image/Player2.png');
     }
 
     create() {
         this.add.text(20, 20, "Play Scene");
         this.add.text(20, 40, "press 1 to go back to menu");
 
+        // variable for if waypoint has been passed.
+        this.passed = false;
+
         // Add player
-        this.player = this.physics.add.sprite(centerX, centerY, 'player').setOrigin(0,0);
+        this.player = this.physics.add.sprite(centerX, centerY, 'player1').setOrigin(0,0);
+
+        // Add player2
+        this.player2 = this.physics.add.sprite(centerX, centerY, 'player2').setOrigin(0,0);
 
         // Add camera
         this.camera = this.cameras.main.setViewport(0, 0, game.config.width, game.config.height);
@@ -26,6 +31,7 @@ class Play extends Phaser.Scene {
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
     }
 
     update() {
@@ -44,5 +50,6 @@ class Play extends Phaser.Scene {
         if (keyDOWN.isDown) {
             this.player.y += 2;
         }
+          
     }
 }
