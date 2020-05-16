@@ -1,6 +1,6 @@
-class Play extends Phaser.Scene {
+class PlayS extends Phaser.Scene {
     constructor() {
-        super("playScene");
+        super("playSplitScene");
     }
 
     preload(){
@@ -9,9 +9,9 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(20, 20, "Play Scene");
+        this.add.text(20, 20, "Play(Split) Scene");
         this.add.text(20, 40, "press 1 to go back to menu");
-        this.add.text(20, 60, "press 2 to go to Split Play menu");
+        this.add.text(20, 60, "press 2 to go back to main Play menu");
 
         // variable for if waypoint has been passed.
         this.passed = false;
@@ -22,9 +22,11 @@ class Play extends Phaser.Scene {
         // Add player2
         this.player2 = this.physics.add.sprite(centerX, centerY, 'player2').setOrigin(0,0);
 
-        // Add camera
-        this.camera = this.cameras.main.setViewport(0, 0, game.config.width-64, game.config.height-64);
-        this.camera.startFollow(this.player);
+        // Add 2 cameras for split screen.
+        this.camera = this.cameras.main.setViewport(0, 0, (game.config.width/2), game.config.height);
+        this.camera.startFollow(this.player, true, 1, 1, -32, -32);
+        this.camera2 = this.cameras.add(centerX, 0, (game.config.width/2), game.config.height);
+        this.camera2.startFollow(this.player2, true, 1, 1, -32, -32);
 
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
@@ -33,6 +35,10 @@ class Play extends Phaser.Scene {
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
     }
 
@@ -41,7 +47,7 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
-            this.scene.start("playSplitScene");
+            this.scene.start("playScene");
         }
         if (keyLEFT.isDown) {
             this.player.x -= 2;
@@ -54,6 +60,18 @@ class Play extends Phaser.Scene {
         }
         if (keyDOWN.isDown) {
             this.player.y += 2;
+        }
+        if (keyA.isDown) {
+            this.player2.x -= 2;
+        }
+        if (keyD.isDown) {
+            this.player2.x += 2;
+        }
+        if (keyW.isDown) {
+            this.player2.y -= 2;
+        }
+        if (keyS.isDown) {
+            this.player2.y += 2;
         }
           
     }

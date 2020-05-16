@@ -10,7 +10,7 @@ let config = {
             gravity: { y: 0}
         }
     },
-    scene:  [ Menu, Play, Tutorial],
+    scene:  [ Menu, Play, PlayS, Tutorial],
 };
 
 let game = new Phaser.Game(config);
@@ -27,4 +27,5 @@ const centerY = game.config.height / 2;
 // reserve some keyboard variables
 let keyONE, keyTWO, keyTHREE, keyFOUR;
 let keyLEFT, keyUP, keyRIGHT, keyDOWN;
+let keyA, keyW, keyD, keyS;
 
