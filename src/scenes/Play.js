@@ -22,7 +22,7 @@ class Play extends Phaser.Scene {
 
         // Add player
         this.player = this.matter.add.sprite(centerX, centerY, 'player1').setOrigin(0.5, 0);
-        this.SteeringWheel = this.matter.add.sprite(centerX, centerY, 'steeringWheel').setOrigin(0.5, 0);
+        this.SteeringWheel = this.matter.add.sprite(100, 100, 'steeringWheel').setOrigin(0.5, 0);
 
         // Add player2
         this.player2 = this.matter.add.sprite(centerX, centerY, 'player2').setOrigin(0, 0);
@@ -61,20 +61,12 @@ class Play extends Phaser.Scene {
         // Movement
         // Got help from https://codepen.io/Samid737/pen/GdVZeX
         // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
-        if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.5) {
+        if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.7) {
             this.SteeringWheel.rotation -= 0.25;
-        } else {
-            if (this.SteeringWheel.rotation != 0) {
-                this.SteeringWheel.rotation += 0.25;
-            }
         }
 
-        if (keyRIGHT.isDown && this.SteeringWheel.rotation < 0.5) {
+        if (keyRIGHT.isDown && this.SteeringWheel.rotation < 0.7) {
             this.SteeringWheel.rotation += 0.25;
-        } else {
-            if (this.SteeringWheel.rotation != 0) {
-                this.SteeringWheel.rotation -= 0.25;
-            }
         }
 
         if (keyUP.isDown) {
@@ -83,21 +75,24 @@ class Play extends Phaser.Scene {
         else {
             if (carSpeed >= 0) {
                 carSpeed -= 0.01;
-            } 
+            }
         }
 
         if (keyDOWN.isDown) {
             carSpeed -= 0.01;
         }
         else {
-            if (carSpeed <= -0.5){
+            if (carSpeed <= 0) {
                 carSpeed += 0.01;
-            }  
+            }
+        }
+
+        if (!keyLEFT.isDown && !keyRIGHT.isDown) {
+            this.SteeringWheel.rotation = 0;
         }
 
         var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
-        this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.05 * Math.exp(-speedsquared / 100));
-
+        this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.03 * Math.exp(-speedsquared / 100));
 
         //no drift
         this.player.setVelocityX(Math.sin(this.player.rotation) * carSpeed);
