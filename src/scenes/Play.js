@@ -22,7 +22,7 @@ class Play extends Phaser.Scene {
         this.player2 = this.physics.add.sprite(centerX, centerY, 'player2').setOrigin(0,0);
 
         // Add camera
-        this.camera = this.cameras.main.setViewport(0, 0, game.config.width, game.config.height);
+        this.camera = this.cameras.main.setViewport(0, 0, game.config.width-64, game.config.height-64);
         this.camera.startFollow(this.player);
 
         // define keys
