@@ -1,3 +1,5 @@
+var carSpeed = 0;
+var staticFriction = 1;
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
@@ -6,9 +8,12 @@ class Play extends Phaser.Scene {
     preload() {
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
+        this.load.image('steeringWheel', './assets/image/waypoint.png')
     }
 
     create() {
+        this.matter.world.setBounds().disableGravity();
+
         this.add.text(20, 20, "Play Scene");
         this.add.text(20, 40, "press 1 to go back to menu");
         this.add.text(20, 60, "press 2 to go to Split Play menu");
@@ -17,10 +22,11 @@ class Play extends Phaser.Scene {
         this.passed = false;
 
         // Add player
-        this.player = this.physics.add.sprite(centerX, centerY, 'player1').setOrigin(0.5, 0);
+        this.player = this.matter.add.sprite(centerX, centerY, 'player1').setOrigin(0.5, 0);
+        this.SteeringWheel = this.matter.add.sprite(centerX, centerY, 'steeringWheel').setOrigin(0.5, 0);
 
         // Add player2
-        this.player2 = this.physics.add.sprite(centerX, centerY, 'player2').setOrigin(0, 0);
+        this.player2 = this.matter.add.sprite(centerX, centerY, 'player2').setOrigin(0, 0);
 
         // Add camera
         this.camera = this.cameras.main.setViewport(0, 0, game.config.width - 64, game.config.height - 64);
@@ -36,8 +42,6 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        var velocity = 0;
-
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }
@@ -46,46 +50,33 @@ class Play extends Phaser.Scene {
         }
 
         // Movement
-        if (keyLEFT.isDown) {
-            this.player.x -= 1;
-            this.player.angle = -90;
+        if (keyLEFT.isDown && this.SteeringWheel.rotation > -1.5) {
+            this.SteeringWheel.rotation -= 0.1;
         }
-        if (keyRIGHT.isDown) {
-            this.player.x += 1;
-            this.player.angle = 90;
+    
+        if (keyRIGHT.isDown && this.SteeringWheel.rotation < 1.5) {
+            this.SteeringWheel.rotation += 0.1;
         }
 
         if (keyUP.isDown) {
-            if (keyUP.isDown && keyLEFT.isDown) {
-                this.player.angle = -45;
-                this.player.y -= 1;
-            }
-
-            else if (keyUP.isDown && keyRIGHT.isDown) {
-                this.player.angle = 45;
-                this.player.y -= 1;
-            }
-
-            else {
-                this.player.y -= 1;
-                this.player.angle = 0;
-            }
+            carSpeed += 0.04;
         }
 
         if (keyDOWN.isDown) {
-            if (keyDOWN.isDown && keyLEFT.isDown) {
-                this.player.angle = -135;
-                this.player.y += 1;
-            }
-
-            else if (keyDOWN.isDown && keyRIGHT.isDown) {
-                this.player.angle = 135;
-                this.player.y += 1;
-            }
-            else {
-                this.player.y += 1;
-                this.player.angle = 180;
-            }
+            carSpeed -= 0.04;
         }
+        var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
+        //if we have enough power, allow movement
+        if (speedsquared > staticFriction) {
+            this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.05 * Math.exp(-speedsquared / 100));
+        }
+
+        //no drift
+        //player.setVelocityX(Math.sin(player.rotation)*carSpeed);
+        //player.setVelocityY(-Math.cos(player.rotation)*carSpeed);
+
+        //with drift
+        this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * carSpeed);
+        this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * carSpeed);
     }
 }

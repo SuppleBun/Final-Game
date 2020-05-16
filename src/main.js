@@ -4,8 +4,8 @@ let config = {
     width: 840,
     height: 480,
     physics: {
-        default: 'arcade',
-        arcade: {
+        default: 'matter',
+        matter: {
             debug: true, // allows to see the hitbox of sprites
             gravity: { y: 0}
         }
