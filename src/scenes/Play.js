@@ -1,48 +1,109 @@
+var carSpeed = 0;
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
     }
 
-    preload(){
-        this.load.image('player', './assets/image/Player(top-down).png');
-        this.load.image('computer1', './assets/image/computer1.png');
-        this.load.image('waypoint', './assets/image/waypoint.png');
+    preload() {
+        this.load.image('player1', './assets/image/Player1.png');
+        this.load.image('player2', './assets/image/Player2.png');
+        this.load.image('steeringWheel', './assets/image/waypoint.png');
+        this.load.spritesheet('start_light', './assets/start_light.png', {frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3});
     }
 
     create() {
+        this.matter.world.setBounds().disableGravity();
+
         this.add.text(20, 20, "Play Scene");
         this.add.text(20, 40, "press 1 to go back to menu");
+        this.add.text(20, 60, "press 2 to go to Split Play menu");
 
         // Add player
-        this.player = this.physics.add.sprite(centerX, centerY, 'player').setOrigin(0,0);
+        this.player = this.matter.add.sprite(centerX, centerY, 'player1').setOrigin(0.5, 0);
+        this.SteeringWheel = this.matter.add.sprite(100, 100, 'steeringWheel').setOrigin(0.5, 0);
+
+        // Add player2
+        this.player2 = this.matter.add.sprite(centerX, centerY, 'player2').setOrigin(0, 0);
 
         // Add camera
-        this.camera = this.cameras.main.setViewport(0, 0, game.config.width, game.config.height);
+        this.camera = this.cameras.main.setViewport(0, 0, game.config.width - 64, game.config.height - 64);
         this.camera.startFollow(this.player);
 
-        // define keys
+        // define scene change keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        keyTWO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+
+        // define acceleration key
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+
+        // define brake key
+        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
+        // define steering key
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
     }
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }
-        if (keyLEFT.isDown) {
-            this.player.x -= 2;
+        if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
+            this.scene.start("playSplitScene");
         }
-        if (keyRIGHT.isDown) {
-            this.player.x += 2;
+
+        // Movement
+        // Got help from https://codepen.io/Samid737/pen/GdVZeX
+        // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
+
+        // Car Steering
+        console.log(carSpeed);
+        if (carSpeed == 0.009999999999999913 || carSpeed == 0.009999999999999691) {
+            this.SteeringWheel.rotation = 0;
+        } else {
+            if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.7) {
+                this.SteeringWheel.rotation -= 0.25;
+            }
+
+            if (keyRIGHT.isDown && this.SteeringWheel.rotation < 0.7) {
+                this.SteeringWheel.rotation += 0.25;
+            }
         }
+
+        // Car acceleration and deceleration
         if (keyUP.isDown) {
-            this.player.y -= 2;
+            carSpeed += 0.01;
         }
+        else {
+            if (carSpeed >= 0) {
+                carSpeed -= 0.01;
+            }
+        }
+
         if (keyDOWN.isDown) {
-            this.player.y += 2;
+            carSpeed -= 0.01;
         }
+        else {
+            if (carSpeed <= 0) {
+                carSpeed += 0.01;
+            }
+        }
+
+        // Prevents car from spinning like crazy
+        if (!keyLEFT.isDown && !keyRIGHT.isDown) {
+            this.SteeringWheel.rotation = 0;
+        }
+
+        var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
+        this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.03 * Math.exp(-speedsquared / 100));
+
+        //no drift
+        this.player.setVelocityX(Math.sin(this.player.rotation) * carSpeed);
+        this.player.setVelocityY(-Math.cos(this.player.rotation) * carSpeed);
+
+        //with drift
+        //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * carSpeed);
+        //this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * carSpeed);
     }
 }
