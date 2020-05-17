@@ -7,7 +7,8 @@ class Play extends Phaser.Scene {
     preload() {
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
-        this.load.image('steeringWheel', './assets/image/waypoint.png')
+        this.load.image('steeringWheel', './assets/image/waypoint.png');
+        this.load.spritesheet('start_light', './assets/start_light.png', {frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3});
     }
 
     create() {
@@ -16,9 +17,6 @@ class Play extends Phaser.Scene {
         this.add.text(20, 20, "Play Scene");
         this.add.text(20, 40, "press 1 to go back to menu");
         this.add.text(20, 60, "press 2 to go to Split Play menu");
-
-        // variable for if waypoint has been passed.
-        this.passed = false;
 
         // Add player
         this.player = this.matter.add.sprite(centerX, centerY, 'player1').setOrigin(0.5, 0);
@@ -36,18 +34,15 @@ class Play extends Phaser.Scene {
         keyTWO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
 
         // define acceleration key
-        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 
         // define brake key
-        keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 
         // define steering key
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
-        // define other keys
-        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
     }
 
     update() {
