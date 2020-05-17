@@ -8,15 +8,16 @@ class Play extends Phaser.Scene {
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
         this.load.image('steeringWheel', './assets/image/waypoint.png');
-        this.load.spritesheet('start_light', './assets/start_light.png', { frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3 });
     }
 
     create() {
         this.matter.world.setBounds().disableGravity();
 
-        this.add.text(20, 20, "Play Scene");
-        this.add.text(20, 40, "press 1 to go back to menu");
-        this.add.text(20, 60, "press 2 to go to Split Play menu");
+        this.add.text(20, 20, "Player Movement Scene");
+        this.add.text(20, 40, "press 1 to go back to Main menu");
+        this.add.text(20, 60, "press 2 to go to Gameplay scene");
+        this.add.text(20, 80, "Player1: Arrow keys to move");
+        this.add.text(20, 100, "Player2: WASD to move");
 
         // Add player
         this.player = this.matter.add.sprite(centerX, centerY, 'player1').setOrigin(0.5, 0);

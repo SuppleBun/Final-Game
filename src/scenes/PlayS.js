@@ -6,7 +6,9 @@ class PlayS extends Phaser.Scene {
     preload(){
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
-        this.load.image('test', './assets/image/test.png');
+        this.load.image('livingRoom', './assets/image/livingRoom.png');
+        this.load.image('bathroom', './assets/image/bathroom.png');
+        this.load.image('kitchen', './assets/image/kitchen.png');
         this.load.spritesheet('start_light', './assets/image/start_light.png', {frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3});
         this.load.spritesheet('go_effect', './assets/image/go.png', {frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 6});
         this.load.spritesheet('firework', './assets/image/firework.png', {frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 2});
@@ -36,9 +38,15 @@ class PlayS extends Phaser.Scene {
 
         this.matter.world.setBounds().disableGravity();
 
-        this.add.text(20, 20, "Play(Split) Scene");
-        this.add.text(20, 40, "press 1 to go back to menu");
-        this.add.text(20, 60, "press 2 to go back to main Play menu");
+        this.add.text(20, 20, "Gameplay Scene");
+        this.add.text(20, 40, "press 1 to go back to Main Menu");
+        this.add.text(20, 60, "press 2 to go back to Player movement menu");
+        this.add.text(20, 80, "Player1: Arrow keys to move");
+        this.add.text(20, 100, "Player2: WASD to move");
+
+        this.add.image(0, 0, 'livingRoom');
+        this.add.image(600, 0, 'bathroom');
+        this.add.image(0, 600, 'kitchen');
 
         // Add player
         this.player = this.matter.add.sprite(centerX, centerY, 'player1').setOrigin(0.5, 0);
@@ -71,6 +79,9 @@ class PlayS extends Phaser.Scene {
         //this.engineOn = this.sound.add('engine_sfx', {volume: 0.5});
         //this.engineOn.setLoop(true);
         //this.engineOn.play();
+        
+        // Play the engine On sound
+        this.sound.play('engineStart_sfx');
 
         // Play the countdown animation
         let countdown = this.add.sprite(centerX + 50, centerY-100, 'start_light');
