@@ -8,7 +8,7 @@ class Play extends Phaser.Scene {
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
         this.load.image('steeringWheel', './assets/image/waypoint.png');
-        this.load.spritesheet('start_light', './assets/start_light.png', {frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('start_light', './assets/start_light.png', { frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3 });
     }
 
     create() {
@@ -59,7 +59,7 @@ class Play extends Phaser.Scene {
 
         // Car Steering
         console.log(carSpeed);
-        if (carSpeed == 0.009999999999999913 || carSpeed == 0.009999999999999691) {
+        if (carSpeed < 0.01) {
             this.SteeringWheel.rotation = 0;
         } else {
             if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.7) {
@@ -90,7 +90,7 @@ class Play extends Phaser.Scene {
             }
         }
 
-        // Prevents car from spinning like crazy
+        // Prevents car from spinning like crazy lol
         if (!keyLEFT.isDown && !keyRIGHT.isDown) {
             this.SteeringWheel.rotation = 0;
         }
@@ -98,9 +98,16 @@ class Play extends Phaser.Scene {
         var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
         this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.03 * Math.exp(-speedsquared / 100));
 
-        //no drift
+        // no drift 
         this.player.setVelocityX(Math.sin(this.player.rotation) * carSpeed);
         this.player.setVelocityY(-Math.cos(this.player.rotation) * carSpeed);
+
+        // sets the maximum speed to 5
+        if (carSpeed >= 5) {
+            carSpeed = 5;
+            this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
+            this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
+        }
 
         //with drift
         //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * carSpeed);
