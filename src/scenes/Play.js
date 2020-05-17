@@ -56,14 +56,22 @@ class Play extends Phaser.Scene {
         // Movement
         // Got help from https://codepen.io/Samid737/pen/GdVZeX
         // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
-        if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.7) {
-            this.SteeringWheel.rotation -= 0.25;
+
+        // Car Steering
+        console.log(carSpeed);
+        if (carSpeed == 0.009999999999999913 || carSpeed == 0.009999999999999691) {
+            this.SteeringWheel.rotation = 0;
+        } else {
+            if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.7) {
+                this.SteeringWheel.rotation -= 0.25;
+            }
+
+            if (keyRIGHT.isDown && this.SteeringWheel.rotation < 0.7) {
+                this.SteeringWheel.rotation += 0.25;
+            }
         }
 
-        if (keyRIGHT.isDown && this.SteeringWheel.rotation < 0.7) {
-            this.SteeringWheel.rotation += 0.25;
-        }
-
+        // Car acceleration and deceleration
         if (keyUP.isDown) {
             carSpeed += 0.01;
         }
@@ -82,6 +90,7 @@ class Play extends Phaser.Scene {
             }
         }
 
+        // Prevents car from spinning like crazy
         if (!keyLEFT.isDown && !keyRIGHT.isDown) {
             this.SteeringWheel.rotation = 0;
         }
