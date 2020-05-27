@@ -112,6 +112,9 @@ class PlayS extends Phaser.Scene {
         // Prevent players moving during countdown
         this.canMove = false;
 
+        // Prevent acceleration sound playing again
+        this.acceleration_play = true;
+
         // Add player UI group
         this.player_UI = this.add.group();
             {   
@@ -172,11 +175,11 @@ class PlayS extends Phaser.Scene {
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
-        this.engineIdle = this.sound.add('engineIdle_sfx', {volume: 0.5, loop: true});
+        this.engineIdle = this.sound.add('engineIdle_sfx', {volume: 0.25, loop: true});
         this.engineIdle.play();
 
         // Play the engine On sound
-        this.engineStart = this.sound.add('engineStart_sfx', {volume: 0.5});
+        this.engineStart = this.sound.add('engineStart_sfx', {volume: 0.25});
         this.engineStart.play();
 
         // Play the countdown animation
@@ -314,8 +317,19 @@ class PlayS extends Phaser.Scene {
                     }
                 }
                 this.carSpeed += 0.01;
+
+                // Play the acceleration sound
+                this.acceleration = this.sound.add('acceleration_sfx', {volume: 1.5});
+                if(this.acceleration_play){
+                    this.acceleration.play();
+                    this.acceleration_play = false;
+                    this.acceleration.on('complete', () => {
+                        this.acceleration_play = true;
+                    })
+                }
             }
             else {
+                this.acceleration.stop();
                 if (this.carSpeed >= 0) {
                     // Play speed meter decrease animation
                     if(this.SteeringWheelAnim){
