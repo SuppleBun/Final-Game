@@ -7,7 +7,6 @@ class Play extends Phaser.Scene {
     preload() {
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
-        this.load.image('steeringWheel', './assets/image/waypoint.png');
     }
 
     create() {
