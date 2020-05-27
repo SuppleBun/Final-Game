@@ -62,9 +62,10 @@ class Play extends Phaser.Scene {
 
         // Car Steering
         console.log(this.carSpeed);
-        if (this.carSpeed < 0.01) {
+        if (this.carSpeed < 0.01 && this.carSpeed > -0.009999999999999913 && !keyDOWN.isDown) {
             this.SteeringWheel.rotation = 0;
-        } else {
+        }
+        else {
             if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.7) {
                 this.SteeringWheel.rotation -= 0.25;
             }
