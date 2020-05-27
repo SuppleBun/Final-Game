@@ -89,10 +89,10 @@ class PlayS extends Phaser.Scene {
         // Add 2 cameras for split screen.
         this.camera = this.cameras.main.setViewport(0, 0, (game.config.width/2), game.config.height);
         this.camera.startFollow(this.player, true, 1, 1, 0, 0);
-        this.camera.setZoom(1.25);
+        this.camera.setZoom(1.15);
         this.camera2 = this.cameras.add(centerX, 0, (game.config.width/2), game.config.height);
         this.camera2.startFollow(this.player2, true, 1, 1, 0, 0);
-        this.camera2.setZoom(1.25);
+        this.camera2.setZoom(1.15);
 
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
