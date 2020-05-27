@@ -61,7 +61,22 @@ class Play extends Phaser.Scene {
         // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
 
         // Car Steering
+        // sets the maximum speed to 5
+        if (this.carSpeed >= 5) {
+            this.carSpeed = 5;
+            this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
+            this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
+        }
+
+        // sets maximum reverse speed to -5
+        if (this.carSpeed <= -5) {
+            this.carSpeed = -5;
+            this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
+            this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
+        }
+
         console.log(this.carSpeed);
+        
         if (this.carSpeed < 0.01 && this.carSpeed > -0.009999999999999913 && !keyDOWN.isDown) {
             this.SteeringWheel.rotation = 0;
         } else {
@@ -104,13 +119,6 @@ class Play extends Phaser.Scene {
         // no drift 
         this.player.setVelocityX(Math.sin(this.player.rotation) * this.carSpeed);
         this.player.setVelocityY(-Math.cos(this.player.rotation) * this.carSpeed);
-
-        // sets the maximum speed to 5
-        if (this.carSpeed >= 5) {
-            this.carSpeed = 5;
-            this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
-            this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
-        }
 
         //with drift
         //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed);
