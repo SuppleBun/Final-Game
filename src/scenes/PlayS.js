@@ -167,7 +167,7 @@ class PlayS extends Phaser.Scene {
         // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
 
         // Car Steering
-        if (this.carSpeed < 0.01) {
+        if (this.carSpeed < 0.01 && this.carSpeed > -0.009999999999999913 && !keyDOWN.isDown) {
             this.SteeringWheel.rotation = 0;
         } else {
             if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.7) {
@@ -224,6 +224,8 @@ class PlayS extends Phaser.Scene {
         // Player 2 Movement
         // Car Steering
         if (this.carSpeed2 < 0.01) {
+            this.SteeringWheel.rotation = 0;
+        } if (this.carSpeed2 < 0.01 && this.carSpeed2 > -0.009999999999999913 && !keyD.isDown) {
             this.SteeringWheel.rotation = 0;
         } else {
             if (keyA.isDown && this.SteeringWheel.rotation > -0.7) {
