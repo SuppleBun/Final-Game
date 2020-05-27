@@ -172,12 +172,12 @@ class PlayS extends Phaser.Scene {
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
-        //this.engineOn = this.sound.add('engine_sfx', {volume: 0.5});
-        //this.engineOn.setLoop(true);
-        //this.engineOn.play();
+        this.engineIdle = this.sound.add('engineIdle_sfx', {volume: 0.5, loop: true});
+        this.engineIdle.play();
 
         // Play the engine On sound
-        this.sound.play('engineStart_sfx');
+        this.engineStart = this.sound.add('engineStart_sfx', {volume: 0.5});
+        this.engineStart.play();
 
         // Play the countdown animation
         let countdown = this.add.sprite(this.player.x + 32, this.player.y - 100, 'start_light');

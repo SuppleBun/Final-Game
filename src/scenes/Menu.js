@@ -7,6 +7,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('brake_sfx', './assets/sound/brake.wav');
         this.load.audio('drift_sfx', './assets/sound/drift.wav');
         this.load.audio('engineStart_sfx', './assets/sound/engineStart.wav');
+        this.load.audio('engineIdle_sfx', './assets/sound/engineIdle.wav');
         this.load.audio('raceStart_sfx', './assets/sound/raceStart.wav');
         this.load.audio('powerUp_sfx', './assets/sound/powerUp.wav');
         this.load.audio('collision_sfx', './assets/sound/collision.wav');
