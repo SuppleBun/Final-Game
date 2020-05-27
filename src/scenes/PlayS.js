@@ -6,15 +6,22 @@ class PlayS extends Phaser.Scene {
     preload(){
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
+        this.load.image('steeringWheel', './assets/image/UI_steeringwheel.png');
+        this.load.image('steeringWheel2', './assets/image/UI_steeringwheel2.png');
         this.load.image('livingRoom', './assets/image/livingRoom.png');
         this.load.image('bathroom', './assets/image/bathroom.png');
         this.load.image('kitchen', './assets/image/kitchen.png');
+        this.load.image('background', './assets/image/background.png');
         this.load.spritesheet('start_light', './assets/image/start_light.png', {frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3});
         this.load.spritesheet('go_effect', './assets/image/go.png', {frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 6});
         this.load.spritesheet('firework', './assets/image/firework.png', {frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 2});
     }
 
     create() {
+
+        this.carSpeed = 0;
+        this.carSpeed2 = 0;
+
         // create animation for countdown-light
         this.anims.create({
             key: 'countdown',
@@ -36,7 +43,9 @@ class PlayS extends Phaser.Scene {
             frameRate: 10,
         })
 
-        this.matter.world.setBounds().disableGravity();
+        this.matter.world.setBounds(0,0,1400,1400);
+        //this.matter.world.setBounds().disableGravity();
+        //console.log(this.matter.world.walls)
 
         this.add.text(20, 20, "Gameplay Scene");
         this.add.text(20, 40, "press 1 to go back to Main Menu");
@@ -44,16 +53,35 @@ class PlayS extends Phaser.Scene {
         this.add.text(20, 80, "Player1: Arrow keys to move");
         this.add.text(20, 100, "Player2: WASD to move");
 
-        this.add.image(0, 0, 'livingRoom');
-        this.add.image(600, 0, 'bathroom');
-        this.add.image(0, 600, 'kitchen');
+        this.add.image(700, 700, 'background').setScale(2);
+        this.add.image(700, 700, 'livingRoom').setScale(2);
+
 
         // Add player
-        this.player = this.matter.add.sprite(centerX, centerY, 'player1').setOrigin(0.5, 0);
-        this.SteeringWheel = this.matter.add.sprite(100, 100, 'steeringWheel').setOrigin(0.5, 0);
+        this.player = this.matter.add.sprite(1270,1150, 'player1').setOrigin(0.5, 0);
+
+        // Hitbox for player
+        this.player.setBody({
+            type: 'rectangle',
+            width: 32,
+            height: 47
+        })
+
+        // Steeringwheel for player
+        this.SteeringWheel = this.matter.add.sprite(1500, 1500, 'steeringWheel').setOrigin(0.5, 0);
 
         // Add player2
-        this.player2 = this.matter.add.sprite(centerX + 100, centerY, 'player2').setOrigin(0.5, 0);
+        this.player2 = this.matter.add.sprite(1335, 1150, 'player2').setOrigin(0.5, 0);
+
+        // Hitbox for player2
+        this.player2.setBody({
+             type: 'rectangle',
+            width: 32,
+            height: 47
+        })
+
+        // Steeringwheel for player2
+        this.SteeringWheel2 = this.matter.add.sprite(1550, 1550, 'steeringWheel2').setOrigin(0.5, 0);
 
         // Prevent players moving during countdown
         this.canMove = false;
@@ -84,7 +112,7 @@ class PlayS extends Phaser.Scene {
         this.sound.play('engineStart_sfx');
 
         // Play the countdown animation
-        let countdown = this.add.sprite(centerX + 50, centerY-100, 'start_light');
+        let countdown = this.add.sprite(this.player.x + 32, this.player.y-100, 'start_light');
         countdown.anims.play('countdown');
         countdown.on('animationcomplete', () => {
             countdown.destroy(true);
@@ -97,8 +125,8 @@ class PlayS extends Phaser.Scene {
             this.bgm.play();
 
             // Play 'Go!' and firework effect
-            let go_effect = this.add.sprite(centerX + 50, centerY, 'go_effect');
-            let firework_effect = this.add.sprite(centerX + 50, centerY, 'firework').setScale(2);
+            let go_effect = this.add.sprite(this.player.x, this.player.y, 'go_effect');
+            let firework_effect = this.add.sprite(this.player.x, this.player.y, 'firework').setScale(2);
 
             go_effect.anims.play('go');
             firework_effect.anims.play('firework');
@@ -125,16 +153,23 @@ class PlayS extends Phaser.Scene {
     }
 
     update() {
+        //console.log(this.player.x)
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
             this.scene.start("playScene");
         }
+        console.log(this.canMove)
         if(this.canMove){
-            // Player 1 Movement
-            // Got help from https://codepen.io/Samid737/pen/GdVZeX
-            // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
+        // Player 1Movement
+        // Got help from https://codepen.io/Samid737/pen/GdVZeX
+        // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
+
+        // Car Steering
+        if (this.carSpeed < 0.01) {
+            this.SteeringWheel.rotation = 0;
+        } else {
             if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.7) {
                 this.SteeringWheel.rotation -= 0.25;
             }
@@ -142,53 +177,105 @@ class PlayS extends Phaser.Scene {
             if (keyRIGHT.isDown && this.SteeringWheel.rotation < 0.7) {
                 this.SteeringWheel.rotation += 0.25;
             }
+        }
 
-            if (keyUP.isDown) {
-                carSpeed += 0.01;
+        // Car acceleration and deceleration
+        if (keyUP.isDown) {
+            this.carSpeed += 0.01;
+        }
+        else {
+            if (this.carSpeed >= 0) {
+                this.carSpeed -= 0.01;
             }
-            else {
-                if (carSpeed >= 0) {
-                    carSpeed -= 0.01;
-                }
+        }
+
+        if (keyDOWN.isDown) {
+            this.carSpeed -= 0.01;
+        }
+        else {
+            if (this.carSpeed <= 0) {
+                this.carSpeed += 0.01;
+            }
+        }
+
+        // Prevents car from spinning like crazy lol
+        if (!keyLEFT.isDown && !keyRIGHT.isDown) {
+            this.SteeringWheel.rotation = 0;
+        }
+
+        var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
+        this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.03 * Math.exp(-speedsquared / 100));
+
+        // no drift 
+        this.player.setVelocityX(Math.sin(this.player.rotation) * this.carSpeed);
+        this.player.setVelocityY(-Math.cos(this.player.rotation) * this.carSpeed);
+
+        // sets the maximum speed to 5
+        if (this.carSpeed >= 5) {
+            this.carSpeed = 5;
+            this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
+            this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
+        }
+
+        //with drift
+        //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed);
+        //this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed);
+
+        // Player 2 Movement
+        // Car Steering
+        if (this.carSpeed2 < 0.01) {
+            this.SteeringWheel.rotation = 0;
+        } else {
+            if (keyA.isDown && this.SteeringWheel.rotation > -0.7) {
+                this.SteeringWheel.rotation -= 0.25;
             }
 
-            if (keyDOWN.isDown) {
-                carSpeed -= 0.01;
+            if (keyD.isDown && this.SteeringWheel.rotation < 0.7) {
+                this.SteeringWheel.rotation += 0.25;
             }
-            else {
-                if (carSpeed <= 0) {
-                    carSpeed += 0.01;
-                }
-            }
+        }
 
-            if (!keyLEFT.isDown && !keyRIGHT.isDown) {
-                this.SteeringWheel.rotation = 0;
+        // Car acceleration and deceleration
+        if (keyW.isDown) {
+            this.carSpeed2 += 0.01;
+        }
+        else {
+            if (this.carSpeed2 >= 0) {
+                this.carSpeed2 -= 0.01;
             }
+        }
 
-            var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
-            this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.03 * Math.exp(-speedsquared / 100));
+        if (keyS.isDown) {
+            this.carSpeed2 -= 0.01;
+        }
+        else {
+            if (this.carSpeed2 <= 0) {
+                this.carSpeed2 += 0.01;
+            }
+        }
 
-            //no drift
-            this.player.setVelocityX(Math.sin(this.player.rotation) * carSpeed);
-            this.player.setVelocityY(-Math.cos(this.player.rotation) * carSpeed);
+        // Prevents car from spinning like crazy lol
+        if (!keyA.isDown && !keyD.isDown) {
+            this.SteeringWheel.rotation = 0;
+        }
 
-            //with drift
-            //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * carSpeed);
-            //this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * carSpeed);
+        var speedsquared = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
+        this.player2.setAngularVelocity(this.SteeringWheel.rotation * 0.03 * Math.exp(-speedsquared / 100));
 
-            // Player 2 Movement
-            if (keyA.isDown) {
-                this.player2.x -= 2;
-            }
-            if (keyD.isDown) {
-                this.player2.x += 2;
-            }
-            if (keyW.isDown) {
-                this.player2.y -= 2;
-            }
-            if (keyS.isDown) {
-                this.player2.y += 2;
-            }
+        // no drift 
+        this.player2.setVelocityX(Math.sin(this.player2.rotation) * this.carSpeed2);
+        this.player2.setVelocityY(-Math.cos(this.player2.rotation) * this.carSpeed2);
+
+        // sets the maximum speed to 5
+        if (this.carSpeed2 >= 5) {
+            this.carSpeed2 = 5;
+            this.player2.setVelocityX(Math.sin(this.player2.rotation) * 5);
+            this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 5);
+        }
+
+        //with drift
+        //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed2);
+        //this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed2);
         }   
     }
 }

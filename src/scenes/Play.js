@@ -1,4 +1,4 @@
-var carSpeed = 0;
+
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
@@ -44,6 +44,8 @@ class Play extends Phaser.Scene {
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
+        this.carSpeed = 0;
+
     }
 
     update() {
@@ -59,8 +61,8 @@ class Play extends Phaser.Scene {
         // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
 
         // Car Steering
-        console.log(carSpeed);
-        if (carSpeed < 0.01) {
+        console.log(this.carSpeed);
+        if (this.carSpeed < 0.01) {
             this.SteeringWheel.rotation = 0;
         } else {
             if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.7) {
@@ -74,20 +76,20 @@ class Play extends Phaser.Scene {
 
         // Car acceleration and deceleration
         if (keyUP.isDown) {
-            carSpeed += 0.01;
+            this.carSpeed += 0.01;
         }
         else {
-            if (carSpeed >= 0) {
-                carSpeed -= 0.01;
+            if (this.carSpeed >= 0) {
+                this.carSpeed -= 0.01;
             }
         }
 
         if (keyDOWN.isDown) {
-            carSpeed -= 0.01;
+            this.carSpeed -= 0.01;
         }
         else {
-            if (carSpeed <= 0) {
-                carSpeed += 0.01;
+            if (this.carSpeed <= 0) {
+                this.carSpeed += 0.01;
             }
         }
 
@@ -100,18 +102,18 @@ class Play extends Phaser.Scene {
         this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.03 * Math.exp(-speedsquared / 100));
 
         // no drift 
-        this.player.setVelocityX(Math.sin(this.player.rotation) * carSpeed);
-        this.player.setVelocityY(-Math.cos(this.player.rotation) * carSpeed);
+        this.player.setVelocityX(Math.sin(this.player.rotation) * this.carSpeed);
+        this.player.setVelocityY(-Math.cos(this.player.rotation) * this.carSpeed);
 
         // sets the maximum speed to 5
-        if (carSpeed >= 5) {
-            carSpeed = 5;
+        if (this.carSpeed >= 5) {
+            this.carSpeed = 5;
             this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
             this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
         }
 
         //with drift
-        //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * carSpeed);
-        //this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * carSpeed);
+        //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed);
+        //this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed);
     }
 }
