@@ -9,6 +9,8 @@ class PlayS extends Phaser.Scene {
         this.load.image('livingRoom', './assets/image/livingRoom.png');
         this.load.image('bathroom', './assets/image/bathroom.png');
         this.load.image('kitchen', './assets/image/kitchen.png');
+        this.load.image('garage', './assets/image/garage.png');
+        this.load.image('hallway', './assets/image/kitchenGarageHall.png');
         this.load.image('background', './assets/image/background.png');
         this.load.image('UI_item', './assets/image/UI_item.png');
         this.load.image('UI_steeringwheel', './assets/image/UI_steeringwheel.png');
@@ -61,20 +63,17 @@ class PlayS extends Phaser.Scene {
         })
         
 
-        this.matter.world.setBounds(0, 0, 1400, 1400);
+        this.matter.world.setBounds(0, 0, 2800, 4200);
         //this.matter.world.setBounds().disableGravity();
         //console.log(this.matter.world.walls)
 
-        /*
-        this.add.text(20, 20, "Gameplay Scene");
-        this.add.text(20, 40, "press 1 to go back to Main Menu");
-        this.add.text(20, 60, "press 2 to go back to Player movement menu");
-        this.add.text(20, 80, "Player1: Arrow keys to move");
-        this.add.text(20, 100, "Player2: WASD to move");*/
-
         // add background track
-        this.background = this.add.image(700, 700, 'background').setScale(2);
-        this.livingRoom = this.add.image(700, 700, 'livingRoom').setScale(2);
+        //this.background = this.add.image(700, 700, 'background').setScale(2);
+        this.bathroom = this.add.image(2100, 700, 'bathroom').setScale(2);
+        this.kitchen = this.add.image(700, 700, 'kitchen').setScale(2);
+        this.livingRoom = this.add.image(2100, 2100, 'livingRoom').setScale(2);
+        this.garage = this.add.image(2100, 3500, 'garage').setScale(2);
+        this.hallway = this.add.image(700, 2100, 'hallway').setScale(2);
 
         // Add item box (for now)
         this.item_box = this.matter.add.sprite(1270, 1050, 'item_box').setScale(0.75);
@@ -97,10 +96,6 @@ class PlayS extends Phaser.Scene {
             width: 32,
             height: 47
         })
-
-        //this.player.setOnCollidWith(this.item_box, () => {
-           // console.log("hit");
-        //})
 
         // Steeringwheel for player
         this.SteeringWheel = this.matter.add.sprite(-425, -95, 'UI_steeringwheel').setScale(2.5);
@@ -133,7 +128,7 @@ class PlayS extends Phaser.Scene {
 
         // Prevent acceleration sound playing again
         this.acceleration_play = true;
-        this.acceleration = this.sound.add('acceleration_sfx', {volume: 0.5});
+        this.acceleration = this.sound.add('acceleration_sfx', {volume: 0.3});
         this.acceleration.setRate(0.5);
 
         // Add player UI group
@@ -167,7 +162,8 @@ class PlayS extends Phaser.Scene {
         // Add 2 cameras for split screen.
         this.camera = this.cameras.main.setViewport(0, 0, (game.config.width/2), game.config.height);
         this.camera.startFollow(this.player, true, 1, 1, 0, 0);
-        this.camera.setZoom(1.15);
+        // this.camera.setZoom(1.15);
+        this.camera.setZoom(0.5);
 
         //this.camera.ignore(this.player_UI);
         this.camera2 = this.cameras.add(centerX, 0, (game.config.width/2), game.config.height);
