@@ -133,6 +133,8 @@ class PlayS extends Phaser.Scene {
 
         // Prevent acceleration sound playing again
         this.acceleration_play = true;
+        this.acceleration = this.sound.add('acceleration_sfx', {volume: 0.5});
+        this.acceleration.setRate(0.5);
 
         // Add player UI group
         this.player_UI = this.add.group();
@@ -286,7 +288,7 @@ class PlayS extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
             this.scene.start("playScene");
         }
-        console.log(this.canMove)
+        console.log(this.acceleration_play)
         if (this.canMove) {
             // Player 1Movement
             // Got help from https://codepen.io/Samid737/pen/GdVZeX
@@ -338,7 +340,6 @@ class PlayS extends Phaser.Scene {
                 this.carSpeed += 0.01;
 
                 // Play the acceleration sound
-                this.acceleration = this.sound.add('acceleration_sfx', {volume: 1.5});
                 if(this.acceleration_play){
                     this.acceleration.play();
                     this.acceleration_play = false;
