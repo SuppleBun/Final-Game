@@ -16,6 +16,7 @@ class PlayS extends Phaser.Scene {
         this.load.spritesheet('start_light', './assets/image/start_light.png', { frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3 });
         this.load.spritesheet('go_effect', './assets/image/go.png', { frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 6 });
         this.load.spritesheet('firework', './assets/image/firework.png', { frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 2 });
+        this.load.spritesheet('item_box', './assets/image/item_box.png', { frameWidth: 55, frameHeight: 55, startFrame: 0, endFrame: 7 });
     }
 
     create() {
@@ -44,19 +45,21 @@ class PlayS extends Phaser.Scene {
             frameRate: 10,
         })
 
-        // create speed increase animation for speed meter
+        // create animation for speed meter
         this.anims.create({
             key: 'speed_increase',
             frames: this.anims.generateFrameNumbers('UI_speed', { start: 0, end: 42, first: 0 }),
             frameRate: 5,
         })
-        
-        // create animation for speed meter
+
+        // create rotate animation for item box
         this.anims.create({
-            key: 'speed_decrease',
-            frames: this.anims.generateFrameNumbers('UI_speed', { start: 0, end: 42, first: 0 }),
-            frameRate: 5,
-        }) 
+            key: 'box_rotate',
+            frames: this.anims.generateFrameNumbers('item_box', { start: 0, end: 7, first: 0 }),
+            frameRate: 8,
+            repeat: -1,
+        })
+        
 
         this.matter.world.setBounds(0, 0, 1400, 1400);
         //this.matter.world.setBounds().disableGravity();
@@ -73,6 +76,18 @@ class PlayS extends Phaser.Scene {
         this.background = this.add.image(700, 700, 'background').setScale(2);
         this.livingRoom = this.add.image(700, 700, 'livingRoom').setScale(2);
 
+        // Add item box (for now)
+        this.item_box = this.matter.add.sprite(1270, 1050, 'item_box').setScale(0.75);
+
+        // Hitbox for item box
+        this.item_box.setBody({
+            type: 'rectangle',
+            width: 32,
+            height: 32
+        })
+
+        this.item_box.anims.play("box_rotate");
+
         // Add player
         this.player = this.matter.add.sprite(1270, 1150, 'player1').setOrigin(0.5, 0);
 
@@ -82,6 +97,10 @@ class PlayS extends Phaser.Scene {
             width: 32,
             height: 47
         })
+
+        //this.player.setOnCollidWith(this.item_box, () => {
+           // console.log("hit");
+        //})
 
         // Steeringwheel for player
         this.SteeringWheel = this.matter.add.sprite(-425, -95, 'UI_steeringwheel').setScale(2.5);
@@ -111,6 +130,9 @@ class PlayS extends Phaser.Scene {
 
         // Prevent players moving during countdown
         this.canMove = false;
+
+        // Prevent acceleration sound playing again
+        this.acceleration_play = true;
 
         // Add player UI group
         this.player_UI = this.add.group();
@@ -172,11 +194,11 @@ class PlayS extends Phaser.Scene {
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
-        this.engineIdle = this.sound.add('engineIdle_sfx', {volume: 0.5, loop: true});
+        this.engineIdle = this.sound.add('engineIdle_sfx', {volume: 0.25, loop: true});
         this.engineIdle.play();
 
         // Play the engine On sound
-        this.engineStart = this.sound.add('engineStart_sfx', {volume: 0.5});
+        this.engineStart = this.sound.add('engineStart_sfx', {volume: 0.25});
         this.engineStart.play();
 
         // Play the countdown animation
@@ -314,6 +336,16 @@ class PlayS extends Phaser.Scene {
                     }
                 }
                 this.carSpeed += 0.01;
+
+                // Play the acceleration sound
+                this.acceleration = this.sound.add('acceleration_sfx', {volume: 1.5});
+                if(this.acceleration_play){
+                    this.acceleration.play();
+                    this.acceleration_play = false;
+                    this.acceleration.on('complete', () => {
+                        this.acceleration_play = true;
+                    })
+                }
             }
             else {
                 if (this.carSpeed >= 0) {
