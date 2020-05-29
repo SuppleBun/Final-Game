@@ -22,7 +22,6 @@ class PlayS extends Phaser.Scene {
     }
 
     create() {
-
         this.carSpeed = 0;
         this.carSpeed2 = 0;
 
