@@ -273,6 +273,8 @@ class PlayS extends Phaser.Scene {
             },
             loop: true
         })
+
+        //this.matter.world.update60Hz();
     }
 
     update() {

@@ -2,6 +2,10 @@ let config = {
     type: Phaser.AUTO,
     width: 960,
     height: 480,
+    fps: {
+        target:60,
+        forceSetTimeOut: true
+    },
     physics: {
         default: 'matter',
         matter: {
