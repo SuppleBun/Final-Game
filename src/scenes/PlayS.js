@@ -290,7 +290,7 @@ class PlayS extends Phaser.Scene {
             // Player 1 Movement
             // Got help from https://codepen.io/Samid737/pen/GdVZeX
             // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
-            // console.log(this.carSpeed);
+            //console.log(this.carSpeed);
             // sets maximum forward speed to 10
             if (this.carSpeed >= 10) {
                 this.carSpeed = 10;
@@ -306,7 +306,7 @@ class PlayS extends Phaser.Scene {
             }
 
             // Car Steering
-            if (this.carSpeed <= 0.25 && !keyDOWN.isDown) {
+            if (this.carSpeed <= 0.25 && this.carSpeed >= 0 && !keyDOWN.isDown) {
                 this.carSpeed = 0;
                 this.SteeringWheel.rotation = 0;
             } else {
@@ -354,7 +354,7 @@ class PlayS extends Phaser.Scene {
                         this.SteeringWheelAnim = false;
                     }
 
-                    this.carSpeed -= 0.45;
+                    this.carSpeed -= 0.05;
                 }
             }
 
@@ -391,7 +391,7 @@ class PlayS extends Phaser.Scene {
                             this.SteeringWheelAnim = false;
                         }
                     }
-                    this.carSpeed += 0.45;
+                    this.carSpeed += 0.05;
                 }
             }
 
@@ -428,7 +428,7 @@ class PlayS extends Phaser.Scene {
             }
 
             // Car Steering
-            if (this.carSpeed2 <= 0.25 && !keyS.isDown) {
+            if (this.carSpeed2 <= 0.25 && this.carSpeed2 >= 0 && !keyS.isDown) {
                 this.carSpeed2 = 0;
                 this.SteeringWheel2.rotation = 0;
             } else {
@@ -467,7 +467,7 @@ class PlayS extends Phaser.Scene {
                         this.SteeringWheelAnim3 = false;
                     }
 
-                    this.carSpeed2 -= 0.45;
+                    this.carSpeed2 -= 0.05;
                 }
             }
 
@@ -504,7 +504,7 @@ class PlayS extends Phaser.Scene {
                             this.SteeringWheelAnim3 = false;
                         }
                     }
-                    this.carSpeed2 += 0.45;
+                    this.carSpeed2 += 0.05;
                 }
             }
 
