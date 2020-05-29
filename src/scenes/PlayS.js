@@ -291,18 +291,18 @@ class PlayS extends Phaser.Scene {
             // Got help from https://codepen.io/Samid737/pen/GdVZeX
             // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
             // console.log(this.carSpeed);
-            // sets maximum forward speed to 7
-            if (this.carSpeed >= 7) {
-                this.carSpeed = 7;
-                this.player.setVelocityX(Math.sin(this.player.rotation) * 7);
-                this.player.setVelocityY(-Math.cos(this.player.rotation) * 7);
+            // sets maximum forward speed to 10
+            if (this.carSpeed >= 10) {
+                this.carSpeed = 10;
+                this.player.setVelocityX(Math.sin(this.player.rotation) * 10);
+                this.player.setVelocityY(-Math.cos(this.player.rotation) * 10);
             }
     
-            // sets maximum reverse speed to -7
-            if (this.carSpeed <= -7) {
-                this.carSpeed = -7;
-                this.player.setVelocityX(Math.sin(this.player.rotation) * 7);
-                this.player.setVelocityY(-Math.cos(this.player.rotation) * 7);
+            // sets maximum reverse speed to -10
+            if (this.carSpeed <= -10) {
+                this.carSpeed = -10;
+                this.player.setVelocityX(Math.sin(this.player.rotation) * 10);
+                this.player.setVelocityY(-Math.cos(this.player.rotation) * 10);
             }
 
             // Car Steering
@@ -335,7 +335,7 @@ class PlayS extends Phaser.Scene {
                         this.SteeringWheelAnim2 = false;
                     }
                 }
-                this.carSpeed += 0.75;
+                this.carSpeed += 0.45;
 
                 // Play the acceleration sound
                 if(this.acceleration_play){
@@ -354,7 +354,7 @@ class PlayS extends Phaser.Scene {
                         this.SteeringWheelAnim = false;
                     }
 
-                    this.carSpeed -= 0.75;
+                    this.carSpeed -= 0.45;
                 }
             }
 
@@ -373,7 +373,7 @@ class PlayS extends Phaser.Scene {
                         this.SteeringWheelAnim2 = false;
                     }
                 }
-                this.carSpeed -= 0.75;
+                this.carSpeed -= 0.45;
             }
             else {
                 if (this.carSpeed <= 0) {
@@ -391,7 +391,7 @@ class PlayS extends Phaser.Scene {
                             this.SteeringWheelAnim = false;
                         }
                     }
-                    this.carSpeed += 0.75;
+                    this.carSpeed += 0.45;
                 }
             }
 
@@ -401,7 +401,7 @@ class PlayS extends Phaser.Scene {
             }
 
             var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
-            this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.09 * Math.exp(-speedsquared / 100));
+            this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.15 * Math.exp(-speedsquared / 100));
 
             // no drift 
             this.player.setVelocityX(Math.sin(this.player.rotation) * this.carSpeed);
@@ -413,18 +413,18 @@ class PlayS extends Phaser.Scene {
 
             // Player 2 Movement
             //console.log(this.carSpeed2);
-            // sets maximum forward speed to 7
-            if (this.carSpeed2 >= 7) {
-                this.carSpeed2 = 7;
-                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 7);
-                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 7);
+            // sets maximum forward speed to 10
+            if (this.carSpeed2 >= 10) {
+                this.carSpeed2 = 10;
+                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 10);
+                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 10);
             }
     
-            // sets maximum reverse speed to -7
-            if (this.carSpeed2 <= -7) {
-                this.carSpeed2 = -7;
-                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 7);
-                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 7);
+            // sets maximum reverse speed to -10
+            if (this.carSpeed2 <= -10) {
+                this.carSpeed2 = -10;
+                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 10);
+                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 10);
             }
 
             // Car Steering
@@ -457,7 +457,7 @@ class PlayS extends Phaser.Scene {
                         this.SteeringWheelAnim4 = false;
                     }
                 }
-                this.carSpeed2 += 0.75;
+                this.carSpeed2 += 0.45;
             }
             else {
                 if (this.carSpeed2 >= 0) {
@@ -467,7 +467,7 @@ class PlayS extends Phaser.Scene {
                         this.SteeringWheelAnim3 = false;
                     }
 
-                    this.carSpeed2 -= 0.75;
+                    this.carSpeed2 -= 0.45;
                 }
             }
 
@@ -486,7 +486,7 @@ class PlayS extends Phaser.Scene {
                         this.SteeringWheelAnim4 = false;
                     }
                 }
-                this.carSpeed2 -= 0.75;
+                this.carSpeed2 -= 0.45;
             }
             else {
                 if (this.carSpeed2 <= 0) {
@@ -504,7 +504,7 @@ class PlayS extends Phaser.Scene {
                             this.SteeringWheelAnim3 = false;
                         }
                     }
-                    this.carSpeed2 += 0.75;
+                    this.carSpeed2 += 0.45;
                 }
             }
 
@@ -514,7 +514,7 @@ class PlayS extends Phaser.Scene {
             }
 
             var speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
-            this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.09 * Math.exp(-speedsquared2 / 100));
+            this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.15 * Math.exp(-speedsquared2 / 100));
 
             // no drift 
             this.player2.setVelocityX(Math.sin(this.player2.rotation) * this.carSpeed2);
