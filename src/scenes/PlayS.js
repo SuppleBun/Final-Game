@@ -6,6 +6,7 @@ class PlayS extends Phaser.Scene {
     preload() {
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
+        this.load.image('map', './assets/image/map.jpg');
         this.load.image('livingRoom', './assets/image/livingRoom.png');
         this.load.image('bathroom', './assets/image/bathroom.png');
         this.load.image('kitchen', './assets/image/kitchen.png');
@@ -68,11 +69,11 @@ class PlayS extends Phaser.Scene {
 
         // add background track
         //this.background = this.add.image(700, 700, 'background').setScale(2);
-        this.bathroom = this.add.image(2100, 700, 'bathroom').setScale(2);
-        this.kitchen = this.add.image(700, 700, 'kitchen').setScale(2);
-        this.livingRoom = this.add.image(2100, 2100, 'livingRoom').setScale(2);
-        this.garage = this.add.image(2100, 3500, 'garage').setScale(2);
-        this.hallway = this.add.image(700, 2100, 'hallway').setScale(2);
+        //this.bathroom = this.add.image(2100, 700, 'bathroom').setScale(2);
+        this.kitchen = this.add.image(700, 700, 'map').setScale(2);
+        //this.livingRoom = this.add.image(2100, 2100, 'livingRoom').setScale(2);
+        //this.garage = this.add.image(2100, 3500, 'garage').setScale(2);
+        //this.hallway = this.add.image(700, 2100, 'hallway').setScale(2);
 
         // Add item box (for now)
         this.item_box = this.matter.add.sprite(1270, 1050, 'item_box').setScale(0.75);
@@ -161,8 +162,8 @@ class PlayS extends Phaser.Scene {
         // Add 2 cameras for split screen.
         this.camera = this.cameras.main.setViewport(0, 0, (game.config.width/2), game.config.height);
         this.camera.startFollow(this.player, true, 1, 1, 0, 0);
-        // this.camera.setZoom(1.15);
-        this.camera.setZoom(0.5);
+         this.camera.setZoom(1.15);
+        //this.camera.setZoom(0.5);
 
         //this.camera.ignore(this.player_UI);
         this.camera2 = this.cameras.add(centerX, 0, (game.config.width/2), game.config.height);
