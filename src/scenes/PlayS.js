@@ -306,7 +306,8 @@ class PlayS extends Phaser.Scene {
             }
 
             // Car Steering
-            if (this.carSpeed < 0.01 && this.carSpeed > -0.009999999999999913 && !keyDOWN.isDown) {
+            if (this.carSpeed <= 0.25 && !keyDOWN.isDown) {
+                this.carSpeed = 0;
                 this.SteeringWheel.rotation = 0;
             } else {
                 if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.7) {
