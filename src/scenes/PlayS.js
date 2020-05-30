@@ -161,13 +161,13 @@ class PlayS extends Phaser.Scene {
         // Add 2 cameras for split screen.
         this.camera = this.cameras.main.setViewport(0, 0, (game.config.width/2), game.config.height);
         this.camera.startFollow(this.player, true, 1, 1, 0, 0);
-        this.camera.setZoom(0.7);
+        this.camera.setZoom(0.6);
         //this.camera.setZoom(0.5);
 
         //this.camera.ignore(this.player_UI);
         this.camera2 = this.cameras.add(centerX, 0, (game.config.width/2), game.config.height);
         this.camera2.startFollow(this.player2, true, 1, 1, 0, 0);
-        this.camera2.setZoom(0.7);
+        this.camera2.setZoom(0.6);
 
         // Add UI Camera for camera 1
         this.UICamera = this.cameras.add(0, 0, (game.config.width/2), game.config.height);
@@ -237,45 +237,7 @@ class PlayS extends Phaser.Scene {
             },
             loop: false
         })
-        
-        /*
-        // delay for steeringwheel animation
-        this.time.addEvent({
-            delay: 5, // 0.19 second 
-            callback: () => {
-                this.SteeringWheelAnim = true;
-            },
-            loop: true
-        })
 
-        // shorter delay for steeringwheel animation
-        this.time.addEvent({
-            delay: 5, // 0.18 second 
-            callback: () => {
-                this.SteeringWheelAnim2 = true;
-            },
-            loop: true
-        })
-
-        // delay for steeringwheel2 animation
-        this.time.addEvent({
-            delay: 190, // 0.19 second 
-            callback: () => {
-                this.SteeringWheelAnim3 = true;
-            },
-            loop: true
-        })
-
-        // shorter delay for steeringwheel2 animation
-        this.time.addEvent({
-            delay: 180, // 0.18 second 
-            callback: () => {
-                this.SteeringWheelAnim4 = true;
-            },
-            loop: true
-        })*/
-
-        //this.matter.world.update60Hz();
     }
 
     update() {
@@ -291,7 +253,7 @@ class PlayS extends Phaser.Scene {
             // Player 1 Movement
             // Got help from https://codepen.io/Samid737/pen/GdVZeX
             // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
-            console.log(this.carSpeed);
+            //console.log(this.carSpeed);
             // sets maximum forward speed to 10
             if (this.carSpeed >= 10) {
                 this.carSpeed = 10;
@@ -453,7 +415,7 @@ class PlayS extends Phaser.Scene {
             }
 
             // Player 2 Movement
-            //console.log(this.carSpeed2);
+            console.log(this.carSpeed2);
             // sets maximum forward speed to 10
             if (this.carSpeed2 >= 10) {
                 this.carSpeed2 = 10;
@@ -484,67 +446,19 @@ class PlayS extends Phaser.Scene {
 
             // Car acceleration and deceleration
             if (keyW.isDown) {
-                if(this.carSpeed2 >= 0){
-                    // Play speed meter increase animation
-                    if(this.SteeringWheelAnim3){
-                        this.UI2_speed.anims.nextFrame();
-                        this.SteeringWheelAnim3 = false;
-                    }
-                }
-                else{
-                    // Play speed meter decrease animation
-                    if(this.SteeringWheelAnim4){
-                        this.UI2_speed.anims.previousFrame();
-                        this.SteeringWheelAnim4 = false;
-                    }
-                }
                 this.carSpeed2 += 0.26;
             }
             else {
                 if (this.carSpeed2 >= 0) {
-                    // Play speed meter decrease animation
-                    if(this.SteeringWheelAnim3){
-                        this.UI2_speed.anims.previousFrame();
-                        this.SteeringWheelAnim3 = false;
-                    }
-
                     this.carSpeed2 -= 0.05;
                 }
             }
 
             if (keyS.isDown) {
-                if(this.carSpeed2 <= 0){
-                    // Play speed meter increase animation
-                    if(this.SteeringWheelAnim3){
-                        this.UI2_speed.anims.nextFrame();
-                        this.SteeringWheelAnim3 = false;
-                    }
-                }
-                else{
-                    // Play speed meter decrease animation
-                    if(this.SteeringWheelAnim4){
-                        this.UI2_speed.anims.previousFrame();
-                        this.SteeringWheelAnim4 = false;
-                    }
-                }
                 this.carSpeed2 -= 0.26;
             }
             else {
                 if (this.carSpeed2 <= 0) {
-                    if(this.carSpeed2 <= 0){
-                        // Play speed meter decrease animation
-                        if(this.SteeringWheelAnim3){
-                            this.UI2_speed.anims.previousFrame();
-                            this.SteeringWheelAnim3 = false;
-                        }
-                    }
-                    else{
-                        // Play speed meter increase animation
-                        if(this.SteeringWheelAnim3){
-                            this.UI2_speed.anims.nextFrame();
-                            this.SteeringWheelAnim3 = false;
-                        }
-                    }
                     this.carSpeed2 += 0.05;
                 }
             }
@@ -564,6 +478,94 @@ class PlayS extends Phaser.Scene {
             //with drift
             //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed2);
             //this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed2);
+
+            this.carSpeed2Anim = this.carSpeed2;
+
+            //console.log(this.carSpeedAnim);
+            if(this.carSpeed2 < 0.67 && this.carSpeed2 > -0.67){
+                this.UI2_speed.anims.load('speed_increase', 0);
+            }
+            else if(this.carSpeed2Anim <= -0.67 && this.carSpeed2 > -1.34){
+                this.UI2_speed.anims.load('speed_increase', 1);
+            }
+            else if(this.carSpeed2Anim >= 0.67 && this.carSpeed2 < 1.34){
+                this.UI2_speed.anims.load('speed_increase', 1);
+            }
+            else if(this.carSpeed2Anim <= -1.34 && this.carSpeed2 > -2.01){
+                this.UI2_speed.anims.load('speed_increase', 2);
+            }
+            else if(this.carSpeed2Anim >= 1.34 && this.carSpeed2 < 2.01){
+                this.UI2_speed.anims.load('speed_increase', 2);
+            }
+            else if(this.carSpeed2Anim <= -2.01 && this.carSpeed2 > -2.68){
+                this.UI2_speed.anims.load('speed_increase', 3);
+            }
+            else if(this.carSpeed2Anim >= 2.01 && this.carSpeed2 < 2.68){
+                this.UI2_speed.anims.load('speed_increase', 3);
+            }
+            else if(this.carSpeed2Anim <= -2.68 && this.carSpeed2 > -3.35){
+                this.UI2_speed.anims.load('speed_increase', 4);
+            }
+            else if(this.carSpeed2Anim >= 2.68 && this.carSpeed2 < 3.35){
+                this.UI2_speed.anims.load('speed_increase', 4);
+            }
+            else if(this.carSpeed2Anim <= -3.35 && this.carSpeed2 > -4.02){
+                this.UI2_speed.anims.load('speed_increase', 5);
+            }
+            else if(this.carSpeed2Anim >= 3.35 && this.carSpeed2 < 4.02){
+                this.UI2_speed.anims.load('speed_increase', 5);
+            }
+            else if(this.carSpeed2Anim <= -4.02 && this.carSpeed2 > -4.69){
+                this.UI2_speed.anims.load('speed_increase', 6);
+            }
+            else if(this.carSpeed2Anim >= 4.02 && this.carSpeed2 < 4.69){
+                this.UI2_speed.anims.load('speed_increase', 6);
+            }
+            else if(this.carSpeed2Anim <= -4.69 && this.carSpeed2 > -5.36){
+                this.UI2_speed.anims.load('speed_increase', 7);
+            }
+            else if(this.carSpeed2Anim >= 4.69 && this.carSpeed2 < 5.36){
+                this.UI2_speed.anims.load('speed_increase', 7);
+            }
+            else if(this.carSpeed2Anim <= -5.36 && this.carSpeed2 > -6.03){
+                this.UI2_speed.anims.load('speed_increase', 8);
+            }
+            else if(this.carSpeed2Anim >= 5.36 && this.carSpeed2 < 6.03){
+                this.UI2_speed.anims.load('speed_increase', 8);
+            }
+            else if(this.carSpeed2Anim <= -6.03 && this.carSpeed2 > -6.7){
+                this.UI2_speed.anims.load('speed_increase', 9);
+            }
+            else if(this.carSpeed2Anim >= 6.03 && this.carSpeed2 < 6.7){
+                this.UI2_speed.anims.load('speed_increase', 9);
+            }
+            else if(this.carSpeed2Anim <= -6.7 && this.carSpeed2 > -7.37){
+                this.UI2_speed.anims.load('speed_increase', 10);
+            }
+            else if(this.carSpeed2Anim >= 6.7 && this.carSpeed2 < 7.37){
+                this.UI2_speed.anims.load('speed_increase', 10);
+            }
+            else if(this.carSpeed2Anim <= -7.37 && this.carSpeed2 > -8.04){
+                this.UI2_speed.anims.load('speed_increase', 11);
+            }
+            else if(this.carSpeed2Anim >= 7.37 && this.carSpeed2 < 8.04){
+                this.UI2_speed.anims.load('speed_increase', 11);
+            }
+            else if(this.carSpeed2Anim <= -8.04 && this.carSpeed2 > -8.71){
+                this.UI2_speed.anims.load('speed_increase', 12);
+            }
+            else if(this.carSpeed2Anim >= 8.04 && this.carSpeed2 < 8.71){
+                this.UI2_speed.anims.load('speed_increase', 12);
+            }
+            else if(this.carSpeed2Anim <= -8.71 && this.carSpeed2 > -9.38){
+                this.UI2_speed.anims.load('speed_increase', 13);
+            }
+            else if(this.carSpeed2Anim >= 8.71 && this.carSpeed2 < 9.38){
+                this.UI2_speed.anims.load('speed_increase', 13);
+            }
+            else{
+                this.UI2_speed.anims.load('speed_increase', 14);
+            }
         }
     }
 }
