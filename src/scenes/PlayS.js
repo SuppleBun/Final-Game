@@ -15,7 +15,7 @@ class PlayS extends Phaser.Scene {
         this.load.image('background', './assets/image/background.png');
         this.load.image('UI_item', './assets/image/UI_item.png');
         this.load.image('UI_steeringwheel', './assets/image/UI_steeringwheel.png');
-        this.load.spritesheet('UI_speed', './assets/image/UI_speed.png', { frameWidth: 64, frameHeight: 64, startFrame: 0, endFrame: 42 });
+        this.load.spritesheet('UI_speed', './assets/image/UI_speed.png', { frameWidth: 64, frameHeight: 64, startFrame: 0, endFrame: 14 });
         this.load.spritesheet('start_light', './assets/image/start_light.png', { frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3 });
         this.load.spritesheet('go_effect', './assets/image/go.png', { frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 6 });
         this.load.spritesheet('firework', './assets/image/firework.png', { frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 2 });
@@ -50,7 +50,7 @@ class PlayS extends Phaser.Scene {
         // create animation for speed meter
         this.anims.create({
             key: 'speed_increase',
-            frames: this.anims.generateFrameNumbers('UI_speed', { start: 0, end: 42, first: 0 }),
+            frames: this.anims.generateFrameNumbers('UI_speed', { start: 0, end: 14, first: 0 }),
             frameRate: 5,
         })
 
@@ -238,9 +238,10 @@ class PlayS extends Phaser.Scene {
             loop: false
         })
         
+        /*
         // delay for steeringwheel animation
         this.time.addEvent({
-            delay: 190, // 0.19 second 
+            delay: 5, // 0.19 second 
             callback: () => {
                 this.SteeringWheelAnim = true;
             },
@@ -249,7 +250,7 @@ class PlayS extends Phaser.Scene {
 
         // shorter delay for steeringwheel animation
         this.time.addEvent({
-            delay: 180, // 0.18 second 
+            delay: 5, // 0.18 second 
             callback: () => {
                 this.SteeringWheelAnim2 = true;
             },
@@ -272,7 +273,7 @@ class PlayS extends Phaser.Scene {
                 this.SteeringWheelAnim4 = true;
             },
             loop: true
-        })
+        })*/
 
         //this.matter.world.update60Hz();
     }
@@ -321,20 +322,6 @@ class PlayS extends Phaser.Scene {
 
             // Car acceleration and deceleration
             if (keyUP.isDown) {
-                if(this.carSpeed >= 0){
-                    // Play speed meter increase animation
-                    if(this.SteeringWheelAnim){
-                        this.UI1_speed.anims.nextFrame();
-                        this.SteeringWheelAnim = false;
-                    }
-                }
-                else{
-                    // Play speed meter decrease animation
-                    if(this.SteeringWheelAnim2){
-                        this.UI1_speed.anims.previousFrame();
-                        this.SteeringWheelAnim2 = false;
-                    }
-                }
                 this.carSpeed += 0.26;
 
                 // Play the acceleration sound
@@ -348,49 +335,15 @@ class PlayS extends Phaser.Scene {
             }
             else {
                 if (this.carSpeed >= 0) {
-                    // Play speed meter decrease animation
-                    if(this.SteeringWheelAnim){
-                        this.UI1_speed.anims.previousFrame();
-                        this.SteeringWheelAnim = false;
-                    }
-
                     this.carSpeed -= 0.05;
                 }
             }
 
             if (keyDOWN.isDown) {
-                if(this.carSpeed <= 0){
-                    // Play speed meter increase animation
-                    if(this.SteeringWheelAnim){
-                        this.UI1_speed.anims.nextFrame();
-                        this.SteeringWheelAnim = false;
-                    }
-                }
-                else{
-                    // Play speed meter decrease animation
-                    if(this.SteeringWheelAnim2){
-                        this.UI1_speed.anims.previousFrame();
-                        this.SteeringWheelAnim2 = false;
-                    }
-                }
                 this.carSpeed -= 0.26;
             }
             else {
                 if (this.carSpeed <= 0) {
-                    if(this.carSpeed <= 0){
-                        // Play speed meter decrease animation
-                        if(this.SteeringWheelAnim){
-                            this.UI1_speed.anims.previousFrame();
-                            this.SteeringWheelAnim = false;
-                        }
-                    }
-                    else{
-                        // Play speed meter increase animation
-                        if(this.SteeringWheelAnim){
-                            this.UI1_speed.anims.nextFrame();
-                            this.SteeringWheelAnim = false;
-                        }
-                    }
                     this.carSpeed += 0.05;
                 }
             }
@@ -410,6 +363,94 @@ class PlayS extends Phaser.Scene {
             //with drift
             //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed);
             //this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed);
+
+            this.carSpeedAnim = this.carSpeed;
+
+            //console.log(this.carSpeedAnim);
+            if(this.carSpeed < 0.67 && this.carSpeed > -0.67){
+                this.UI1_speed.anims.load('speed_increase', 0);
+            }
+            else if(this.carSpeedAnim <= -0.67 && this.carSpeed > -1.34){
+                this.UI1_speed.anims.load('speed_increase', 1);
+            }
+            else if(this.carSpeedAnim >= 0.67 && this.carSpeed < 1.34){
+                this.UI1_speed.anims.load('speed_increase', 1);
+            }
+            else if(this.carSpeedAnim <= -1.34 && this.carSpeed > -2.01){
+                this.UI1_speed.anims.load('speed_increase', 2);
+            }
+            else if(this.carSpeedAnim >= 1.34 && this.carSpeed < 2.01){
+                this.UI1_speed.anims.load('speed_increase', 2);
+            }
+            else if(this.carSpeedAnim <= -2.01 && this.carSpeed > -2.68){
+                this.UI1_speed.anims.load('speed_increase', 3);
+            }
+            else if(this.carSpeedAnim >= 2.01 && this.carSpeed < 2.68){
+                this.UI1_speed.anims.load('speed_increase', 3);
+            }
+            else if(this.carSpeedAnim <= -2.68 && this.carSpeed > -3.35){
+                this.UI1_speed.anims.load('speed_increase', 4);
+            }
+            else if(this.carSpeedAnim >= 2.68 && this.carSpeed < 3.35){
+                this.UI1_speed.anims.load('speed_increase', 4);
+            }
+            else if(this.carSpeedAnim <= -3.35 && this.carSpeed > -4.02){
+                this.UI1_speed.anims.load('speed_increase', 5);
+            }
+            else if(this.carSpeedAnim >= 3.35 && this.carSpeed < 4.02){
+                this.UI1_speed.anims.load('speed_increase', 5);
+            }
+            else if(this.carSpeedAnim <= -4.02 && this.carSpeed > -4.69){
+                this.UI1_speed.anims.load('speed_increase', 6);
+            }
+            else if(this.carSpeedAnim >= 4.02 && this.carSpeed < 4.69){
+                this.UI1_speed.anims.load('speed_increase', 6);
+            }
+            else if(this.carSpeedAnim <= -4.69 && this.carSpeed > -5.36){
+                this.UI1_speed.anims.load('speed_increase', 7);
+            }
+            else if(this.carSpeedAnim >= 4.69 && this.carSpeed < 5.36){
+                this.UI1_speed.anims.load('speed_increase', 7);
+            }
+            else if(this.carSpeedAnim <= -5.36 && this.carSpeed > -6.03){
+                this.UI1_speed.anims.load('speed_increase', 8);
+            }
+            else if(this.carSpeedAnim >= 5.36 && this.carSpeed < 6.03){
+                this.UI1_speed.anims.load('speed_increase', 8);
+            }
+            else if(this.carSpeedAnim <= -6.03 && this.carSpeed > -6.7){
+                this.UI1_speed.anims.load('speed_increase', 9);
+            }
+            else if(this.carSpeedAnim >= 6.03 && this.carSpeed < 6.7){
+                this.UI1_speed.anims.load('speed_increase', 9);
+            }
+            else if(this.carSpeedAnim <= -6.7 && this.carSpeed > -7.37){
+                this.UI1_speed.anims.load('speed_increase', 10);
+            }
+            else if(this.carSpeedAnim >= 6.7 && this.carSpeed < 7.37){
+                this.UI1_speed.anims.load('speed_increase', 10);
+            }
+            else if(this.carSpeedAnim <= -7.37 && this.carSpeed > -8.04){
+                this.UI1_speed.anims.load('speed_increase', 11);
+            }
+            else if(this.carSpeedAnim >= 7.37 && this.carSpeed < 8.04){
+                this.UI1_speed.anims.load('speed_increase', 11);
+            }
+            else if(this.carSpeedAnim <= -8.04 && this.carSpeed > -8.71){
+                this.UI1_speed.anims.load('speed_increase', 12);
+            }
+            else if(this.carSpeedAnim >= 8.04 && this.carSpeed < 8.71){
+                this.UI1_speed.anims.load('speed_increase', 12);
+            }
+            else if(this.carSpeedAnim <= -8.71 && this.carSpeed > -9.38){
+                this.UI1_speed.anims.load('speed_increase', 13);
+            }
+            else if(this.carSpeedAnim >= 8.71 && this.carSpeed < 9.38){
+                this.UI1_speed.anims.load('speed_increase', 13);
+            }
+            else{
+                this.UI1_speed.anims.load('speed_increase', 14);
+            }
 
             // Player 2 Movement
             //console.log(this.carSpeed2);
