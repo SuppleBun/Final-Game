@@ -75,13 +75,13 @@ class PlayS extends Phaser.Scene {
         //this.hallway = this.add.image(700, 2100, 'hallway').setScale(2);
 
         // Add item box (for now)
-        this.item_box = this.matter.add.sprite(150, 150, 'item_box').setScale(0.75);
+        this.item_box = this.matter.add.sprite(-150, -150, 'item_box').setScale(1.5);
 
         // Hitbox for item box
         this.item_box.setBody({
             type: 'rectangle',
-            width: 32,
-            height: 32
+            width: 64,
+            height: 64
         })
 
         this.item_box.anims.play("box_rotate");
@@ -92,8 +92,8 @@ class PlayS extends Phaser.Scene {
         // Hitbox for player
         this.player.setBody({
             type: 'rectangle',
-            width: 32,
-            height: 47
+            width: 50,
+            height: 94
         })
 
         // Steeringwheel for player
@@ -110,8 +110,8 @@ class PlayS extends Phaser.Scene {
         // Hitbox for player2
         this.player2.setBody({
             type: 'rectangle',
-            width: 32,
-            height: 47
+            width: 50,
+            height: 94
         })
 
         // Steeringwheel for player2
@@ -162,7 +162,7 @@ class PlayS extends Phaser.Scene {
         this.camera = this.cameras.main.setViewport(0, 0, (game.config.width/2), game.config.height);
         this.camera.startFollow(this.player, true, 1, 1, 0, 0);
         this.camera.setZoom(0.6);
-        //this.camera.setZoom(0.5);
+        //this.camera.setZoom(1);
 
         //this.camera.ignore(this.player_UI);
         this.camera2 = this.cameras.add(centerX, 0, (game.config.width/2), game.config.height);
