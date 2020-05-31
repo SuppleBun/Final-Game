@@ -727,18 +727,18 @@ class PlayS extends Phaser.Scene {
 
             // Player 2 Movement
             //console.log(this.carSpeed2);
-            // sets maximum forward speed to 10
-            if (this.carSpeed2 >= 10) {
-                this.carSpeed2 = 10;
-                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 10);
-                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 10);
+            // sets maximum forward speed to 5
+            if (this.carSpeed2 >= 5) {
+                this.carSpeed2 = 5;
+                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 5);
+                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 5);
             }
 
-            // sets maximum reverse speed to -10
-            if (this.carSpeed2 <= -10) {
-                this.carSpeed2 = -10;
-                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 10);
-                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 10);
+            // sets maximum reverse speed to -5
+            if (this.carSpeed2 <= -5) {
+                this.carSpeed2 = -5;
+                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 5);
+                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 5);
             }
 
             // Car Steering
@@ -746,12 +746,12 @@ class PlayS extends Phaser.Scene {
                 this.carSpeed2 = 0;
                 this.SteeringWheel2.rotation = 0;
             } else {
-                if (keyA.isDown && this.SteeringWheel2.rotation > -0.7) {
-                    this.SteeringWheel2.rotation -= 0.5;
+                if (keyA.isDown && this.SteeringWheel2.rotation > -0.5) {
+                    this.SteeringWheel2.rotation -= 0.05;
                 }
 
-                if (keyD.isDown && this.SteeringWheel2.rotation < 0.7) {
-                    this.SteeringWheel2.rotation += 0.5;
+                if (keyD.isDown && this.SteeringWheel2.rotation < 0.5) {
+                    this.SteeringWheel2.rotation += 0.05;
                 }
             }
 
