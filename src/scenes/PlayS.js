@@ -65,14 +65,8 @@ class PlayS extends Phaser.Scene {
         this.matter.world.setBounds(-1250, -1250, 2500, 2500);
         //this.matter.world.setBounds().disableGravity();
         //console.log(this.matter.world.walls)
-
-        // add background track
-        //this.background = this.add.image(700, 700, 'background').setScale(2);
-        //this.bathroom = this.add.image(2100, 700, 'bathroom').setScale(2);
         this.map = this.add.image(0, 0, 'map');
-        //this.livingRoom = this.add.image(2100, 2100, 'livingRoom').setScale(2);
-        //this.garage = this.add.image(2100, 3500, 'garage').setScale(2);
-        //this.hallway = this.add.image(700, 2100, 'hallway').setScale(2);
+
 
         // OUTER WALLS -----------------------------------------------------
         this.wall = this.matter.add.sprite(110, -1245);
@@ -379,7 +373,7 @@ class PlayS extends Phaser.Scene {
         // OBJECTS ON TRACK ------------------------------------------------
 
         // Add item box (for now)
-        this.item_box = this.matter.add.sprite(650, 200, 'item_box').setScale(1.5).setStatic(true).setSensor(true);
+        this.item_box = this.matter.add.sprite(650, 200, 'item_box').setScale(1).setStatic(true).setSensor(true);
         //this.item_box.setStatic(true);
 
         // Hitbox for item box
@@ -513,10 +507,10 @@ class PlayS extends Phaser.Scene {
             // Players can now move
             this.canMove = true;
 
-            /*// Play bgm
+            // Play bgm
             this.bgm = this.sound.add('bgm', { volume: 0.3 });
             this.bgm.setLoop(true);
-            this.bgm.play();*/
+            this.bgm.play();
 
             // Play 'Go!' and firework effect
             let go_effect = this.add.sprite(this.player.x, this.player.y, 'go_effect');
