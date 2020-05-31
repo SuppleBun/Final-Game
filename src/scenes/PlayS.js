@@ -607,7 +607,10 @@ class PlayS extends Phaser.Scene {
         this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
             if(bodyA.label == 'item_box' && bodyB.label == 'player1') {
                 console.log('item_box hit player1');
-                //this.handleCollision(bodyA, bodyB);
+                //var item = Phaser.Math.Between(1,4);
+                //console.log(bodyA);
+                //console.log(this.item_box);
+                //bodyA.destroy(true);
             }
 
             if(bodyA.label == 'item_box' && bodyB.label == 'player2') {
@@ -615,12 +618,6 @@ class PlayS extends Phaser.Scene {
             }
         });
     }
-
-    /*handleCollision(item, player){
-        console.log(item);
-        console.log(player);
-        console.log(this.item_box);
-    }*/
 
     update() {
         //console.log('x: '+this.player.x);
