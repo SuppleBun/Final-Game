@@ -379,6 +379,8 @@ class PlayS extends Phaser.Scene {
         this.item_box4 = this.matter.add.sprite(-740, -890, 'item_box').setScale(1).setStatic(true).setSensor(true);
         this.item_box5 = this.matter.add.sprite(-660, 1050, 'item_box').setScale(1).setStatic(true).setSensor(true);
         this.item_box6 = this.matter.add.sprite(-500, 950, 'item_box').setScale(1).setStatic(true).setSensor(true);
+        this.item_box7 = this.matter.add.sprite(620, 860, 'item_box').setScale(1).setStatic(true).setSensor(true);
+        this.item_box8 = this.matter.add.sprite(775, 860, 'item_box').setScale(1).setStatic(true).setSensor(true);
         //this.item_box.setStatic(true);
 
         // Hitbox for item box
@@ -418,12 +420,26 @@ class PlayS extends Phaser.Scene {
             height: 48,
         }, { label: 'item_box' })
 
+        this.item_box7.setBody({
+            type: 'rectangle',
+            width: 48,
+            height: 48,
+        }, { label: 'item_box' })
+
+        this.item_box8.setBody({
+            type: 'rectangle',
+            width: 48,
+            height: 48,
+        }, { label: 'item_box' })
+
         this.item_box.anims.play("box_rotate");
         this.item_box2.anims.play("box_rotate");
         this.item_box3.anims.play("box_rotate");
         this.item_box4.anims.play("box_rotate");
         this.item_box5.anims.play("box_rotate");
         this.item_box6.anims.play("box_rotate");
+        this.item_box7.anims.play("box_rotate");
+        this.item_box8.anims.play("box_rotate");
 
         // Add player
         this.player = this.matter.add.sprite(650, 400, 'player1').setOrigin(0.5, 0).setScale(2);
