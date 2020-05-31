@@ -480,7 +480,7 @@ class PlayS extends Phaser.Scene {
         this.SteeringWheelAnim4 = true;
 
         // Prevent players moving during countdown
-        this.canMove = true; // should be false
+        this.canMove = false; // should be false
 
         // Prevent acceleration sound playing again
         this.acceleration_play = true;
@@ -556,7 +556,7 @@ class PlayS extends Phaser.Scene {
         this.engineStart.play();
 
         // Play the countdown animation
-        let countdown = this.add.sprite(this.player.x + 32, this.player.y - 100, 'start_light');
+        let countdown = this.add.sprite(-2260, -2350, 'start_light').setScale(1);
         countdown.anims.play('countdown');
         countdown.on('animationcomplete', () => {
             countdown.destroy(true);
@@ -569,8 +569,8 @@ class PlayS extends Phaser.Scene {
             this.bgm.play();
 
             // Play 'Go!' and firework effect
-            let go_effect = this.add.sprite(this.player.x, this.player.y, 'go_effect');
-            let firework_effect = this.add.sprite(this.player.x, this.player.y, 'firework').setScale(2);
+            let go_effect = this.add.sprite(-2250, -2300, 'go_effect').setScale(1);
+            let firework_effect = this.add.sprite(-2250, -2300, 'firework').setScale(2);
 
             go_effect.anims.play('go');
             firework_effect.anims.play('firework');
