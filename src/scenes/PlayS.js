@@ -594,11 +594,20 @@ class PlayS extends Phaser.Scene {
             },
             loop: false
         })
+
+        // Add item slots for players
+        this.player.item_slot = 0;
+        this.player.item_slot2 = 0;
+
+        this.player2.item_slot = 0;
+        this.player2.item_slot2 = 0;
+        console.log(this.item_box);
         
         // collision detection between item box and the players
         this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
             if(bodyA.label == 'item_box' && bodyB.label == 'player1') {
                 console.log('item_box hit player1');
+                //this.handleCollision(bodyA, bodyB);
             }
 
             if(bodyA.label == 'item_box' && bodyB.label == 'player2') {
@@ -607,9 +616,15 @@ class PlayS extends Phaser.Scene {
         });
     }
 
+    /*handleCollision(item, player){
+        console.log(item);
+        console.log(player);
+        console.log(this.item_box);
+    }*/
+
     update() {
-        console.log('x: '+this.player.x);
-        console.log('y: '+this.player.y);
+        //console.log('x: '+this.player.x);
+        //console.log('y: '+this.player.y);
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }
@@ -654,14 +669,14 @@ class PlayS extends Phaser.Scene {
             if (keyUP.isDown) {
                 this.carSpeed += 0.26;
 
-                // Play the acceleration sound
+                /*// Play the acceleration sound
                 if (this.acceleration_play) {
                     this.acceleration.play();
                     this.acceleration_play = false;
                     this.acceleration.on('complete', () => {
                         this.acceleration_play = true;
                     })
-                }
+                }*/
             }
             else {
                 if (this.carSpeed >= 0) {
