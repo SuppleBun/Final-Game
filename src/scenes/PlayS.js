@@ -15,8 +15,10 @@ class PlayS extends Phaser.Scene {
         this.load.image('UI_hammer', './assets/image/UI_hammer.png');
         this.load.image('UI_honey', './assets/image/UI_honey.png');
         this.load.image('UI_lap', './assets/image/UI_lap.png');
-        this.load.spritesheet('UI_lapcount', './assets/image/UI_lapcount.png', { frameWidth: 34, frameHeight: 25, startFrame: 0, endFrame: 2 });
-        this.load.spritesheet('UI_place', './assets/image/UI_place.png', { frameWidth: 28, frameHeight: 52, startFrame: 0, endFrame: 1 });
+        this.load.spritesheet('UI_lapcount', './assets/image/UI_lapcount.png', { frameWidth: 36, frameHeight: 25, startFrame: 0, endFrame: 2 });
+        this.load.spritesheet('UI_place', './assets/image/UI_place.png', { frameWidth: 30, frameHeight: 54, startFrame: 0, endFrame: 1 });
+        this.load.spritesheet('UI_laptwo', './assets/image/UI_laptwo.png', { frameWidth: 68, frameHeight: 19, startFrame: 0, endFrame: 6 });
+        this.load.spritesheet('UI_lapfinal', './assets/image/UI_lapfinal.png', { frameWidth: 132, frameHeight: 19, startFrame: 0, endFrame: 6 });
         this.load.spritesheet('UI_speed', './assets/image/UI_speed.png', { frameWidth: 64, frameHeight: 64, startFrame: 0, endFrame: 14 });
         this.load.spritesheet('start_light', './assets/image/start_light.png', { frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3 });
         this.load.spritesheet('go_effect', './assets/image/go.png', { frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 6 });
@@ -73,6 +75,20 @@ class PlayS extends Phaser.Scene {
         this.anims.create({
             key: 'UI_place',
             frames: this.anims.generateFrameNumbers('UI_place', { start: 0, end: 1, first: 0 }),
+        })
+
+        // create rotate animation for Lap 2 UI
+        this.anims.create({
+            key: 'lap_two',
+            frames: this.anims.generateFrameNumbers('UI_laptwo', { start: 0, end: 6, first: 0 }),
+            frameRate: 8,
+        })
+
+        // create rotate animation for Final Lap UI
+        this.anims.create({
+            key: 'lap_final',
+            frames: this.anims.generateFrameNumbers('UI_lapfinal', { start: 0, end: 6, first: 0 }),
+            frameRate: 8,
         })
 
         this.matter.world.setBounds(-1250, -1250, 2500, 2500);
@@ -455,7 +471,7 @@ class PlayS extends Phaser.Scene {
         this.item_box8.anims.play("box_rotate");
 
         // Add player
-        this.player = this.matter.add.sprite(650, 400, 'player1').setOrigin(0.5, 0).setScale(2);
+        this.player = this.matter.add.sprite(650, 399.9, 'player1').setOrigin(0.5, 0).setScale(2);
 
         // Hitbox for player
         this.player.setBody({
@@ -477,7 +493,7 @@ class PlayS extends Phaser.Scene {
         this.SteeringWheelAnim2 = true;
 
         // Add player2
-        this.player2 = this.matter.add.sprite(800, 400, 'player2').setOrigin(0.5, 0).setScale(2);
+        this.player2 = this.matter.add.sprite(800, 399.9, 'player2').setOrigin(0.5, 0).setScale(2);
 
         // Hitbox for player2
         this.player2.setBody({
@@ -649,6 +665,28 @@ class PlayS extends Phaser.Scene {
             loop: false
         })
 
+        // To prevent players entering finish line repeatedly.
+        this.lineEnter = false;
+        this.lineEnter2 = false;
+
+        // delay for entering goal line
+        this.time.addEvent({
+            delay: 10000, // 10 seconds 
+            callback: () => {
+                this.lineEnter = true;
+            },
+            loop: true
+        })
+
+        // delay for entering goal line
+        this.time.addEvent({
+            delay: 10000, // 10 seconds 
+            callback: () => {
+                this.lineEnter2 = true;
+            },
+            loop: true
+        })
+
         // Add item slots for players
         this.player.item_slot = 0;
         this.player.item_slot2 = 0;
@@ -676,6 +714,9 @@ class PlayS extends Phaser.Scene {
     update() {
         //console.log('x: '+this.player.x);
         //console.log('y: '+this.player.y);
+        //console.log("player1: " + this.player_waypoint);
+        //console.log("player2: " + this.player2_waypoint);
+        console.log(this.player_waypoint);
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }
@@ -763,92 +804,92 @@ class PlayS extends Phaser.Scene {
             this.carSpeedAnim = this.carSpeed;
 
             //console.log(this.carSpeedAnim);
-            if (this.carSpeed < 0.67 && this.carSpeed > -0.67) {
+            if (this.carSpeed < 0.335 && this.carSpeed > -0.335) {
                 this.UI1_speed.anims.load('speed_increase', 0);
             }
-            else if (this.carSpeedAnim <= -0.67 && this.carSpeed > -1.34) {
+            else if (this.carSpeedAnim <= -0.335 && this.carSpeed > -0.67) {
                 this.UI1_speed.anims.load('speed_increase', 1);
             }
-            else if (this.carSpeedAnim >= 0.67 && this.carSpeed < 1.34) {
+            else if (this.carSpeedAnim >= 0.335 && this.carSpeed < 0.67) {
                 this.UI1_speed.anims.load('speed_increase', 1);
             }
-            else if (this.carSpeedAnim <= -1.34 && this.carSpeed > -2.01) {
+            else if (this.carSpeedAnim <= -0.67 && this.carSpeed > -1.005) {
                 this.UI1_speed.anims.load('speed_increase', 2);
             }
-            else if (this.carSpeedAnim >= 1.34 && this.carSpeed < 2.01) {
+            else if (this.carSpeedAnim >= 0.67 && this.carSpeed < 1.005) {
                 this.UI1_speed.anims.load('speed_increase', 2);
             }
-            else if (this.carSpeedAnim <= -2.01 && this.carSpeed > -2.68) {
+            else if (this.carSpeedAnim <= -1.005 && this.carSpeed > -1.34) {
                 this.UI1_speed.anims.load('speed_increase', 3);
             }
-            else if (this.carSpeedAnim >= 2.01 && this.carSpeed < 2.68) {
+            else if (this.carSpeedAnim >= 1.005 && this.carSpeed < 1.34) {
                 this.UI1_speed.anims.load('speed_increase', 3);
             }
-            else if (this.carSpeedAnim <= -2.68 && this.carSpeed > -3.35) {
+            else if (this.carSpeedAnim <= -1.34 && this.carSpeed > -1.675) {
                 this.UI1_speed.anims.load('speed_increase', 4);
             }
-            else if (this.carSpeedAnim >= 2.68 && this.carSpeed < 3.35) {
+            else if (this.carSpeedAnim >= 1.34 && this.carSpeed < 1.675) {
                 this.UI1_speed.anims.load('speed_increase', 4);
             }
-            else if (this.carSpeedAnim <= -3.35 && this.carSpeed > -4.02) {
+            else if (this.carSpeedAnim <= -1.675 && this.carSpeed > -2.01) {
                 this.UI1_speed.anims.load('speed_increase', 5);
             }
-            else if (this.carSpeedAnim >= 3.35 && this.carSpeed < 4.02) {
+            else if (this.carSpeedAnim >= 1.675 && this.carSpeed < 2.01) {
                 this.UI1_speed.anims.load('speed_increase', 5);
             }
-            else if (this.carSpeedAnim <= -4.02 && this.carSpeed > -4.69) {
+            else if (this.carSpeedAnim <= -2.01 && this.carSpeed > -2.345) {
                 this.UI1_speed.anims.load('speed_increase', 6);
             }
-            else if (this.carSpeedAnim >= 4.02 && this.carSpeed < 4.69) {
+            else if (this.carSpeedAnim >= 2.01 && this.carSpeed < 2.345) {
                 this.UI1_speed.anims.load('speed_increase', 6);
             }
-            else if (this.carSpeedAnim <= -4.69 && this.carSpeed > -5.36) {
+            else if (this.carSpeedAnim <= -2.345 && this.carSpeed > -2.68) {
                 this.UI1_speed.anims.load('speed_increase', 7);
             }
-            else if (this.carSpeedAnim >= 4.69 && this.carSpeed < 5.36) {
+            else if (this.carSpeedAnim >= 2.345 && this.carSpeed < 2.68) {
                 this.UI1_speed.anims.load('speed_increase', 7);
             }
-            else if (this.carSpeedAnim <= -5.36 && this.carSpeed > -6.03) {
+            else if (this.carSpeedAnim <= -2.68 && this.carSpeed > -3.015) {
                 this.UI1_speed.anims.load('speed_increase', 8);
             }
-            else if (this.carSpeedAnim >= 5.36 && this.carSpeed < 6.03) {
+            else if (this.carSpeedAnim >= 2.68 && this.carSpeed < 3.015) {
                 this.UI1_speed.anims.load('speed_increase', 8);
             }
-            else if (this.carSpeedAnim <= -6.03 && this.carSpeed > -6.7) {
+            else if (this.carSpeedAnim <= -3.015 && this.carSpeed > -3.35) {
                 this.UI1_speed.anims.load('speed_increase', 9);
             }
-            else if (this.carSpeedAnim >= 6.03 && this.carSpeed < 6.7) {
+            else if (this.carSpeedAnim >= 3.015 && this.carSpeed < 3.35) {
                 this.UI1_speed.anims.load('speed_increase', 9);
             }
-            else if (this.carSpeedAnim <= -6.7 && this.carSpeed > -7.37) {
+            else if (this.carSpeedAnim <= -3.35 && this.carSpeed > -3.685) {
                 this.UI1_speed.anims.load('speed_increase', 10);
             }
-            else if (this.carSpeedAnim >= 6.7 && this.carSpeed < 7.37) {
+            else if (this.carSpeedAnim >= 3.35 && this.carSpeed < 3.685) {
                 this.UI1_speed.anims.load('speed_increase', 10);
             }
-            else if (this.carSpeedAnim <= -7.37 && this.carSpeed > -8.04) {
+            else if (this.carSpeedAnim <= -3.685 && this.carSpeed > -4.02) {
                 this.UI1_speed.anims.load('speed_increase', 11);
             }
-            else if (this.carSpeedAnim >= 7.37 && this.carSpeed < 8.04) {
+            else if (this.carSpeedAnim >= 3.685 && this.carSpeed < 4.02) {
                 this.UI1_speed.anims.load('speed_increase', 11);
             }
-            else if (this.carSpeedAnim <= -8.04 && this.carSpeed > -8.71) {
+            else if (this.carSpeedAnim <= -4.02 && this.carSpeed > -4.355) {
                 this.UI1_speed.anims.load('speed_increase', 12);
             }
-            else if (this.carSpeedAnim >= 8.04 && this.carSpeed < 8.71) {
+            else if (this.carSpeedAnim >= 4.02 && this.carSpeed < 4.355) {
                 this.UI1_speed.anims.load('speed_increase', 12);
             }
-            else if (this.carSpeedAnim <= -8.71 && this.carSpeed > -9.38) {
+            else if (this.carSpeedAnim <= -4.355 && this.carSpeed > -4.69) {
                 this.UI1_speed.anims.load('speed_increase', 13);
             }
-            else if (this.carSpeedAnim >= 8.71 && this.carSpeed < 9.38) {
+            else if (this.carSpeedAnim >= 4.355 && this.carSpeed < 4.69) {
                 this.UI1_speed.anims.load('speed_increase', 13);
             }
             else {
                 this.UI1_speed.anims.load('speed_increase', 14);
             }
 
-            if((this.player.x > -830 && this.player.x < 850) && (this.player.y > 850 && this.player.y < 1200)){
+            if((this.player.x >= -830 && this.player.x <= 850) && (this.player.y >= 850 && this.player.y <= 1200)){
                 if(this.player_waypoint == 4 || this.player_waypoint == 5){ // check if player is coming from right direction
                     this.player_waypoint = 5;
                 }
@@ -856,15 +897,23 @@ class PlayS extends Phaser.Scene {
                     console.log("player 1 wrong way")
                 }   
             }
-            else if((this.player.x > 400 && this.player.x < 850) && (this.player.y > 0 && this.player.y < 850)){
-                if(this.player_waypoint == 5 || this.player_waypoint == 1){
+            else if((this.player.x >= 400 && this.player.x <= 850) && (this.player.y > 400 && this.player.y <= 850)){ // to goal
+                if(this.player_waypoint == 5 || this.player_waypoint == 6){
+                    this.player_waypoint = 6;
+                }
+                else{ // wrong way
+                    console.log("player 1 wrong way")
+                } 
+            }
+            else if((this.player.x >= 400 && this.player.x <= 850) && (this.player.y < 350 && this.player.y >= 0)){ 
+                if(this.player_waypoint == 6 || this.player_waypoint == 1){
                     this.player_waypoint = 1;
                 }
                 else{ // wrong way
                     console.log("player 1 wrong way")
                 } 
             }
-            else if((this.player.x > 780 && this.player.x < 1200) && (this.player.y > -940 && this.player.y < 180)){
+            else if((this.player.x >= 780 && this.player.x <= 1200) && (this.player.y >= -940 && this.player.y <= 180)){
                 if(this.player_waypoint == 1 || this.player_waypoint == 2){
                     this.player_waypoint = 2;
                 }
@@ -872,7 +921,7 @@ class PlayS extends Phaser.Scene {
                     console.log("player 1 wrong way")
                 } 
             }
-            else if((this.player.x > -830 && this.player.x < 970) && (this.player.y > -1220 && this.player.y < -940)){
+            else if((this.player.x >= -830 && this.player.x <= 970) && (this.player.y >= -1220 && this.player.y <= -940)){
                 if(this.player_waypoint == 2 || this.player_waypoint == 3){
                     this.player_waypoint = 3;
                 }
@@ -881,12 +930,43 @@ class PlayS extends Phaser.Scene {
                 } 
             }
             else{
-                if(this.player_waypoint == 3 || this.player_waypoint == 4){
-                    this.player_waypoint = 4;
+                if(!(this.player.x >= 400 && this.player.x <= 850) && (this.player.y <= 400 && this.player.y >= 350)){
+                    if(this.player_waypoint == 3 || this.player_waypoint == 4){
+                        this.player_waypoint = 4;
+                    }
+                    else{ // wrong way
+                        console.log("player 1 wrong way")
+                    } 
                 }
-                else{ // wrong way
-                    console.log("player 1 wrong way")
-                } 
+            }
+
+            if(this.lineEnter){
+                if((this.player.x >= 400 && this.player.x <= 850) && (this.player.y <= 400 && this.player.y >= 350)){ // goal line
+                    if(this.player_waypoint == 6){
+                        this.player_lap += 1;
+                        this.lineEnter = false;
+                        if(this.player_lap == 2){ // Lap 2
+                            this.UI1_lapcount.anims.load('lap_count', 1);
+                            let UI1_laptwo = this.add.sprite(-3260, -3350, 'UI_laptwo').setScale(2.5);
+                            UI1_laptwo.anims.play("lap_two");
+                            UI1_laptwo.on('animationcomplete', () => {
+                                UI1_laptwo.destroy(true);
+                            })
+                        }
+                        if(this.player_lap == 3){ // Last lap
+                            this.UI1_lapcount.anims.load('lap_count', 2);
+                            let UI1_lapfinal = this.add.sprite(-3260, -3350, 'UI_lapfinal').setScale(2.5);
+                            UI1_lapfinal.anims.play("lap_final");
+                            UI1_lapfinal.on('animationcomplete', () => {
+                                UI1_lapfinal.destroy(true);
+                            })
+                        }
+                        if(this.player_lap == 4){ // Over
+                            
+                        }
+                    }
+
+                }
             }
 
             // Player 2 Movement
@@ -957,85 +1037,85 @@ class PlayS extends Phaser.Scene {
             this.carSpeed2Anim = this.carSpeed2;
 
             //console.log(this.carSpeedAnim);
-            if (this.carSpeed2 < 0.67 && this.carSpeed2 > -0.67) {
+            if (this.carSpeed2 < 0.67/2 && this.carSpeed2 > -0.67/2) {
                 this.UI2_speed.anims.load('speed_increase', 0);
             }
-            else if (this.carSpeed2Anim <= -0.67 && this.carSpeed2 > -1.34) {
+            else if (this.carSpeed2Anim <= -0.67/2 && this.carSpeed2 > -1.34/2) {
                 this.UI2_speed.anims.load('speed_increase', 1);
             }
-            else if (this.carSpeed2Anim >= 0.67 && this.carSpeed2 < 1.34) {
+            else if (this.carSpeed2Anim >= 0.67/2 && this.carSpeed2 < 1.34/2) {
                 this.UI2_speed.anims.load('speed_increase', 1);
             }
-            else if (this.carSpeed2Anim <= -1.34 && this.carSpeed2 > -2.01) {
+            else if (this.carSpeed2Anim <= -1.34/2 && this.carSpeed2 > -2.01/2) {
                 this.UI2_speed.anims.load('speed_increase', 2);
             }
-            else if (this.carSpeed2Anim >= 1.34 && this.carSpeed2 < 2.01) {
+            else if (this.carSpeed2Anim >= 1.34/2 && this.carSpeed2 < 2.01/2) {
                 this.UI2_speed.anims.load('speed_increase', 2);
             }
-            else if (this.carSpeed2Anim <= -2.01 && this.carSpeed2 > -2.68) {
+            else if (this.carSpeed2Anim <= -2.01/2 && this.carSpeed2 > -2.68/2) {
                 this.UI2_speed.anims.load('speed_increase', 3);
             }
-            else if (this.carSpeed2Anim >= 2.01 && this.carSpeed2 < 2.68) {
+            else if (this.carSpeed2Anim >= 2.01/2 && this.carSpeed2 < 2.68/2) {
                 this.UI2_speed.anims.load('speed_increase', 3);
             }
-            else if (this.carSpeed2Anim <= -2.68 && this.carSpeed2 > -3.35) {
+            else if (this.carSpeed2Anim <= -2.68/2 && this.carSpeed2 > -3.35/2) {
                 this.UI2_speed.anims.load('speed_increase', 4);
             }
-            else if (this.carSpeed2Anim >= 2.68 && this.carSpeed2 < 3.35) {
+            else if (this.carSpeed2Anim >= 2.68/2 && this.carSpeed2 < 3.35/2) {
                 this.UI2_speed.anims.load('speed_increase', 4);
             }
-            else if (this.carSpeed2Anim <= -3.35 && this.carSpeed2 > -4.02) {
+            else if (this.carSpeed2Anim <= -3.35/2 && this.carSpeed2 > -4.02/2) {
                 this.UI2_speed.anims.load('speed_increase', 5);
             }
-            else if (this.carSpeed2Anim >= 3.35 && this.carSpeed2 < 4.02) {
+            else if (this.carSpeed2Anim >= 3.35/2 && this.carSpeed2 < 4.02/2) {
                 this.UI2_speed.anims.load('speed_increase', 5);
             }
-            else if (this.carSpeed2Anim <= -4.02 && this.carSpeed2 > -4.69) {
+            else if (this.carSpeed2Anim <= -4.02/2 && this.carSpeed2 > -4.69/2) {
                 this.UI2_speed.anims.load('speed_increase', 6);
             }
-            else if (this.carSpeed2Anim >= 4.02 && this.carSpeed2 < 4.69) {
+            else if (this.carSpeed2Anim >= 4.02/2 && this.carSpeed2 < 4.69/2) {
                 this.UI2_speed.anims.load('speed_increase', 6);
             }
-            else if (this.carSpeed2Anim <= -4.69 && this.carSpeed2 > -5.36) {
+            else if (this.carSpeed2Anim <= -4.69/2 && this.carSpeed2 > -5.36/2) {
                 this.UI2_speed.anims.load('speed_increase', 7);
             }
-            else if (this.carSpeed2Anim >= 4.69 && this.carSpeed2 < 5.36) {
+            else if (this.carSpeed2Anim >= 4.69/2 && this.carSpeed2 < 5.36/2) {
                 this.UI2_speed.anims.load('speed_increase', 7);
             }
-            else if (this.carSpeed2Anim <= -5.36 && this.carSpeed2 > -6.03) {
+            else if (this.carSpeed2Anim <= -5.36/2 && this.carSpeed2 > -6.03/2) {
                 this.UI2_speed.anims.load('speed_increase', 8);
             }
-            else if (this.carSpeed2Anim >= 5.36 && this.carSpeed2 < 6.03) {
+            else if (this.carSpeed2Anim >= 5.36/2 && this.carSpeed2 < 6.03/2) {
                 this.UI2_speed.anims.load('speed_increase', 8);
             }
-            else if (this.carSpeed2Anim <= -6.03 && this.carSpeed2 > -6.7) {
+            else if (this.carSpeed2Anim <= -6.03/2 && this.carSpeed2 > -6.7/2) {
                 this.UI2_speed.anims.load('speed_increase', 9);
             }
-            else if (this.carSpeed2Anim >= 6.03 && this.carSpeed2 < 6.7) {
+            else if (this.carSpeed2Anim >= 6.03/2 && this.carSpeed2 < 6.7/2) {
                 this.UI2_speed.anims.load('speed_increase', 9);
             }
-            else if (this.carSpeed2Anim <= -6.7 && this.carSpeed2 > -7.37) {
+            else if (this.carSpeed2Anim <= -6.7/2 && this.carSpeed2 > -7.37/2) {
                 this.UI2_speed.anims.load('speed_increase', 10);
             }
-            else if (this.carSpeed2Anim >= 6.7 && this.carSpeed2 < 7.37) {
+            else if (this.carSpeed2Anim >= 6.7/2 && this.carSpeed2 < 7.37/2) {
                 this.UI2_speed.anims.load('speed_increase', 10);
             }
-            else if (this.carSpeed2Anim <= -7.37 && this.carSpeed2 > -8.04) {
+            else if (this.carSpeed2Anim <= -7.37/2 && this.carSpeed2 > -8.04/2) {
                 this.UI2_speed.anims.load('speed_increase', 11);
             }
-            else if (this.carSpeed2Anim >= 7.37 && this.carSpeed2 < 8.04) {
+            else if (this.carSpeed2Anim >= 7.37/2 && this.carSpeed2 < 8.04/2) {
                 this.UI2_speed.anims.load('speed_increase', 11);
             }
-            else if (this.carSpeed2Anim <= -8.04 && this.carSpeed2 > -8.71) {
+            else if (this.carSpeed2Anim <= -8.04/2 && this.carSpeed2 > -8.71/2) {
                 this.UI2_speed.anims.load('speed_increase', 12);
             }
-            else if (this.carSpeed2Anim >= 8.04 && this.carSpeed2 < 8.71) {
+            else if (this.carSpeed2Anim >= 8.04/2 && this.carSpeed2 < 8.71/2) {
                 this.UI2_speed.anims.load('speed_increase', 12);
             }
-            else if (this.carSpeed2Anim <= -8.71 && this.carSpeed2 > -9.38) {
+            else if (this.carSpeed2Anim <= -8.71/2 && this.carSpeed2 > -9.38/2) {
                 this.UI2_speed.anims.load('speed_increase', 13);
             }
-            else if (this.carSpeed2Anim >= 8.71 && this.carSpeed2 < 9.38) {
+            else if (this.carSpeed2Anim >= 8.71/2 && this.carSpeed2 < 9.38/2) {
                 this.UI2_speed.anims.load('speed_increase', 13);
             }
             else {
@@ -1043,7 +1123,7 @@ class PlayS extends Phaser.Scene {
             }
         }
 
-        if((this.player2.x > -830 && this.player2.x < 850) && (this.player2.y > 850 && this.player2.y < 1200)){
+        if((this.player2.x >= -830 && this.player2.x <= 850) && (this.player2.y >= 850 && this.player2.y <= 1200)){
             if(this.player2_waypoint == 4 || this.player2_waypoint == 5){ // check if player2 is coming from right direction
                 this.player2_waypoint = 5;
             }
@@ -1051,15 +1131,23 @@ class PlayS extends Phaser.Scene {
                 console.log("player 2 wrong way")
             }   
         }
-        else if((this.player2.x > 400 && this.player2.x < 850) && (this.player2.y > 0 && this.player2.y < 850)){
-            if(this.player2_waypoint == 5 || this.player2_waypoint == 1){
+        else if((this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y > 400 && this.player2.y <= 850)){ // to goal
+            if(this.player2_waypoint == 5 || this.player2_waypoint == 6){
+                this.player2_waypoint = 6;
+            }
+            else{ // wrong way
+                console.log("player2 1 wrong way")
+            } 
+        }
+        else if((this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y < 350 && this.player2.y >= 0)){ 
+            if(this.player2_waypoint == 6 || this.player2_waypoint == 1){
                 this.player2_waypoint = 1;
             }
             else{ // wrong way
-                console.log("player 2 wrong way")
+                console.log("player 1 wrong way")
             } 
         }
-        else if((this.player2.x > 780 && this.player2.x < 1200) && (this.player2.y > -940 && this.player2.y < 180)){
+        else if((this.player2.x >= 780 && this.player2.x <= 1200) && (this.player2.y >= -940 && this.player2.y <= 180)){
             if(this.player2_waypoint == 1 || this.player2_waypoint == 2){
                 this.player2_waypoint = 2;
             }
@@ -1067,7 +1155,7 @@ class PlayS extends Phaser.Scene {
                 console.log("player 2 wrong way")
             } 
         }
-        else if((this.player2.x > -830 && this.player2.x < 970) && (this.player2.y > -1220 && this.player2.y < -940)){
+        else if((this.player2.x >= -830 && this.player2.x <= 970) && (this.player2.y >= -1220 && this.player2.y <= -940)){
             if(this.player2_waypoint == 2 || this.player2_waypoint == 3){
                 this.player2_waypoint = 3;
             }
@@ -1076,12 +1164,44 @@ class PlayS extends Phaser.Scene {
             } 
         }
         else{
-            if(this.player2_waypoint == 3 || this.player2_waypoint == 4){
-                this.player2_waypoint = 4;
+            if(!(this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y <= 400 && this.player2.y >= 350)){
+                if(this.player2_waypoint == 3 || this.player2_waypoint == 4){
+                    this.player2_waypoint = 4;
+                }
+                else{ // wrong way
+                    console.log("player 2 wrong way")
+                } 
             }
-            else{ // wrong way
-                console.log("player 2 wrong way")
-            } 
+        }
+
+        if(this.lineEnter2){
+            if((this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y <= 400 && this.player2.y >= 350)){ // goal line
+                if(this.player2_waypoint == 6){
+                    this.player2_lap += 1;
+                    this.lineEnter2 = false;
+                    if(this.player2_lap == 2){ // Lap 2
+                        this.UI2_lapcount.anims.load('lap_count', 1);
+                        let UI2_laptwo = this.add.sprite(-2260, -2350, 'UI_laptwo').setScale(2.5);
+                        UI2_laptwo.anims.play("lap_two");
+                        UI2_laptwo.on('animationcomplete', () => {
+                            UI2_laptwo.destroy(true);
+                        })
+                    }
+                    if(this.player2_lap == 3){ // Last lap
+                        this.UI2_lapcount.anims.load('lap_count', 2);
+                        let UI2_lapfinal = this.add.sprite(-2260, -2350, 'UI_lapfinal').setScale(2.5);
+                        UI2_lapfinal.anims.play("lap_final");
+                        UI2_lapfinal.on('animationcomplete', () => {
+                            UI2_lapfinal.destroy(true);
+                        })
+                    }
+                    if(this.player2_lap == 4){ // Over
+                        
+                    }
+
+                }
+                
+            }
         }
 
         if(this.player_lap == this.player2_lap){ // only check if players are on same lap.
@@ -1106,7 +1226,7 @@ class PlayS extends Phaser.Scene {
                         this.UI2_place.anims.load('UI_place', 0);
                     }
                 }
-                else if(this.player_waypoint == 3){
+                else if(this.player_waypoint == 3){ 
                     if(this.player.x < this.player2.x){ // player 1 is ahead
                         this.UI1_place.anims.load('UI_place', 0);
                         this.UI2_place.anims.load('UI_place', 1);
@@ -1126,8 +1246,18 @@ class PlayS extends Phaser.Scene {
                         this.UI2_place.anims.load('UI_place', 0);
                     }
                 }
-                else{ // waypoint == 5
+                else if(this.player_waypoint == 5){
                     if(this.player.x > this.player2.x){ // player 1 is ahead
+                        this.UI1_place.anims.load('UI_place', 0);
+                        this.UI2_place.anims.load('UI_place', 1);
+                    }
+                    else{ // player 2 is ahead
+                        this.UI1_place.anims.load('UI_place', 1);
+                        this.UI2_place.anims.load('UI_place', 0);
+                    }
+                }
+                else{ // waypoint == 6
+                    if(this.player.y < this.player2.y){ // player 1 is ahead
                         this.UI1_place.anims.load('UI_place', 0);
                         this.UI2_place.anims.load('UI_place', 1);
                     }
