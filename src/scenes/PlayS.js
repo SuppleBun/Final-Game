@@ -7,14 +7,16 @@ class PlayS extends Phaser.Scene {
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
         this.load.image('map', './assets/image/map.jpg');
-        //this.load.image('livingRoom', './assets/image/livingRoom.png');
-        //this.load.image('bathroom', './assets/image/bathroom.png');
-        //this.load.image('kitchen', './assets/image/kitchen.png');
-        //this.load.image('garage', './assets/image/garage.png');
-        //this.load.image('hallway', './assets/image/kitchenGarageHall.png');
         this.load.image('background', './assets/image/background.png');
         this.load.image('UI_item', './assets/image/UI_item.png');
         this.load.image('UI_steeringwheel', './assets/image/UI_steeringwheel.png');
+        this.load.image('UI_banana', './assets/image/UI_banana.png');
+        this.load.image('UI_boost', './assets/image/UI_boost.png');
+        this.load.image('UI_hammer', './assets/image/UI_hammer.png');
+        this.load.image('UI_honey', './assets/image/UI_honey.png');
+        this.load.image('UI_lap', './assets/image/UI_lap.png');
+        this.load.spritesheet('UI_lapcount', './assets/image/UI_lapcount.png', { frameWidth: 34, frameHeight: 25, startFrame: 0, endFrame: 2 });
+        this.load.spritesheet('UI_place', './assets/image/UI_place.png', { frameWidth: 28, frameHeight: 52, startFrame: 0, endFrame: 1 });
         this.load.spritesheet('UI_speed', './assets/image/UI_speed.png', { frameWidth: 64, frameHeight: 64, startFrame: 0, endFrame: 14 });
         this.load.spritesheet('start_light', './assets/image/start_light.png', { frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3 });
         this.load.spritesheet('go_effect', './assets/image/go.png', { frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 6 });
@@ -51,7 +53,6 @@ class PlayS extends Phaser.Scene {
         this.anims.create({
             key: 'speed_increase',
             frames: this.anims.generateFrameNumbers('UI_speed', { start: 0, end: 14, first: 0 }),
-            frameRate: 5,
         })
 
         // create rotate animation for item box
@@ -60,6 +61,18 @@ class PlayS extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('item_box', { start: 0, end: 7, first: 0 }),
             frameRate: 8,
             repeat: -1,
+        })
+
+        // create rotate animation for lap count
+        this.anims.create({
+            key: 'lap_count',
+            frames: this.anims.generateFrameNumbers('UI_lapcount', { start: 0, end: 2, first: 0 }),
+        })
+
+        // create rotate animation for UI place
+        this.anims.create({
+            key: 'UI_place',
+            frames: this.anims.generateFrameNumbers('UI_place', { start: 0, end: 1, first: 0 }),
         })
 
         this.matter.world.setBounds(-1250, -1250, 2500, 2500);
@@ -451,10 +464,12 @@ class PlayS extends Phaser.Scene {
             height: 94
         }, { label: 'player1' })
 
-        //this.player.setCollisionGroup(-1);
+        // Define lap count and waypoints for player
+        this.player_lap = 1;
+        this.player_waypoint = 1;
 
         // Steeringwheel for player
-        this.SteeringWheel = this.matter.add.sprite(-2425, -2095, 'UI_steeringwheel').setScale(2.5);
+        this.SteeringWheel = this.matter.add.sprite(-3425, -3095, 'UI_steeringwheel').setScale(2.5);
         this.SteeringWheel.setCollisionGroup(-1); // Make sure steeringwheels don't collide with each other.
 
         // Animation delay for Steeringwheel
@@ -470,6 +485,10 @@ class PlayS extends Phaser.Scene {
             width: 50,
             height: 94
         }, { label: 'player2' })
+
+        // Define lap count for player2
+        this.player2_lap = 1;
+        this.player2_waypoint = 1;
 
         // Steeringwheel for player2
         this.SteeringWheel2 = this.matter.add.sprite(-2425, -2095, 'UI_steeringwheel').setScale(2.5);
@@ -491,29 +510,55 @@ class PlayS extends Phaser.Scene {
         this.player_UI = this.add.group();
         {
             // item
-            this.UI1_item = this.add.image(-2100, -2450, 'UI_item').setScale(2.5);
+            this.UI1_item = this.add.image(-3100, -3450, 'UI_item').setScale(2.5);
 
             // speed meter
-            this.UI1_speed = this.add.sprite(-2080, -2083, 'UI_speed').setScale(2);
+            this.UI1_speed = this.add.sprite(-3080, -3083, 'UI_speed').setScale(2);
             this.UI1_speed.anims.load('speed_increase');
 
+            // lap text
+            this.UI1_lap = this.add.image(-3450, -3462, 'UI_lap').setScale(2);
+
+            // lap count
+            this.UI1_lapcount = this.add.sprite(-3370, -3462, 'UI_lapcount').setScale(2.25);
+            this.UI1_lapcount.anims.load('lap_count');
+
+            // place
+            this.UI1_place = this.add.sprite(-3460, -3380, 'UI_place').setScale(1.75);
+            this.UI1_place.anims.load('UI_place');
+
             // add objects to group
-            this.player_UI.addMultiple([this.UI1_item, this.UI1_speed]);
+            this.player_UI.addMultiple([this.UI1_item, this.UI1_speed, this.UI1_lap, this.UI1_lapcount, this.UI1_place]);
         }
+
 
         // Add player2 UI group
         this.player2_UI = this.add.group();
         {
-            // item
+            // item1
             this.UI2_item = this.add.image(-2100, -2450, 'UI_item').setScale(2.5);
 
             // speed meter
             this.UI2_speed = this.add.sprite(-2080, -2083, 'UI_speed').setScale(2);
             this.UI2_speed.anims.load('speed_increase');
 
+            // lap text
+            this.UI2_lap = this.add.image(-2450, -2462, 'UI_lap').setScale(2);
+
+            // lap count
+            this.UI2_lapcount = this.add.sprite(-2370, -2462, 'UI_lapcount').setScale(2.25);
+            this.UI2_lapcount.anims.load('lap_count');
+
+            // place
+            this.UI2_place = this.add.sprite(-2460, -2380, 'UI_first').setScale(1.75);
+            this.UI2_place.anims.load('UI_place');
+
             // add objects to group
-            this.player2_UI.addMultiple([this.UI2_item, this.UI2_speed]);
+            this.player2_UI.addMultiple([this.UI2_item, this.UI2_speed, this.UI2_lap, this.UI2_lapcount, this.UI2_place]);
         }
+
+        //this.hamemr = this.add.image(-2126, -2450, 'UI_hammer').setScale(1.7);
+        //this.honey = this.add.image(-2059, -2438, 'UI_honey').setScale(0.7);
 
         // Add 2 cameras for split screen.
         this.camera = this.cameras.main.setViewport(0, 0, (game.config.width / 2), game.config.height);
@@ -528,7 +573,7 @@ class PlayS extends Phaser.Scene {
 
         // Add UI Camera for camera 1
         this.UICamera = this.cameras.add(0, 0, (game.config.width / 2), game.config.height);
-        this.UICamera.setScroll(-2500, -2500);
+        this.UICamera.setScroll(-3500, -3500);
         this.UICamera.ignore([this.player2_UI, this.SteeringWheel2, this.map]);
 
         // Add UI Camera for camera 2
@@ -556,10 +601,13 @@ class PlayS extends Phaser.Scene {
         this.engineStart.play();
 
         // Play the countdown animation
-        let countdown = this.add.sprite(-2260, -2350, 'start_light').setScale(1);
+        let countdown = this.add.sprite(-3260, -3350, 'start_light').setScale(1);
+        let countdown2 = this.add.sprite(-2260, -2350, 'start_light').setScale(1);
         countdown.anims.play('countdown');
+        countdown2.anims.play('countdown');
         countdown.on('animationcomplete', () => {
             countdown.destroy(true);
+            countdown2.destroy(true);
             // Players can now move
             this.canMove = true;
 
@@ -569,17 +617,23 @@ class PlayS extends Phaser.Scene {
             this.bgm.play();
 
             // Play 'Go!' and firework effect
-            let go_effect = this.add.sprite(-2250, -2300, 'go_effect').setScale(1);
-            let firework_effect = this.add.sprite(-2250, -2300, 'firework').setScale(2);
+            let go_effect = this.add.sprite(-3250, -3300, 'go_effect').setScale(1);
+            let go_effect2 = this.add.sprite(-2250, -2300, 'go_effect').setScale(1);
+            let firework_effect = this.add.sprite(-3250, -3300, 'firework').setScale(2);
+            let firework_effect2 = this.add.sprite(-2250, -2300, 'firework').setScale(2);
 
             go_effect.anims.play('go');
+            go_effect2.anims.play('go');
             firework_effect.anims.play('firework');
+            firework_effect2.anims.play('firework');
 
             go_effect.on('animationcomplete', () => {
                 go_effect.destroy(true);
+                go_effect2.destroy(true);
             })
             firework_effect.on('animationcomplete', () => {
                 firework_effect.destroy(true);
+                firework_effect2.destroy(true);
             })
 
         })
@@ -610,7 +664,7 @@ class PlayS extends Phaser.Scene {
                 //var item = Phaser.Math.Between(1,4);
                 //console.log(bodyA);
                 //console.log(this.item_box);
-                //bodyA.destroy(true);
+                bodyA.gameObject.destroy();
             }
 
             if(bodyA.label == 'item_box' && bodyB.label == 'player2') {
@@ -794,6 +848,47 @@ class PlayS extends Phaser.Scene {
                 this.UI1_speed.anims.load('speed_increase', 14);
             }
 
+            if((this.player.x > -830 && this.player.x < 850) && (this.player.y > 850 && this.player.y < 1200)){
+                if(this.player_waypoint == 4 || this.player_waypoint == 5){ // check if player is coming from right direction
+                    this.player_waypoint = 5;
+                }
+                else{ // wrong way
+                    console.log("player 1 wrong way")
+                }   
+            }
+            else if((this.player.x > 400 && this.player.x < 850) && (this.player.y > 0 && this.player.y < 850)){
+                if(this.player_waypoint == 5 || this.player_waypoint == 1){
+                    this.player_waypoint = 1;
+                }
+                else{ // wrong way
+                    console.log("player 1 wrong way")
+                } 
+            }
+            else if((this.player.x > 780 && this.player.x < 1200) && (this.player.y > -940 && this.player.y < 180)){
+                if(this.player_waypoint == 1 || this.player_waypoint == 2){
+                    this.player_waypoint = 2;
+                }
+                else{ // wrong way
+                    console.log("player 1 wrong way")
+                } 
+            }
+            else if((this.player.x > -830 && this.player.x < 970) && (this.player.y > -1220 && this.player.y < -940)){
+                if(this.player_waypoint == 2 || this.player_waypoint == 3){
+                    this.player_waypoint = 3;
+                }
+                else{ // wrong way
+                    console.log("player 1 wrong way")
+                } 
+            }
+            else{
+                if(this.player_waypoint == 3 || this.player_waypoint == 4){
+                    this.player_waypoint = 4;
+                }
+                else{ // wrong way
+                    console.log("player 1 wrong way")
+                } 
+            }
+
             // Player 2 Movement
             //console.log(this.carSpeed2);
             // sets maximum forward speed to 5
@@ -946,6 +1041,118 @@ class PlayS extends Phaser.Scene {
             else {
                 this.UI2_speed.anims.load('speed_increase', 14);
             }
+        }
+
+        if((this.player2.x > -830 && this.player2.x < 850) && (this.player2.y > 850 && this.player2.y < 1200)){
+            if(this.player2_waypoint == 4 || this.player2_waypoint == 5){ // check if player2 is coming from right direction
+                this.player2_waypoint = 5;
+            }
+            else{ // wrong way
+                console.log("player 2 wrong way")
+            }   
+        }
+        else if((this.player2.x > 400 && this.player2.x < 850) && (this.player2.y > 0 && this.player2.y < 850)){
+            if(this.player2_waypoint == 5 || this.player2_waypoint == 1){
+                this.player2_waypoint = 1;
+            }
+            else{ // wrong way
+                console.log("player 2 wrong way")
+            } 
+        }
+        else if((this.player2.x > 780 && this.player2.x < 1200) && (this.player2.y > -940 && this.player2.y < 180)){
+            if(this.player2_waypoint == 1 || this.player2_waypoint == 2){
+                this.player2_waypoint = 2;
+            }
+            else{ // wrong way
+                console.log("player 2 wrong way")
+            } 
+        }
+        else if((this.player2.x > -830 && this.player2.x < 970) && (this.player2.y > -1220 && this.player2.y < -940)){
+            if(this.player2_waypoint == 2 || this.player2_waypoint == 3){
+                this.player2_waypoint = 3;
+            }
+            else{ // wrong way
+                console.log("player 2 wrong way")
+            } 
+        }
+        else{
+            if(this.player2_waypoint == 3 || this.player2_waypoint == 4){
+                this.player2_waypoint = 4;
+            }
+            else{ // wrong way
+                console.log("player 2 wrong way")
+            } 
+        }
+
+        if(this.player_lap == this.player2_lap){ // only check if players are on same lap.
+            if(this.player_waypoint == this.player2_waypoint){ // players are in same box
+                if(this.player_waypoint == 1){
+                    if(this.player.y < this.player2.y){ // player 1 is ahead
+                        this.UI1_place.anims.load('UI_place', 0);
+                        this.UI2_place.anims.load('UI_place', 1);
+                    }
+                    else{ // player 2 is ahead
+                        this.UI1_place.anims.load('UI_place', 1);
+                        this.UI2_place.anims.load('UI_place', 0);
+                    }
+                }
+                else if(this.player_waypoint == 2){
+                    if(this.player.y < this.player2.y){ // player 1 is ahead
+                        this.UI1_place.anims.load('UI_place', 0);
+                        this.UI2_place.anims.load('UI_place', 1);
+                    }
+                    else{ // player 2 is ahead
+                        this.UI1_place.anims.load('UI_place', 1);
+                        this.UI2_place.anims.load('UI_place', 0);
+                    }
+                }
+                else if(this.player_waypoint == 3){
+                    if(this.player.x < this.player2.x){ // player 1 is ahead
+                        this.UI1_place.anims.load('UI_place', 0);
+                        this.UI2_place.anims.load('UI_place', 1);
+                    }
+                    else{ // player 2 is ahead
+                        this.UI1_place.anims.load('UI_place', 1);
+                        this.UI2_place.anims.load('UI_place', 0);
+                    }
+                }
+                else if(this.player_waypoint == 4){
+                    if(this.player.y > this.player2.y){ // player 1 is ahead
+                        this.UI1_place.anims.load('UI_place', 0);
+                        this.UI2_place.anims.load('UI_place', 1);
+                    }
+                    else{ // player 2 is ahead
+                        this.UI1_place.anims.load('UI_place', 1);
+                        this.UI2_place.anims.load('UI_place', 0);
+                    }
+                }
+                else{ // waypoint == 5
+                    if(this.player.x > this.player2.x){ // player 1 is ahead
+                        this.UI1_place.anims.load('UI_place', 0);
+                        this.UI2_place.anims.load('UI_place', 1);
+                    }
+                    else{ // player 2 is ahead
+                        this.UI1_place.anims.load('UI_place', 1);
+                        this.UI2_place.anims.load('UI_place', 0);
+                    }
+                }
+            }
+            else if(this.player_waypoint > this.player2_waypoint){ // player 1 is ahead
+                this.UI1_place.anims.load('UI_place', 0);
+                this.UI2_place.anims.load('UI_place', 1);
+            }
+            else{ // player 2 is ahead
+                this.UI1_place.anims.load('UI_place', 1);
+                this.UI2_place.anims.load('UI_place', 0);
+            }
+        }
+        else if(this.player_lap > this.player2_lap){ // player 1 has lap lead
+            this.UI1_place.anims.load('UI_place', 0);
+            this.UI2_place.anims.load('UI_place', 1);
+        }
+        else{ // player 2 has lap lead
+            this.UI1_place.anims.load('UI_place', 1);
+            this.UI2_place.anims.load('UI_place', 0);
         }
     }
 }

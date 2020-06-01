@@ -9,7 +9,7 @@ let config = {
     physics: {
         default: 'matter',
         matter: {
-            debug: false, // allows to see the hitbox of sprites
+            debug: true, // allows to see the hitbox of sprites
             gravity: { y: 0}
         }
     },
