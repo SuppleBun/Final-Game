@@ -655,22 +655,43 @@ class PlayS extends Phaser.Scene {
 
         this.player2.item_slot = 0;
         this.player2.item_slot2 = 0;
-        console.log(this.item_box);
-        
+        //console.log(this.item_box);
+
         // collision detection between item box and the players
         this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-            if(bodyA.label == 'item_box' && bodyB.label == 'player1') {
+            if((bodyA.label == 'item_box' && bodyB.label == 'player1')) {
                 console.log('item_box hit player1');
                 //var item = Phaser.Math.Between(1,4);
-                //console.log(bodyA);
-                //console.log(this.item_box);
+                var x = bodyA.position.x;
+                var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
+                this.respawnBox(x,y);
             }
 
             if(bodyA.label == 'item_box' && bodyB.label == 'player2') {
                 console.log('item_box hit player2')
+                var x = bodyA.position.x;
+                var y = bodyA.position.y;
+                bodyA.gameObject.destroy();
             }
         });
+    }
+
+    respawnBox(x,y) {
+        this.time.addEvent({
+            delay: 3000, 
+            callback: () => {
+                this.item_box = this.matter.add.sprite(x, y, 'item_box').setScale(1).setStatic(true).setSensor(true);
+                this.item_box.setBody({
+                    type: 'rectangle',
+                    width: 48,
+                    height: 48,
+                }, { label: 'item_box' })
+                this.item_box.anims.play("box_rotate");
+                //console.log(this.item_box.body.label);
+            },
+            loop: false
+        })
     }
 
     update() {
