@@ -74,7 +74,7 @@ class Play extends Phaser.Scene {
             this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
         }
 
-        console.log(this.carSpeed);
+        //console.log(this.carSpeed);
         
         if (this.carSpeed < 0.01 && this.carSpeed > -0.009999999999999913 && !keyDOWN.isDown) {
             this.SteeringWheel.rotation = 0;
