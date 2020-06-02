@@ -697,8 +697,9 @@ class PlayS extends Phaser.Scene {
 
         // collision detection between item box and the players
         this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-            if((bodyA.label == 'item_box' && bodyB.label == 'player1')) {
-                console.log('item_box hit player1');
+            //console.log(bodyB);
+            if(bodyA.label == 'item_box' && bodyB.label == 'player1') {
+                //console.log('item_box hit player1');
                 //var item = Phaser.Math.Between(1,4);
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
@@ -706,13 +707,30 @@ class PlayS extends Phaser.Scene {
                 this.respawnBox(x,y);
             }
 
+            if(bodyB.label == 'item_box' && bodyA.label == 'player1') {
+                //console.log('item_box hit player1');
+                var x = bodyB.position.x;
+                var y = bodyB.position.y;
+                bodyB.gameObject.destroy();
+                this.respawnBox(x,y);
+            }   
+
             if(bodyA.label == 'item_box' && bodyB.label == 'player2') {
-                console.log('item_box hit player2')
+                //console.log('item_box hit player2')
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
+                this.respawnBox(x,y);
             }
-        });
+
+            if(bodyB.label == 'item_box' && bodyA.label == 'player2') {
+                //console.log('item_box hit player2')
+                var x = bodyB.position.x;
+                var y = bodyB.position.y;
+                bodyB.gameObject.destroy();
+                this.respawnBox(x,y);
+            }
+        }, this);
     }
 
     respawnBox(x,y) {
@@ -726,7 +744,7 @@ class PlayS extends Phaser.Scene {
                     height: 48,
                 }, { label: 'item_box' })
                 this.item_box.anims.play("box_rotate");
-                //console.log(this.item_box.body.label);
+                console.log(this.item_box);
             },
             loop: false
         })
@@ -737,7 +755,7 @@ class PlayS extends Phaser.Scene {
         //console.log('y: '+this.player.y);
         //console.log("player1: " + this.player_waypoint);
         //console.log("player2: " + this.player2_waypoint);
-        console.log(this.player_waypoint);
+        //console.log(this.player_waypoint);
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }
