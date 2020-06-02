@@ -29,6 +29,8 @@ class PlayS extends Phaser.Scene {
     create() {
         this.carSpeed = 0;
         this.carSpeed2 = 0;
+        this.boost = false;
+        this.boost2 = false;
 
         // create animation for countdown-light
         this.anims.create({
@@ -711,23 +713,44 @@ class PlayS extends Phaser.Scene {
         //console.log(this.item_box);
 
         // collision detection between item box and the players
+        // got help from https://www.html5gamedevs.com/topic/38484-matter-and-collisions/
         this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-            if((bodyA.label == 'item_box' && bodyB.label == 'player1')) {
-                console.log('item_box hit player1');
+            if(bodyA.label == 'item_box' && bodyB.label == 'player1') {
+                //console.log('item_box hit player1');
                 //var item = Phaser.Math.Between(1,4);
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
+                this.speedBoost('p1');
                 this.respawnBox(x,y);
             }
 
+            if(bodyB.label == 'item_box' && bodyA.label == 'player1') {
+                //console.log('item_box hit player1');
+                var x = bodyB.position.x;
+                var y = bodyB.position.y;
+                bodyB.gameObject.destroy();
+                this.speedBoost('p1');
+                this.respawnBox(x,y);
+            }   
+
             if(bodyA.label == 'item_box' && bodyB.label == 'player2') {
-                console.log('item_box hit player2')
+                //console.log('item_box hit player2')
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
+                this.speedBoost('p2')
+                this.respawnBox(x,y);
             }
 
+            if(bodyB.label == 'item_box' && bodyA.label == 'player2') {
+                //console.log('item_box hit player2')
+                var x = bodyB.position.x;
+                var y = bodyB.position.y;
+                bodyB.gameObject.destroy();
+                this.speedBoost('p2');
+                this.respawnBox(x,y);
+            }
         }, this);
     }
 
@@ -742,7 +765,28 @@ class PlayS extends Phaser.Scene {
                     height: 48,
                 }, { label: 'item_box' })
                 this.item_box.anims.play("box_rotate");
-                //console.log(this.item_box.body.label);
+            },
+            loop: false
+        })
+    }
+    
+    // function that activates the speed boost
+    // passes in either 'p1' or 'p2' for which car to boost
+    speedBoost(player) {
+        if (player == 'p1') {
+            this.boost = true;
+        } else {
+            this.boost2 = true;
+        }
+        this.time.addEvent({
+            delay: 1700, 
+            callback: () => {
+                //console.log("stopped boosting");
+                if (player == 'p1') {
+                    this.boost = false;
+                } else {
+                    this.boost2 = false;
+                }
             },
             loop: false
         })
@@ -767,11 +811,17 @@ class PlayS extends Phaser.Scene {
             // Got help from https://codepen.io/Samid737/pen/GdVZeX
             // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
             //console.log(this.carSpeed);
-            // sets maximum forward speed to 10
-            if (this.carSpeed >= 5) {
+            // sets maximum forward speed to 5
+            if (this.carSpeed >= 5 && this.boost == false) {
                 this.carSpeed = 5;
                 this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
                 this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
+            }
+
+            if (this.boost == true) {
+                this.carSpeed = 7.5;
+                this.player.setVelocityX(Math.sin(this.player.rotation) * 7.5);
+                this.player.setVelocityY(-Math.cos(this.player.rotation) * 7.5);
             }
 
             // sets maximum reverse speed to -5
@@ -1021,6 +1071,12 @@ class PlayS extends Phaser.Scene {
                 this.carSpeed2 = -5;
                 this.player2.setVelocityX(Math.sin(this.player2.rotation) * 5);
                 this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 5);
+            }
+
+            if (this.boost2 == true) {
+                this.carSpeed2 = 7.5;
+                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 7.5);
+                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 7.5);
             }
 
             // Car Steering
