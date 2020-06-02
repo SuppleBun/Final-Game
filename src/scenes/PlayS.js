@@ -31,6 +31,12 @@ class PlayS extends Phaser.Scene {
         this.carSpeed2 = 0;
         this.boost = false;
         this.boost2 = false;
+        this.banana = false;
+        this.banana2 = false;
+        this.hammmer = false;
+        this.hammer2 = false;
+        this.honey = false;
+        this.honey2 = false;
 
         // create animation for countdown-light
         this.anims.create({
@@ -700,40 +706,48 @@ class PlayS extends Phaser.Scene {
         // collision detection between item box and the players
         // got help from https://www.html5gamedevs.com/topic/38484-matter-and-collisions/
         this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
+            // player1 picking up item
             if(bodyA.label == 'item_box' && bodyB.label == 'player1') {
                 //console.log('item_box hit player1');
                 //var item = Phaser.Math.Between(1,4);
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
-                this.speedBoost('p1');
+                //this.speedBoost('p1');
+                //this.hammerATK('p1');
                 this.respawnBox(x,y);
             }
 
+            // player1 picking up item
             if(bodyB.label == 'item_box' && bodyA.label == 'player1') {
                 //console.log('item_box hit player1');
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
-                this.speedBoost('p1');
+                //this.speedBoost('p1');
+                //this.hammerATK('p1');
                 this.respawnBox(x,y);
             }   
 
+            // player2 picking up item
             if(bodyA.label == 'item_box' && bodyB.label == 'player2') {
                 //console.log('item_box hit player2')
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
-                this.speedBoost('p2')
+                //this.speedBoost('p2');
+                this.hammerATK('p2');
                 this.respawnBox(x,y);
             }
 
+            // player2 picking up item
             if(bodyB.label == 'item_box' && bodyA.label == 'player2') {
                 //console.log('item_box hit player2')
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
-                this.speedBoost('p2');
+                //this.speedBoost('p2');
+                this.hammerATK('p2');
                 this.respawnBox(x,y);
             }
         }, this);
@@ -777,6 +791,42 @@ class PlayS extends Phaser.Scene {
         })
     }
 
+    bananaATK(player) {
+        if (player == 'p1') {
+            this.banana = true;
+        } else {
+            this.banana2 = true;
+        }
+    }
+
+    honeyATK(player) {
+        if (player == 'p1') {
+            this.honey = true;
+        } else {
+            this.honey2 = true;
+        }
+    }
+
+    hammerATK(player) {
+        if (player == 'p1') {
+            this.hammer = true;
+        } else {
+            this.hammer2 = true;
+        }
+        this.time.addEvent({
+            delay: 1700, 
+            callback: () => {
+                //console.log("stopped boosting");
+                if (player == 'p1') {
+                    this.hammer = false;
+                } else {
+                    this.hammer2 = false;
+                }
+            },
+            loop: false
+        })
+    }
+
     update() {
         //console.log('x: '+this.player.x);
         //console.log('y: '+this.player.y);
@@ -802,10 +852,19 @@ class PlayS extends Phaser.Scene {
                 this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
             }
 
+            // player1 activating speedboost
             if (this.boost == true) {
                 this.carSpeed = 7.5;
                 this.player.setVelocityX(Math.sin(this.player.rotation) * 7.5);
                 this.player.setVelocityY(-Math.cos(this.player.rotation) * 7.5);
+            }
+
+            // player1 activating hammerATK
+            if (this.hammer == true) {
+                this.carSpeed2 = 0;
+                this.player2.setVelocityX(0);
+                this.player2.setVelocityY(0);
+                this.SteeringWheel2.rotation = 0;
             }
 
             // sets maximum reverse speed to -5
@@ -1057,10 +1116,19 @@ class PlayS extends Phaser.Scene {
                 this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 5);
             }
 
+            // player2 activating speedboost
             if (this.boost2 == true) {
                 this.carSpeed2 = 7.5;
                 this.player2.setVelocityX(Math.sin(this.player2.rotation) * 7.5);
                 this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 7.5);
+            }
+
+            // player2 activating hammerATK
+            if (this.hammer2 == true) {
+                this.carSpeed = 0;
+                this.player.setVelocityX(0);
+                this.player.setVelocityY(0);
+                this.SteeringWheel.rotation = 0;
             }
 
             // Car Steering
