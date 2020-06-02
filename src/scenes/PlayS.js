@@ -6,7 +6,7 @@ class PlayS extends Phaser.Scene {
     preload() {
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
-        this.load.image('map', './assets/image/map.jpg');
+        this.load.image('map', './assets/image/map.png');
         this.load.image('background', './assets/image/background.png');
         this.load.image('UI_item', './assets/image/UI_item.png');
         this.load.image('UI_steeringwheel', './assets/image/UI_steeringwheel.png');
@@ -665,6 +665,21 @@ class PlayS extends Phaser.Scene {
             loop: false
         })
 
+        // Stopwatch to track player's time.
+        let stopwatchConfig = {
+            fontFamily: 'Press Start 2P',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: "#843605",
+        }
+
+        this.timer = this.time.addEvent({
+            delay: 0,
+            loop: false
+        })
+
+       // console.log(this.timer.getElapsed());
+
         // To prevent players entering finish line repeatedly.
         this.lineEnter = false;
         this.lineEnter2 = false;
@@ -712,7 +727,8 @@ class PlayS extends Phaser.Scene {
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
             }
-        });
+
+        }, this);
     }
 
     respawnBox(x,y) {
@@ -737,7 +753,8 @@ class PlayS extends Phaser.Scene {
         //console.log('y: '+this.player.y);
         //console.log("player1: " + this.player_waypoint);
         //console.log("player2: " + this.player2_waypoint);
-        console.log(this.player_waypoint);
+       // console.log(this.player_waypoint);
+       console.log(this.timer.getElapsedSeconds());
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }
