@@ -378,37 +378,29 @@ class PlayS extends Phaser.Scene {
         this.door2.rotation = 2.97;
         this.door2.setStatic(true);
 
-        this.toy = this.matter.add.sprite(799, 736);
+        this.toy = this.matter.add.sprite(805, 575);
         this.toy.setBody({
-            type: 'rectangle',
-            width: 47,
-            height: 35,
-        })
-        this.toy.setStatic(true);
-
-        this.toy2 = this.matter.add.sprite(805, 575);
-        this.toy2.setBody({
             type: 'rectangle',
             width: 47,
             height: 34,
         })
+        this.toy.setStatic(true);
+
+        this.toy2 = this.matter.add.sprite(749, 136);
+        this.toy2.setBody({
+            type: 'rectangle',
+            width: 47,
+            height: 35,
+        })
         this.toy2.setStatic(true);
 
-        this.toy3 = this.matter.add.sprite(749, 136);
+        this.toy3 = this.matter.add.sprite(598, 1040);
         this.toy3.setBody({
             type: 'rectangle',
             width: 47,
             height: 35,
         })
         this.toy3.setStatic(true);
-
-        this.toy4 = this.matter.add.sprite(598, 1040);
-        this.toy4.setBody({
-            type: 'rectangle',
-            width: 47,
-            height: 35,
-        })
-        this.toy4.setStatic(true);
         // OBJECTS ON TRACK ------------------------------------------------
 
         // Add item box (for now)
@@ -416,8 +408,8 @@ class PlayS extends Phaser.Scene {
         this.item_box2 = this.matter.add.sprite(940, -680, 'item_box').setScale(1).setStatic(true).setSensor(true);
         this.item_box3 = this.matter.add.sprite(-513, -890, 'item_box').setScale(1).setStatic(true).setSensor(true);
         this.item_box4 = this.matter.add.sprite(-740, -890, 'item_box').setScale(1).setStatic(true).setSensor(true);
-        this.item_box5 = this.matter.add.sprite(-660, 1050, 'item_box').setScale(1).setStatic(true).setSensor(true);
-        this.item_box6 = this.matter.add.sprite(-500, 950, 'item_box').setScale(1).setStatic(true).setSensor(true);
+        this.item_box5 = this.matter.add.sprite(-700, 550, 'item_box').setScale(1).setStatic(true).setSensor(true);
+        this.item_box6 = this.matter.add.sprite(-550, 550, 'item_box').setScale(1).setStatic(true).setSensor(true);
         this.item_box7 = this.matter.add.sprite(620, 860, 'item_box').setScale(1).setStatic(true).setSensor(true);
         this.item_box8 = this.matter.add.sprite(775, 860, 'item_box').setScale(1).setStatic(true).setSensor(true);
         //this.item_box.setStatic(true);
