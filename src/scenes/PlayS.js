@@ -426,6 +426,31 @@ class PlayS extends Phaser.Scene {
             height: 10,
         })
         this.dishwasher3.setStatic(true);
+
+        this.oiltank = this.matter.add.sprite(-715, 1030);
+        this.oiltank.setBody({
+            type: 'rectangle',
+            width: 60,
+            height: 10,
+        })
+        this.oiltank.rotation = 1.5708; // 90 degrees
+        this.oiltank.setStatic(true);
+
+        this.oiltank2 = this.matter.add.sprite(-780, 1005);
+        this.oiltank2.setBody({
+            type: 'rectangle',
+            width: 130,
+            height: 10,
+        })
+        this.oiltank2.setStatic(true);
+        
+        this.oiltank3 = this.matter.add.sprite(-750, 1060);
+        this.oiltank3.setBody({
+            type: 'rectangle',
+            width: 80,
+            height: 10,
+        })
+        this.oiltank3.setStatic(true);
         // OBJECTS ON TRACK ------------------------------------------------
 
         // Add item box (for now)
@@ -499,6 +524,7 @@ class PlayS extends Phaser.Scene {
 
         // Add player
         this.player = this.matter.add.sprite(650, 399.9, 'player1').setOrigin(0.5, 0).setScale(2);
+        //this.player = this.matter.add.sprite(-650, 800, 'player1').setOrigin(0.5, 0).setScale(2);
 
         // Hitbox for player
         this.player.setBody({
