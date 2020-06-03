@@ -401,6 +401,31 @@ class PlayS extends Phaser.Scene {
             height: 35,
         })
         this.toy3.setStatic(true);
+
+        this.dishwasher = this.matter.add.sprite(-700, -480);
+        this.dishwasher.setBody({
+            type: 'rectangle',
+            width: 240,
+            height: 10,
+        })
+        this.dishwasher.rotation = 1.5708; // 90 degrees
+        this.dishwasher.setStatic(true);
+
+        this.dishwasher2 = this.matter.add.sprite(-800, -600);
+        this.dishwasher2.setBody({
+            type: 'rectangle',
+            width: 200,
+            height: 10,
+        })
+        this.dishwasher2.setStatic(true);
+
+        this.dishwasher3 = this.matter.add.sprite(-800, -365);
+        this.dishwasher3.setBody({
+            type: 'rectangle',
+            width: 200,
+            height: 10,
+        })
+        this.dishwasher3.setStatic(true);
         // OBJECTS ON TRACK ------------------------------------------------
 
         // Add item box (for now)
@@ -867,9 +892,9 @@ class PlayS extends Phaser.Scene {
     }
 
     update() {
-        console.log('this.banana: '+this.banana);
-        //console.log('x: '+this.player.x);
-        //console.log('y: '+this.player.y);
+        //console.log('this.banana: '+this.banana);
+        console.log('x: '+this.player.x);
+        console.log('y: '+this.player.y);
         //console.log("player1: " + this.player_waypoint);
         //console.log("player2: " + this.player2_waypoint);
         // console.log(this.player_waypoint);
