@@ -27,17 +27,19 @@ class PlayS extends Phaser.Scene {
     }
 
     create() {
-        this.carSpeed = 0;
+        this.carSpeed = 0;          // speed of player
         this.carSpeed2 = 0;
-        this.boost = false;
+        this.boost = false;         // boolean for activating p1 speed boost
         this.boost2 = false;
-        this.bananaSlot = false;
-        this.bananaSlot2 = false;
-        this.banana = false;
+        this.bananaSlot = false;    // boolean to tell if banana is in slot
+        this.bananaSlot2 = false; 
+        this.banana = false;        // boolean for when player hits a banana
         this.banana2 = false;
-        this.hammmer = false;
+        this.hammmer = false;       // boolean for activating hammer attack
         this.hammer2 = false;
-        this.honey = false;
+        this.honeySlot = false;     // boolean to tell if honey is in slot
+        this.honeySlot2 = false;
+        this.honey = false;         // boolean for when player hits honey
         this.honey2 = false;
 
         // create animation for countdown-light
@@ -778,7 +780,8 @@ class PlayS extends Phaser.Scene {
                 bodyA.gameObject.destroy();
                 //this.speedBoost('p1');    // speedboost powerup
                 //this.hammerATK('p1');     // hammer attack powerup
-                this.bananaSlot = true;     // give player1 the banana item
+                //this.bananaSlot = true;     // give player1 the banana item
+                this.honeySlot = true;
                 this.respawnBox(x, y);
             }
 
@@ -791,7 +794,8 @@ class PlayS extends Phaser.Scene {
                 bodyB.gameObject.destroy();
                 //this.speedBoost('p1');    // speedboost powerup
                 //this.hammerATK('p1');     // hammer attack powerup
-                this.bananaSlot = true;     // give player1 the banana item
+                //this.bananaSlot = true;     // give player1 the banana item
+                this.honeySlot2 = true;
                 this.respawnBox(x, y);
             }
 
@@ -804,7 +808,8 @@ class PlayS extends Phaser.Scene {
                 bodyA.gameObject.destroy();
                 //this.speedBoost('p2');
                 //this.hammerATK('p2');
-                this.bananaSlot2 = true;     // give player2 the banana item
+                //this.bananaSlot2 = true;     
+                this.honeySlot2 = true;       
                 this.respawnBox(x, y);
             }
 
@@ -817,7 +822,8 @@ class PlayS extends Phaser.Scene {
                 bodyB.gameObject.destroy();
                 //this.speedBoost('p2');
                 //this.hammerATK('p2');
-                this.bananaSlot2 = true;     // give player2 the banana item
+                //this.bananaSlot2 = true;     
+                this.honeySlot2 = true;
                 this.respawnBox(x, y);
             }
 
@@ -835,6 +841,18 @@ class PlayS extends Phaser.Scene {
                 }
             }
 
+            // player1 colliding with honey
+            if ((bodyA.label == 'honey' && bodyB.label == 'player1') || (bodyB.label == 'honey' && bodyA.label == 'player1')) {
+                console.log('hit honey!');
+                if (bodyA.label == 'player1') {
+                    this.honeyHit('p1');
+                    bodyB.gameObject.destroy();
+                } else {
+                    this.honeyHit('p1');
+                    bodyA.gameObject.destroy();
+                }
+            }
+
             // player2 colliding with banana
             if ((bodyA.label == 'banana' && bodyB.label == 'player2') || (bodyB.label == 'banana' && bodyA.label == 'player2')) {
                 console.log('hit banana!');
@@ -845,6 +863,17 @@ class PlayS extends Phaser.Scene {
                 } else {
                     console.log('spinning!');
                     this.bananaHit('p2');
+                    bodyA.gameObject.destroy();
+                }
+            }
+
+            // player2 colliding with honey
+            if ((bodyA.label == 'honey' && bodyB.label == 'player2') || (bodyB.label == 'honey' && bodyA.label == 'player2')) {
+                if (bodyA.label == 'player2') {
+                    this.honeyHit('p2');
+                    bodyB.gameObject.destroy();
+                } else {
+                    this.honeyHit('p2');
                     bodyA.gameObject.destroy();
                 }
             }
@@ -896,7 +925,7 @@ class PlayS extends Phaser.Scene {
         //console.log(this.bananaSprite);
     }
 
-    // function that causes player to spin out
+    // function that causes player to spin out after hitting banana
     bananaHit(player) {
         if (player == 'p1') {
             this.banana = true;
@@ -916,12 +945,31 @@ class PlayS extends Phaser.Scene {
         })
     }
 
-    honeyATK(player) {
+    // function that deploys the honey with given coordinates
+    honeySpawn(x, y) {
+        this.honeySprite = this.matter.add.sprite(x, y, 'UI_honey').setScale(1).setStatic(true).setSensor(true);
+        this.honeySprite.body.label = 'honey';
+        //console.log(this.honeySprite);
+    }
+
+    // function that causes player to slow down in honey
+    honeyHit(player) {
         if (player == 'p1') {
             this.honey = true;
         } else {
             this.honey2 = true;
         }
+        this.time.addEvent({
+            delay: 1500,
+            callback: () => {
+                if (player == 'p1') {
+                    this.honey = false;
+                } else {
+                    this.honey2 = false;
+                }
+            },
+            loop: false
+        })
     }
 
     // function that stuns player's enemy
@@ -966,7 +1014,9 @@ class PlayS extends Phaser.Scene {
             // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
             //console.log(this.carSpeed);
             // sets maximum forward speed to 5
-            if (this.carSpeed >= 5 && this.boost == false) {
+            let speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
+            let speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
+            if (this.carSpeed >= 5 && this.boost == false && this.honey == false) {
                 this.carSpeed = 5;
                 this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
                 this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
@@ -996,6 +1046,21 @@ class PlayS extends Phaser.Scene {
             // player1 hitting banana
             if (this.banana == true) {
                 this.player.setAngularVelocity(50);
+            }
+
+            // player1 deploying honey
+            if (keyT.isDown && this.honeySlot == true) {
+                this.honeySpawn(this.player.x+50, this.player.y-50);
+                this.honeySlot = false;
+            }
+
+            // player1 hitting honey
+            if (this.honey == true) {
+                //console.log('stuck by honey!');
+                this.carSpeed = 2 ;
+                this.player.setVelocityX(1.4);
+                this.player.setVelocityY(1.4);
+                this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.01 * Math.exp(-speedsquared / 100));
             }
 
             // sets maximum reverse speed to -5
@@ -1052,10 +1117,8 @@ class PlayS extends Phaser.Scene {
                 this.SteeringWheel.rotation = 0;
             }
 
-            let speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
-
-            // if the car isnt hit by the banana, then it rotates normally
-            if (this.banana == false) {
+            // if the car isnt hit by the banana or honey, then it rotates normally
+            if (this.banana == false && this.honey == false) {
                 this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.15 * Math.exp(-speedsquared / 100));
             }
 
@@ -1277,6 +1340,20 @@ class PlayS extends Phaser.Scene {
                 this.player2.setAngularVelocity(50);
             }
 
+            // player2 deploying honey
+            if (keyU.isDown && this.honeySlot2 == true) {
+                this.honeySpawn(this.player2.x+50, this.player2.y-50);
+                this.honeySlot2 = false;
+            }
+
+            // player2 hitting honey
+            if (this.honey2 == true) {
+                this.carSpeed2 = 2 ;
+                this.player2.setVelocityX(1.4);
+                this.player2.setVelocityY(1.4);
+                this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.01 * Math.exp(-speedsquared2 / 100));
+            }
+
             // Car Steering
             if (this.carSpeed2 <= 0.25 && this.carSpeed2 >= 0 && !keyS.isDown) {
                 this.carSpeed2 = 0;
@@ -1315,8 +1392,8 @@ class PlayS extends Phaser.Scene {
                 this.SteeringWheel2.rotation = 0;
             }
 
-            let speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
-            if (this.banana2 == false) {
+            // if not hit by banana or honey, rotatation is normal
+            if (this.banana2 == false && this.honey2 == false) {
                 this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.15 * Math.exp(-speedsquared2 / 100));
             }
 
