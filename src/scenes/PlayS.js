@@ -768,8 +768,9 @@ class PlayS extends Phaser.Scene {
         // collision detection between item box and the players
         // got help from https://www.html5gamedevs.com/topic/38484-matter-and-collisions/
         this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-            // player1 picking up item
-            if ((bodyA.label == 'item_box' && bodyB.label == 'player1') || (bodyB.label == 'item_box' && bodyA.label == 'player1')) {
+            // player1 picking up item 
+            // bodyA = item_box
+            if (bodyA.label == 'item_box' && bodyB.label == 'player1') {
                 //console.log('item_box hit player1');
                 //var item = Phaser.Math.Between(1,4);
                 var x = bodyA.position.x;
@@ -781,12 +782,39 @@ class PlayS extends Phaser.Scene {
                 this.respawnBox(x, y);
             }
 
+            // bodyB = item_box
+            if (bodyB.label == 'item_box' && bodyA.label == 'player1') {
+                //console.log('item_box hit player1');
+                //var item = Phaser.Math.Between(1,4);
+                var x = bodyB.position.x;
+                var y = bodyB.position.y;
+                bodyB.gameObject.destroy();
+                //this.speedBoost('p1');    // speedboost powerup
+                //this.hammerATK('p1');     // hammer attack powerup
+                this.bananaSlot = true;     // give player1 the banana item
+                this.respawnBox(x, y);
+            }
+
             // player2 picking up item
-            if ((bodyA.label == 'item_box' && bodyB.label == 'player2') || bodyB.label == 'item_box' && bodyA.label == 'player2') {
+            // bodyA = item_box
+            if (bodyA.label == 'item_box' && bodyB.label == 'player2') {
                 //console.log('item_box hit player2')
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
+                //this.speedBoost('p2');
+                //this.hammerATK('p2');
+                this.bananaSlot2 = true;     // give player2 the banana item
+                this.respawnBox(x, y);
+            }
+
+            // player2 picking up item
+            // bodyB = item_box
+            if (bodyB.label == 'item_box' && bodyA.label == 'player2') {
+                //console.log('item_box hit player2')
+                var x = bodyB.position.x;
+                var y = bodyB.position.y;
+                bodyB.gameObject.destroy();
                 //this.speedBoost('p2');
                 //this.hammerATK('p2');
                 this.bananaSlot2 = true;     // give player2 the banana item
@@ -918,9 +946,9 @@ class PlayS extends Phaser.Scene {
     }
 
     update() {
-        //console.log('this.banana: '+this.banana);
-        console.log('x: '+this.player.x);
-        console.log('y: '+this.player.y);
+        //console.log(this.player);
+        //console.log('x: '+this.player.x);
+        //console.log('y: '+this.player.y);
         //console.log("player1: " + this.player_waypoint);
         //console.log("player2: " + this.player2_waypoint);
         // console.log(this.player_waypoint);
@@ -1024,7 +1052,7 @@ class PlayS extends Phaser.Scene {
                 this.SteeringWheel.rotation = 0;
             }
 
-            var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
+            let speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
 
             // if the car isnt hit by the banana, then it rotates normally
             if (this.banana == false) {
@@ -1287,9 +1315,9 @@ class PlayS extends Phaser.Scene {
                 this.SteeringWheel2.rotation = 0;
             }
 
-            var speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
+            let speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
             if (this.banana2 == false) {
-                this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.15 * Math.exp(-speedsquared / 100));
+                this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.15 * Math.exp(-speedsquared2 / 100));
             }
 
             // no drift 
