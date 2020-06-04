@@ -1048,7 +1048,11 @@ class PlayS extends Phaser.Scene {
             this.displayTimeElapsed();
             var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
             var speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
-            // Player 1 Movement
+
+            ///////////////////////
+            // Player 1 Movement //
+            ///////////////////////
+
             // Got help from https://codepen.io/Samid737/pen/GdVZeX
             // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
             //console.log(this.carSpeed);
@@ -1130,7 +1134,7 @@ class PlayS extends Phaser.Scene {
             // player1 hitting honey
             if (this.honey == true) {
                 //console.log('stuck by honey!');
-                this.carSpeed = 2;
+                this.carSpeed = 1;
                 this.player.setVelocityX(1.4);
                 this.player.setVelocityY(1.4);
                 this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.01 * Math.exp(-speedsquared / 100));
@@ -1144,22 +1148,22 @@ class PlayS extends Phaser.Scene {
             }
 
             // Car Steering
-            if (this.carSpeed <= 0.25 && this.carSpeed >= 0 && !keyDOWN.isDown) {
+            if (this.carSpeed <= 0.04 && this.carSpeed >= 0 && !keyS.isDown) {
                 this.carSpeed = 0;
                 this.SteeringWheel.rotation = 0;
             } else {
-                if (keyLEFT.isDown && this.SteeringWheel.rotation > -0.5) {
-                    this.SteeringWheel.rotation -= 0.05;
+                if (keyA.isDown && this.SteeringWheel.rotation > -0.3) {
+                    this.SteeringWheel.rotation -= 0.02;
                 }
 
-                if (keyRIGHT.isDown && this.SteeringWheel.rotation < 0.5) {
-                    this.SteeringWheel.rotation += 0.05;
+                if (keyD.isDown && this.SteeringWheel.rotation < 0.3) {
+                    this.SteeringWheel.rotation += 0.02;
                 }
             }
 
             // Car acceleration and deceleration
-            if (keyUP.isDown) {
-                this.carSpeed += 0.26;
+            if (keyW.isDown) {
+                this.carSpeed += 0.05;
 
                 /*// Play the acceleration sound
                 if (this.acceleration_play) {
@@ -1172,21 +1176,21 @@ class PlayS extends Phaser.Scene {
             }
             else {
                 if (this.carSpeed >= 0) {
-                    this.carSpeed -= 0.05;
+                    this.carSpeed -= 0.01;
                 }
             }
 
-            if (keyDOWN.isDown) {
-                this.carSpeed -= 0.26;
+            if (keyS.isDown) {
+                this.carSpeed -= 0.05;
             }
             else {
                 if (this.carSpeed <= 0) {
-                    this.carSpeed += 0.05;
+                    this.carSpeed += 0.01;
                 }
             }
 
             // Prevents car from spinning like crazy lol
-            if (!keyLEFT.isDown && !keyRIGHT.isDown) {
+            if (!keyA.isDown && !keyD.isDown) {
                 this.SteeringWheel.rotation = 0;
             }
 
@@ -1454,7 +1458,7 @@ class PlayS extends Phaser.Scene {
             // player2 hitting honey
             if (this.honey2 == true) {
                 //console.log('stuck by honey!');
-                this.carSpeed2 = 2;
+                this.carSpeed2 = 1;
                 this.player2.setVelocityX(1.4);
                 this.player2.setVelocityY(1.4);
                 this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.01 * Math.exp(-speedsquared2 / 100));
@@ -1468,40 +1472,40 @@ class PlayS extends Phaser.Scene {
             }
 
             // Car Steering
-            if (this.carSpeed2 <= 0.25 && this.carSpeed2 >= 0 && !keyS.isDown) {
+            if (this.carSpeed2 <= 0.04 && this.carSpeed2 >= 0 && !keyDOWN.isDown) {
                 this.carSpeed2 = 0;
                 this.SteeringWheel2.rotation = 0;
             } else {
-                if (keyA.isDown && this.SteeringWheel2.rotation > -0.5) {
-                    this.SteeringWheel2.rotation -= 0.05;
+                if (keyLEFT.isDown && this.SteeringWheel2.rotation > -0.3) {
+                    this.SteeringWheel2.rotation -= 0.02;
                 }
 
-                if (keyD.isDown && this.SteeringWheel2.rotation < 0.5) {
-                    this.SteeringWheel2.rotation += 0.05;
+                if (keyRIGHT.isDown && this.SteeringWheel2.rotation < 0.3) {
+                    this.SteeringWheel2.rotation += 0.02;
                 }
             }
 
             // Car acceleration and deceleration
-            if (keyW.isDown) {
-                this.carSpeed2 += 0.26;
+            if (keyUP.isDown) {
+                this.carSpeed2 += 0.05;
             }
             else {
                 if (this.carSpeed2 >= 0) {
-                    this.carSpeed2 -= 0.05;
+                    this.carSpeed2 -= 0.01;
                 }
             }
 
-            if (keyS.isDown) {
-                this.carSpeed2 -= 0.26;
+            if (keyDOWN.isDown) {
+                this.carSpeed2 -= 0.05;
             }
             else {
                 if (this.carSpeed2 <= 0) {
-                    this.carSpeed2 += 0.05;
+                    this.carSpeed2 += 0.01;
                 }
             }
 
             // Prevents car from spinning like crazy lol
-            if (!keyA.isDown && !keyD.isDown) {
+            if (!keyLEFT.isDown && !keyRIGHT.isDown) {
                 this.SteeringWheel2.rotation = 0;
             }
 
