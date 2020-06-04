@@ -32,13 +32,13 @@ class PlayS extends Phaser.Scene {
         this.carSpeed2 = 0;
         this.boost = false;         // boolean for activating p1 speed boost
         this.boost2 = false;
-        this.bananaSlot = false;    // boolean to tell if banana is in slot
+        this.bananaSlot = false;    // boolean to tell if banana is in slot for p1
         this.bananaSlot2 = false;
-        this.banana = false;        // boolean for when player hits a banana
+        this.banana = false;        // boolean for when player hits a banana 
         this.banana2 = false;
         this.hammmer = false;       // boolean for activating hammer attack
         this.hammer2 = false;
-        this.honeySlot = false;     // boolean to tell if honey is in slot
+        this.honeySlot = false;     // boolean to tell if honey is in slot for p1
         this.honeySlot2 = false;
         this.honey = false;         // boolean for when player hits honey
         this.honey2 = false;
@@ -790,7 +790,7 @@ class PlayS extends Phaser.Scene {
             // bodyA = item_box
             if (bodyA.label == 'item_box' && bodyB.label == 'player1') {
                 //var item = Phaser.Math.Between(1, 4);
-                var item = 2;
+                var item = 3;
                 if (this.player.item_slot == 0 && this.player.item_slot2 == 0) {            // if slots are empty
                     this.player.item_slot = item;
                 } else if (this.player.item_slot != 0 && this.player.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
@@ -802,35 +802,6 @@ class PlayS extends Phaser.Scene {
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
 
-                // assigning item to slot1
-                if (this.player.item_slot == 1) {
-                    console.log('p1 has speedBoost in slot1');
-                } else if (this.player.item_slot == 2) {
-                    console.log('p1 has hammer');
-                } else {}
-                // } else if (this.player.item_slot == 3) {
-                //     //this.bananaSlot = true;
-                //     console.log('p1 has banana');
-                // } else {
-                //     //this.honeySlot = true; 
-                //     console.log('p1 has honey');
-                // }
-
-                // assigning item to slot2
-                if (this.player.item_slot2 == 1) {
-                    this.p1boostSlot2 = true;
-                    console.log('p1 has speedBoost in slot2');
-                } else if (this.player.item_slot2 == 2) {
-                    console.log('p1 has hammer');
-                } else {}
-                // } else if (this.player.item_slot2 == 3) {
-                //     //this.bananaSlot = true;
-                //     console.log('p1 has banana');
-                // } else {
-                //     //this.honeySlot = true; 
-                //     console.log('p1 has honey');
-                // }
-
                 //this.speedBoost('p1');    // speedboost powerup
                 //this.hammerATK('p1');     // hammer attack powerup
                 //this.bananaSlot = true;     // give player1 the banana item
@@ -841,7 +812,7 @@ class PlayS extends Phaser.Scene {
             // bodyB = item_box
             if (bodyB.label == 'item_box' && bodyA.label == 'player1') {
                 //var item = Phaser.Math.Between(1, 4);
-                var item = 2;
+                var item = 3;
                 if (this.player.item_slot == 0 && this.player.item_slot2 == 0) {            // if slots are empty
                     this.player.item_slot = item;
                 } else if (this.player.item_slot != 0 && this.player.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
@@ -852,36 +823,6 @@ class PlayS extends Phaser.Scene {
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
-
-                // assigning item to slot1
-                if (this.player.item_slot == 1) {
-                    console.log('p1 has speedBoost in slot1');
-                } else if (this.player.item_slot == 2) {
-                    console.log('p1 has hammer');
-                } else {}
-                // } else if (this.player.item_slot == 3) {
-                //     //this.bananaSlot = true;
-                //     console.log('p1 has banana');
-                // } else {
-                //     //this.honeySlot = true;
-                //     console.log('p1 has honey');
-                // }
-
-                // assigning item to slot2
-                if (this.player.item_slot2 == 1) {
-                    this.p1boostSlot2 = true;
-                    console.log('p1 has speedBoost in slot2');
-                } else if (this.player.item_slot2 == 2) {
-                    this.hammerSlot2 = true;
-                    console.log('p1 has hammer');
-                } else {}
-                // } else if (this.player.item_slot2 == 3) {
-                //     //this.bananaSlot = true;
-                //     console.log('p1 has banana');
-                // } else { 
-                //     //this.honeySlot = true; 
-                //     console.log('p1 has honey');
-                // }
 
                 //this.speedBoost('p1');    // speedboost powerup
                 //this.hammerATK('p1');     // hammer attack powerup
@@ -1123,8 +1064,10 @@ class PlayS extends Phaser.Scene {
                     this.speedBoost('p1');
                     this.player.item_slot = 0;
                 } else if (this.player.item_slot == 2) {
-                    console.log('attack!');
                     this.hammerATK('p1');
+                    this.player.item_slot = 0;
+                } else if (this.player.item_slot == 3) {
+                    this.bananaSlot = true;
                     this.player.item_slot = 0;
                 } else {}
             }
@@ -1137,7 +1080,11 @@ class PlayS extends Phaser.Scene {
                 } else if (this.player.item_slot2 == 2) {
                     this.hammerATK('p1');
                     this.player.item_slot2 = 0;
-                } else {}
+                } else if (this.player.item_slot2 == 3) {
+                    this.bananaSlot = true;
+                    this.player.item_slot2 = 0;
+                }
+                else {}
             }
 
             // player1 activating speedboost
@@ -1156,7 +1103,7 @@ class PlayS extends Phaser.Scene {
             }
 
             // player1 deploying banana
-            if (keyT.isDown && this.bananaSlot == true) {
+            if (this.bananaSlot == true) {
                 this.bananaSpawn(this.player.x + 50, this.player.y - 50);
                 this.bananaSlot = false;
             }
