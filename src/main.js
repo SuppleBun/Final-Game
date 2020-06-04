@@ -30,5 +30,5 @@ const centerY = game.config.height / 2;
 // reserve some keyboard variables
 let keyONE, keyTWO, keyTHREE, keyFOUR;
 let keyLEFT, keyUP, keyRIGHT, keyDOWN;
-let keyA, keyW, keyD, keyS, keyT, keyU;
+let keyA, keyW, keyD, keyS, keyT, keyY, keyO, keyP;
 

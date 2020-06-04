@@ -27,6 +27,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('steppingBan', './assets/sound/steppingBan.wav');
         this.load.audio('plantingHon', './assets/sound/plantingHon.wav');
         this.load.audio('steppingHon', './assets/sound/steppingHon.wav');
+        this.load.audio('itemCollect', './assets/sound/itemCollect.wav');
         // COLLISION
         this.load.audio('collideCar', './assets/sound/collideCar.wav');
         this.load.audio('collideWall', './assets/sound/collideWall.wav');

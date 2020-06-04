@@ -33,9 +33,11 @@ class PlayS extends Phaser.Scene {
         // ITEM
         this.load.image('banana', './assets/image/banana.png');
         this.load.image('honey', './assets/image/honey.png');
-        this.load.spritesheet('boost', './assets/image/boost.png', { frameWidth: 25, frameHeight: 15, startFrame: 0, endFrame: 29 });
+        this.load.spritesheet('player1_boost', './assets/image/player1_boost.png', { frameWidth: 64, frameHeight: 74, startFrame: 0, endFrame: 10 });
+        this.load.spritesheet('player2_boost', './assets/image/player2_boost.png', { frameWidth: 64, frameHeight: 74, startFrame: 0, endFrame: 10 });
         this.load.spritesheet('hammer', './assets/image/hammer.png', { frameWidth: 29, frameHeight: 18, startFrame: 0, endFrame: 11 });
         this.load.spritesheet('item_box', './assets/image/item_box.png', { frameWidth: 55, frameHeight: 55, startFrame: 0, endFrame: 7 });
+        this.load.spritesheet('item_collecting', './assets/image/item_collecting.png', { frameWidth: 55, frameHeight: 55, startFrame: 0, endFrame: 3 });
     }
 
     create() {
@@ -89,51 +91,81 @@ class PlayS extends Phaser.Scene {
             repeat: -1,
         })
 
-        // create rotate animation for lap count
+        // create animation for item collecting
+        this.anims.create({
+            key: 'item_collecting',
+            frames: this.anims.generateFrameNumbers('item_collecting', { start: 0, end: 3, first: 0 }),
+            frameRate: 8,
+        })
+
+        // create animation for lap count
         this.anims.create({
             key: 'lap_count',
             frames: this.anims.generateFrameNumbers('UI_lapcount', { start: 0, end: 2, first: 0 }),
         })
 
-        // create rotate animation for UI place
+        // create animation for UI place
         this.anims.create({
             key: 'UI_place',
             frames: this.anims.generateFrameNumbers('UI_place', { start: 0, end: 1, first: 0 }),
         })
 
-        // create rotate animation for Lap 2 UI
+        // create animation for Lap 2 UI
         this.anims.create({
             key: 'lap_two',
             frames: this.anims.generateFrameNumbers('UI_laptwo', { start: 0, end: 6, first: 0 }),
             frameRate: 8,
         })
 
-        // create rotate animation for Final Lap UI
+        // create animation for Final Lap UI
         this.anims.create({
             key: 'lap_final',
             frames: this.anims.generateFrameNumbers('UI_lapfinal', { start: 0, end: 6, first: 0 }),
             frameRate: 8,
         })
 
-        // create rotate animation for race one UI
+        // create animation for race one UI
         this.anims.create({
             key: 'race_one',
             frames: this.anims.generateFrameNumbers('UI_raceone', { start: 0, end: 4, first: 0 }),
             frameRate: 6,
         })
 
-        // create rotate animation for race two UI
+        // create animation for race two UI
         this.anims.create({
             key: 'race_two',
             frames: this.anims.generateFrameNumbers('UI_racetwo', { start: 0, end: 4, first: 0 }),
             frameRate: 6,
         })
 
-        // create rotate animation for final race UI
+        // create animation for final race UI
         this.anims.create({
             key: 'race_final',
             frames: this.anims.generateFrameNumbers('UI_racefinal', { start: 0, end: 4, first: 0 }),
             frameRate: 6,
+        })
+
+        // create animation for boost item (player 1)
+        this.anims.create({
+            key: 'player1_boost',
+            frames: this.anims.generateFrameNumbers('player1_boost', { start: 0, end: 10, first: 0 }),
+            frameRate: 12,
+            repeat: -1,
+        })
+
+        // create animation for boost item (player 2)
+        this.anims.create({
+            key: 'player2_boost',
+            frames: this.anims.generateFrameNumbers('player2_boost', { start: 0, end: 10, first: 0 }),
+            frameRate: 12,
+            repeat: -1,
+        })
+
+        // create animation for hammer item
+        this.anims.create({
+            key: 'hammer_hit',
+            frames: this.anims.generateFrameNumbers('hammer', { start: 0, end: 10, first: 0 }),
+            frameRate: 18,
         })
 
         this.matter.world.setBounds(-1250, -1250, 2500, 2500);
@@ -558,14 +590,14 @@ class PlayS extends Phaser.Scene {
         this.item_box8.anims.play("box_rotate");
 
         // Add player
-        this.player = this.matter.add.sprite(650, 399.9, 'player1').setOrigin(0.5, 0).setScale(2);
-        //this.player = this.matter.add.sprite(-650, 800, 'player1').setOrigin(0.5, 0).setScale(2);
+        this.player = this.matter.add.sprite(650, 399.9, 'player1_boost').setOrigin(0.5, 0).setScale(2);
+       // this.player = this.matter.add.sprite(-650, -800, 'player1_boost').setOrigin(0.5, 0).setScale(2);
 
         // Hitbox for player
         this.player.setBody({
             type: 'rectangle',
             width: 50,
-            height: 94
+            height: 100
         }, { label: 'player1' })
 
         // Define lap count and waypoints for player
@@ -581,13 +613,14 @@ class PlayS extends Phaser.Scene {
         this.SteeringWheelAnim2 = true;
 
         // Add player2
-        this.player2 = this.matter.add.sprite(800, 399.9, 'player2').setOrigin(0.5, 0).setScale(2);
+        this.player2 = this.matter.add.sprite(800, 399.9, 'player2_boost').setOrigin(0.5, 0).setScale(2);
+        //this.player2 = this.matter.add.sprite(-650, -800, 'player2_boost').setOrigin(0.5, 0).setScale(2);
 
         // Hitbox for player2
         this.player2.setBody({
             type: 'rectangle',
             width: 50,
-            height: 94
+            height: 100,
         }, { label: 'player2' })
 
         // Define lap count for player2
@@ -603,8 +636,8 @@ class PlayS extends Phaser.Scene {
         this.SteeringWheelAnim4 = true;
 
         // Prevent players moving during countdown
-        this.playerMove = false;
-        this.player2Move = false;
+        this.playerMove = false; 
+        this.player2Move = false; 
 
         // Indication if player has finished race.
         this.playerDone = false;
@@ -615,11 +648,17 @@ class PlayS extends Phaser.Scene {
         this.acceleration = this.sound.add('acceleration', { volume: 0.3 });
         this.acceleration.setRate(0.5);
 
+        this.player.item_slotUI = this.add.image(-3135, -3450, '').setScale(0.1);
+        this.player.item_slotUI2 = this.add.image(-3135, -3450, '').setScale(0.1);
+
+        this.player2.item_slotUI = this.add.image(-2135, -2450, '').setScale(0.1);
+        this.player2.item_slotUI2 = this.add.image(-2135, -2450, '').setScale(0.1);
         // Add player UI group
         this.player_UI = this.add.group();
         {
             // item
-            this.UI1_item = this.add.image(-3100, -3450, 'UI_item').setScale(2.5);
+            this.UI1_item1 = this.add.image(-3135, -3450, 'UI_item').setScale(2.5);
+            this.UI1_item2 = this.add.image(-3060, -3450, 'UI_item').setScale(2.5);
 
             // speed meter
             this.UI1_speed = this.add.sprite(-3080, -3083, 'UI_speed').setScale(2);
@@ -637,15 +676,15 @@ class PlayS extends Phaser.Scene {
             this.UI1_place.anims.load('UI_place');
 
             // add objects to group
-            this.player_UI.addMultiple([this.UI1_item, this.UI1_speed, this.UI1_lap, this.UI1_lapcount, this.UI1_place]);
+            this.player_UI.addMultiple([this.UI1_item1, this.UI1_item2, this.UI1_speed, this.UI1_lap, this.UI1_lapcount, this.UI1_place]);
         }
-
 
         // Add player2 UI group
         this.player2_UI = this.add.group();
         {
-            // item1
-            this.UI2_item = this.add.image(-2100, -2450, 'UI_item').setScale(2.5);
+            // item
+            this.UI2_item1 = this.add.image(-2135, -2450, 'UI_item').setScale(2.5);
+            this.UI2_item2 = this.add.image(-2060, -2450, 'UI_item').setScale(2.5);
 
             // speed meter
             this.UI2_speed = this.add.sprite(-2080, -2083, 'UI_speed').setScale(2);
@@ -663,7 +702,7 @@ class PlayS extends Phaser.Scene {
             this.UI2_place.anims.load('UI_place');
 
             // add objects to group
-            this.player2_UI.addMultiple([this.UI2_item, this.UI2_speed, this.UI2_lap, this.UI2_lapcount, this.UI2_place]);
+            this.player2_UI.addMultiple([this.UI2_item1, this.UI2_item2, this.UI2_speed, this.UI2_lap, this.UI2_lapcount, this.UI2_place]);
         }
 
         //this.hamemr = this.add.image(-2126, -2450, 'UI_hammer').setScale(1.7);
@@ -702,7 +741,9 @@ class PlayS extends Phaser.Scene {
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
-        keyU = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
+        keyY = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Y);
+        keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
+        keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
         this.engineIdle = this.sound.add('engineIdle', { volume: 0.25, loop: true });
         this.engineIdle.play();
@@ -882,9 +923,17 @@ class PlayS extends Phaser.Scene {
                 } else {                                                                    // all slots full
                     //console.log('item slots full');
                 }
+                this.sound.play('itemCollect');
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
+
+                // Play Item Collecting Animation
+                let item_collectingAnim = this.add.sprite(x, y, "item_collecting").setScale(2);
+                item_collectingAnim.anims.play('item_collecting');
+                item_collectingAnim.on('animationcomplete', () => {
+                    item_collectingAnim.destroy(true);
+                })
 
                 // call these functions to activate powerups
                 //this.speedBoost('p1');    // activate speedboost powerup
@@ -904,9 +953,18 @@ class PlayS extends Phaser.Scene {
                 } else {                                                                    // all slots full
                     //console.log('item slots full');
                 }
+                this.sound.play('itemCollect');
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
+
+                // Play Item Collecting Animation
+                let item_collectingAnim = this.add.sprite(x, y, "item_collecting").setScale(2);
+                item_collectingAnim.anims.play('item_collecting');
+                item_collectingAnim.on('animationcomplete', () => {
+                    item_collectingAnim.destroy(true);
+                })
+
                 this.respawnBox(x, y);
             }
 
@@ -924,9 +982,18 @@ class PlayS extends Phaser.Scene {
                 } else {                                                                    // all slots full
                     //console.log('item slots full');
                 }
+                this.sound.play('itemCollect');
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
+
+                // Play Item Collecting Animation
+                let item_collectingAnim = this.add.sprite(x, y, "item_collecting").setScale(2);
+                item_collectingAnim.anims.play('item_collecting');
+                item_collectingAnim.on('animationcomplete', () => {
+                    item_collectingAnim.destroy(true);
+                })
+
                 this.respawnBox(x, y);
             }
 
@@ -941,19 +1008,28 @@ class PlayS extends Phaser.Scene {
                 } else {                                                                    // all slots full
                     //console.log('item slots full');
                 }
+                this.sound.play('itemCollect');
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
+
+                // Play Item Collecting Animation
+                let item_collectingAnim = this.add.sprite(x, y, "item_collecting").setScale(2);
+                item_collectingAnim.anims.play('item_collecting');
+                item_collectingAnim.on('animationcomplete', () => {
+                    item_collectingAnim.destroy(true);
+                })
+
                 this.respawnBox(x, y);
             }
 
             // player1 colliding with banana
             if ((bodyA.label == 'banana' && bodyB.label == 'player1') || (bodyB.label == 'banana' && bodyA.label == 'player1')) {
                 if (bodyA.label == 'player1') {
-                    this.bananaHit('p1');
+                    this.bananaHit('p1', this.player.rotation);
                     bodyB.gameObject.destroy();
                 } else {
-                    this.bananaHit('p1');
+                    this.bananaHit('p1', this.player.rotation);
                     bodyA.gameObject.destroy();
                 }
             }
@@ -972,10 +1048,10 @@ class PlayS extends Phaser.Scene {
             // player2 colliding with banana
             if ((bodyA.label == 'banana' && bodyB.label == 'player2') || (bodyB.label == 'banana' && bodyA.label == 'player2')) {
                 if (bodyA.label == 'player2') {
-                    this.bananaHit('p2');
+                    this.bananaHit('p2', this.player2.rotation);
                     bodyB.gameObject.destroy();
                 } else {
-                    this.bananaHit('p2');
+                    this.bananaHit('p2', this.player2.rotation);
                     bodyA.gameObject.destroy();
                 }
             }
@@ -1032,26 +1108,108 @@ class PlayS extends Phaser.Scene {
     }
 
     // function that deploys the banana with given coordinates
-    bananaSpawn(x, y) {
-        this.bananaSprite = this.matter.add.sprite(x, y, 'UI_banana').setScale(1).setStatic(true).setSensor(true);
+    bananaSpawn(x, y, z) { // z = rotation value
+        this.sound.play("plantingBan");
+        z = z / 6.3;
+        if(z < 0){
+            z = z % 1; // remove whole number
+            //console.log("z: " + z);
+            if(z <= 0 && z > -0.125){ // Counter-Clockwise rotation check. Divided into 8 sections.
+                x = x + 65;
+                y = y + 145;
+            }
+            else if(z <= -0.125 && z > -0.25){
+                x = x + 145;
+                y = y + 65;
+            }
+            else if(z <= -0.25 && z > -0.375){
+                x = x + 65;
+                y = y - 145;
+            }
+            else if(z <= -0.375 && z > -0.5){
+                x = x + 65;
+                y = y - 145;
+            }
+            else if(z <= -0.5 && z > -0.625){
+                x = x - 65;
+                y = y - 145;
+            }
+            else if(z <= -0.625 && z > -0.75){
+                x = x - 145;
+                y = y - 65;
+            }
+            else if(z <= -0.75 && z > -0.875){
+                x = x - 145;
+                y = y + 65;
+            }
+            else{
+                x = x - 65;
+                y = y + 145;
+            }
+        }
+        else{ // positive rotation
+            z = z % 1; // remove whole number
+            //console.log("z: " + z);
+            if(z >= 0 && z < 0.125){ // Clockwise rotation check. Divided into 8 sections.
+                x = x - 65;
+                y = y + 145;
+            }
+            else if(z >= 0.125 && z < 0.25){
+                x = x - 145;
+                y = y + 65;
+            }
+            else if(z >= 0.25 && z < 0.375){
+                x = x - 145;
+                y = y - 65;
+            }
+            else if(z >= 0.375 && z < 0.5){
+                x = x - 65;
+                y = y - 145;
+            }
+            else if(z >= 0.5 && z < 0.625){
+                x = x + 65;
+                y = y - 145;
+            }
+            else if(z >= 0.625 && z < 0.75){
+                x = x + 65;
+                y = y - 145;
+            }
+            else if(z >= 0.75 && z < 0.875){
+                x = x + 145;
+                y = y + 65;
+            }
+            else{
+                x = x + 65;
+                y = y + 145;
+            }
+        }
+        this.bananaSprite = this.matter.add.sprite(x, y, 'banana').setScale(3).setStatic(true).setSensor(true);
         this.bananaSprite.body.label = 'banana';
         //console.log(this.bananaSprite);
     }
 
     // function that causes player to spin out after hitting banana
-    bananaHit(player) {
+    bananaHit(player, number) {
+        // Play the banana hit sound
+        this.bananaSound = this.sound.add('steppingBan', { volume: 1.5 });
+        this.bananaSound.play();
+
         if (player == 'p1') {
             this.banana = true;
+            var prevRotation1 = number;
         } else {
             this.banana2 = true;
+            var prevRotation2 = number;
         }
         this.time.addEvent({
             delay: 1000,
             callback: () => {
                 if (player == 'p1') {
                     this.banana = false;
+                    this.player.rotation = prevRotation1;
                 } else {
                     this.banana2 = false;
+                    this.player2.rotation = prevRotation2;
                 }
             },
             loop: false
@@ -1059,14 +1217,92 @@ class PlayS extends Phaser.Scene {
     }
 
     // function that deploys the honey with given coordinates
-    honeySpawn(x, y) {
-        this.honeySprite = this.matter.add.sprite(x, y, 'UI_honey').setScale(1).setStatic(true).setSensor(true);
+    honeySpawn(x, y, z) {
+        this.sound.play("plantingHon");
+        z = z / 6.3;
+        if(z < 0){
+            z = z % 1; // remove whole number
+            console.log("z: " + z);
+            if(z <= 0 && z > -0.125){ // Counter-Clockwise rotation check. Divided into 8 sections.
+                x = x + 65;
+                y = y + 145;
+            }
+            else if(z <= -0.125 && z > -0.25){
+                x = x + 145;
+                y = y + 65;
+            }
+            else if(z <= -0.25 && z > -0.375){
+                x = x + 65;
+                y = y - 145;
+            }
+            else if(z <= -0.375 && z > -0.5){
+                x = x + 65;
+                y = y - 145;
+            }
+            else if(z <= -0.5 && z > -0.625){
+                x = x - 65;
+                y = y - 145;
+            }
+            else if(z <= -0.625 && z > -0.75){
+                x = x - 145;
+                y = y - 65;
+            }
+            else if(z <= -0.75 && z > -0.875){
+                x = x - 145;
+                y = y + 65;
+            }
+            else{
+                x = x - 65;
+                y = y + 145;
+            }
+        }
+        else{ // positive rotation
+            z = z % 1; // remove whole number
+            console.log("z: " + z);
+            if(z >= 0 && z < 0.125){ // Clockwise rotation check. Divided into 8 sections.
+                x = x - 65;
+                y = y + 145;
+            }
+            else if(z >= 0.125 && z < 0.25){
+                x = x - 145;
+                y = y + 65;
+            }
+            else if(z >= 0.25 && z < 0.375){
+                x = x - 145;
+                y = y - 65;
+            }
+            else if(z >= 0.375 && z < 0.5){
+                x = x - 65;
+                y = y - 145;
+            }
+            else if(z >= 0.5 && z < 0.625){
+                x = x + 65;
+                y = y - 145;
+            }
+            else if(z >= 0.625 && z < 0.75){
+                x = x + 65;
+                y = y - 145;
+            }
+            else if(z >= 0.75 && z < 0.875){
+                x = x + 145;
+                y = y + 65;
+            }
+            else{
+                x = x + 65;
+                y = y + 145;
+            }
+        }
+        this.honeySprite = this.matter.add.sprite(x, y, 'honey').setScale(2.5).setStatic(true).setSensor(true);
         this.honeySprite.body.label = 'honey';
         //console.log(this.honeySprite);
     }
 
     // function that causes player to slow down in honey
     honeyHit(player) {
+        // Play the honey hit sound
+        this.honeySound = this.sound.add('steppingHon', { volume: 1.5 });
+        this.honeySound.play();
+
         if (player == 'p1') {
             this.honey = true;
         } else {
@@ -1087,13 +1323,26 @@ class PlayS extends Phaser.Scene {
 
     // function that stuns player's enemy
     hammerATK(player) {
+        // Play the hammer sound
+        this.hammerSound = this.sound.add('usingHammer', { volume: 0.5 });
+        this.hammerSound.play();
+
         if (player == 'p1') {
             this.hammer = true;
         } else {
             this.hammer2 = true;
         }
         this.time.addEvent({
-            delay: 1700,
+            delay: 500,
+            callback: () => {
+                // Play hit sound
+                this.hammerHit = this.sound.add('gettingHammerHit', { volume: 0.75 });
+                this.hammerHit.play();
+            },
+            loop: false
+        })
+        this.time.addEvent({
+            delay: 1000,
             callback: () => {
                 if (player == 'p1') {
                     this.hammer = false;
@@ -1106,13 +1355,14 @@ class PlayS extends Phaser.Scene {
     }
 
     update() {
-        // console.log('player item_slot: ' + this.player.item_slot);
+        //console.log('player item_slot: ' + this.player.item_slot);
         // console.log('player item_slot2: ' + this.player.item_slot2);
+        //console.log(this.player2.rotation);
         // console.log('player2 item_slot: ' + this.player2.item_slot);
         // console.log('player2 item_slot2: ' + this.player2.item_slot2);
         // console.log(this.player);
-        // console.log('x: '+this.player.x);
-        // console.log('y: '+this.player.y);
+        // console.log('x: '+this.player2.x);
+        // console.log('y: '+this.player2.y);
         // console.log("player1: " + this.player_waypoint);
         // console.log("player2: " + this.player2_waypoint);
         // console.log(this.player_waypoint);
@@ -1130,7 +1380,7 @@ class PlayS extends Phaser.Scene {
         //console.log(this.acceleration_play)
         if (this.playerMove) {
             // Update stopwatch when game starts.
-            this.displayTimeElapsed();
+            this.displayPlayerTime(); 
             var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
             var speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
 
@@ -1148,8 +1398,8 @@ class PlayS extends Phaser.Scene {
                 this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
             }
 
-            // if only slot1 is filled
-            if (this.player.item_slot != 0 && this.player.item_slot2 == 0 && Phaser.Input.Keyboard.JustDown(keyT)) {
+            // if slot1 filled
+            if (this.player.item_slot != 0 && Phaser.Input.Keyboard.JustDown(keyT)) {
                 if (this.player.item_slot == 1) {           // speed boost
                     this.speedBoost('p1');
                     this.player.item_slot = 0;
@@ -1166,8 +1416,8 @@ class PlayS extends Phaser.Scene {
                 else { }
             }
 
-            // if both slots are filled
-            if (this.player.item_slot != 0 && this.player.item_slot2 != 0 && Phaser.Input.Keyboard.JustDown(keyT)) {
+            // if slot2 is filled
+            if (this.player.item_slot2 != 0 && Phaser.Input.Keyboard.JustDown(keyY)) {
                 if (this.player.item_slot2 == 1) {
                     this.speedBoost('p1');
                     this.player.item_slot2 = 0;
@@ -1189,6 +1439,21 @@ class PlayS extends Phaser.Scene {
                 this.carSpeed = 7.5;
                 this.player.setVelocityX(Math.sin(this.player.rotation) * 7.5);
                 this.player.setVelocityY(-Math.cos(this.player.rotation) * 7.5);
+                
+                // Play the boost sound
+                this.boost = this.sound.add('boost', { volume: 0.75 });
+                this.boost.play();
+                
+                // Play the boost animation
+                this.player.anims.play('player1_boost');
+                this.time.addEvent({
+                    delay:1700,
+                    callback: () => {
+                        this.player.anims.load('player1_boost', 0);
+                    },
+                    loop: false
+                })
+
             }
 
             // player1 activating hammerATK
@@ -1197,11 +1462,19 @@ class PlayS extends Phaser.Scene {
                 this.player2.setVelocityX(0);
                 this.player2.setVelocityY(0);
                 this.SteeringWheel2.rotation = 0;
+                // Play the sound
+                //this.sound.play("gettingHammerHit");
+                // Play the animation 
+                let hammerHitAnim = this.add.sprite(this.player2.x + 30, this.player2.y - 10, 'hammer').setScale(4);
+                hammerHitAnim.anims.play('hammer_hit');
+                hammerHitAnim.on('animationcomplete', () => {
+                    hammerHitAnim.destroy(true);
+                })
             }
 
             // player1 deploying banana
             if (this.bananaSlot == true) {
-                this.bananaSpawn(this.player.x + 50, this.player.y - 50);
+                this.bananaSpawn(this.player.x, this.player.y, this.player.rotation);
                 this.bananaSlot = false;
             }
 
@@ -1212,7 +1485,7 @@ class PlayS extends Phaser.Scene {
 
             // player1 deploying honey
             if (this.honeySlot == true) {
-                this.honeySpawn(this.player.x + 50, this.player.y - 50);
+                this.honeySpawn(this.player.x, this.player.y, this.player.rotation);
                 this.honeySlot = false;
             }
 
@@ -1292,9 +1565,73 @@ class PlayS extends Phaser.Scene {
             //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed);
             //this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed);
 
-            this.carSpeedAnim = this.carSpeed;
+            // UI Item Slots
+            if(this.player.item_slot != 0 ){
+                if(this.player.item_slot == 1){ // boost
+                    if(this.drawImage){
+                        this.player.item_slotUI = this.add.image(-3135, -3450, 'UI_boost').setScale(1.75);
+                        this.drawImage = false;
+                    }
+                }
+                else if(this.player.item_slot == 2){ // hammer
+                    if(this.drawImage){
+                        this.player.item_slotUI = this.add.image(-3135, -3450, 'UI_hammer').setScale(1.75);
+                        this.drawImage = false;
+                    }
+                }
+                else if(this.player.item_slot == 3){ // banana
+                    if(this.drawImage){
+                        this.player.item_slotUI = this.add.image(-3135, -3450, 'UI_banana').setScale(2.5);
+                        this.drawImage = false;
+                    }
+                }
+                else{ // honey
+                    if(this.drawImage){
+                        this.player.item_slotUI = this.add.image(-3135, -3450, 'UI_honey').setScale(1.4);
+                        this.drawImage = false;
+                    }
+                }
+            }
+            else{ // delete the image
+                this.player.item_slotUI.destroy(true);
+                this.drawImage = true;
+                
+            }
+            if(this.player.item_slot2 != 0 ){
+                if(this.player.item_slot2 == 1){ // boost
+                    if(this.drawImage2){
+                        this.player.item_slotUI2 = this.add.image(-3060, -3450, 'UI_boost').setScale(1.75);
+                        this.drawImage2 = false;
+                    }
+                }
+                else if(this.player.item_slot2 == 2){ // hammer
+                    if(this.drawImage2){
+                        this.player.item_slotUI2 = this.add.image(-3060, -3450, 'UI_hammer').setScale(1.75);
+                        this.drawImage2 = false;
+                    }
+                }
+                else if(this.player.item_slot2 == 3){ // banana
+                    if(this.drawImage2){
+                        this.player.item_slotUI2 = this.add.image(-3060, -3450, 'UI_banana').setScale(2.5);
+                        this.drawImage2 = false;
+                    }
+                }
+                else{ // honey
+                    if(this.drawImage2){
+                        this.player.item_slotUI2 = this.add.image(-3060, -3450, 'UI_honey').setScale(1.4);
+                        this.drawImage2 = false;
+                    }
+                }
+            }
+            else{
+                this.player.item_slotUI2.destroy(true);
+                this.drawImage2 = true;
+            }
 
-            //console.log(this.carSpeedAnim);
+
+
+            // Change animation for speed meter
+            this.carSpeedAnim = this.carSpeed;
             if (this.carSpeed < 0.335 && this.carSpeed > -0.335) {
                 this.UI1_speed.anims.load('speed_increase', 0);
             }
@@ -1463,6 +1800,9 @@ class PlayS extends Phaser.Scene {
             }
         }
         if (this.player2Move) {
+            // Update stopwatch when game starts.
+            this.displayPlayer2Time(); 
+
             // Player 2 Movement
             // console.log(this.carSpeed2);
             // sets maximum forward speed to 5
@@ -1472,8 +1812,8 @@ class PlayS extends Phaser.Scene {
                 this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 5);
             }
 
-            // if only slot1 is filled
-            if (this.player2.item_slot != 0 && this.player2.item_slot2 == 0 && Phaser.Input.Keyboard.JustDown(keyU)) {
+            // if slot1 is filled
+            if (this.player2.item_slot != 0 && Phaser.Input.Keyboard.JustDown(keyO)) {
                 if (this.player2.item_slot == 1) {           // speed boost
                     this.speedBoost('p2');
                     this.player2.item_slot = 0;
@@ -1490,8 +1830,8 @@ class PlayS extends Phaser.Scene {
                 else { }
             }
 
-            // if both slots are filled
-            if (this.player2.item_slot != 0 && this.player2.item_slot2 != 0 && Phaser.Input.Keyboard.JustDown(keyU)) {
+            // if slot2 is filled
+            if (this.player2.item_slot2 != 0 && Phaser.Input.Keyboard.JustDown(keyP)) {
                 if (this.player2.item_slot2 == 1) {
                     this.speedBoost('p2');
                     this.player2.item_slot2 = 0;
@@ -1513,6 +1853,20 @@ class PlayS extends Phaser.Scene {
                 this.carSpeed2 = 7.5;
                 this.player2.setVelocityX(Math.sin(this.player2.rotation) * 7.5);
                 this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 7.5);
+
+                // Play the boost sound
+                this.boost2 = this.sound.add('boost', { volume: 0.75 });
+                this.boost2.play();
+                
+                // Play the boost animation
+                this.player2.anims.play('player2_boost');
+                this.time.addEvent({
+                    delay:1700,
+                    callback: () => {
+                        this.player2.anims.load('player2_boost', 0);
+                    },
+                    loop: false
+                })
             }
 
             // player2 activating hammerATK
@@ -1521,11 +1875,17 @@ class PlayS extends Phaser.Scene {
                 this.player.setVelocityX(0);
                 this.player.setVelocityY(0);
                 this.SteeringWheel.rotation = 0;
+
+                let hammerHitAnim = this.add.sprite(this.player.x + 30, this.player.y - 10, 'hammer').setScale(4);
+                hammerHitAnim.anims.play('hammer_hit');
+                hammerHitAnim.on('animationcomplete', () => {
+                    hammerHitAnim.destroy(true);
+                })
             }
 
             // player2 deploying banana
             if (this.bananaSlot2 == true) {
-                this.bananaSpawn(this.player2.x + 50, this.player2.y - 50);
+                this.bananaSpawn(this.player2.x, this.player2.y, this.player2.rotation);
                 this.bananaSlot2 = false;
             }
 
@@ -1536,7 +1896,7 @@ class PlayS extends Phaser.Scene {
 
             // player2 deploying honey
             if (this.honeySlot2 == true) {
-                this.honeySpawn(this.player2.x + 50, this.player2.y - 50);
+                this.honeySpawn(this.player2.x, this.player2.y, this.player2.rotation);
                 this.honeySlot2 = false;
             }
 
@@ -1607,6 +1967,69 @@ class PlayS extends Phaser.Scene {
             //this.player.setVelocityX(Math.sin(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed2);
             //this.player.setVelocityY(-Math.cos(this.player.rotation - this.player.body.angularVelocity / 0.1) * this.carSpeed2);
 
+            // UI Item Slots
+            if(this.player2.item_slot != 0 ){
+                if(this.player2.item_slot == 1){ // boost
+                    if(this.drawImage3){
+                        this.player2.item_slotUI = this.add.image(-2135, -2450, 'UI_boost').setScale(1.75);
+                        this.drawImage3 = false;
+                    }
+                }
+                else if(this.player2.item_slot == 2){ // hammer
+                    if(this.drawImage3){
+                        this.player2.item_slotUI = this.add.image(-2135, -2450, 'UI_hammer').setScale(1.75);
+                        this.drawImage3 = false;
+                    }
+                }
+                else if(this.player2.item_slot == 3){ // banana
+                    if(this.drawImage3){
+                        this.player2.item_slotUI = this.add.image(-2135, -2450, 'UI_banana').setScale(2.5);
+                        this.drawImage3 = false;
+                    }
+                }
+                else{ // honey
+                    if(this.drawImage3){
+                        this.player2.item_slotUI = this.add.image(-2135, -2450, 'UI_honey').setScale(1.4);
+                        this.drawImage3 = false;
+                    }
+                }
+            }
+            else{ // delete the image
+                this.player2.item_slotUI.destroy(true);
+                this.drawImage3 = true;
+                
+            }
+            if(this.player2.item_slot2 != 0 ){
+                if(this.player2.item_slot2 == 1){ // boost
+                    if(this.drawImage4){
+                        this.player2.item_slotUI2 = this.add.image(-2060, -2450, 'UI_boost').setScale(1.75);
+                        this.drawImage4 = false;
+                    }
+                }
+                else if(this.player2.item_slot2 == 2){ // hammer
+                    if(this.drawImage4){
+                        this.player2.item_slotUI2 = this.add.image(-2060, -2450, 'UI_hammer').setScale(1.75);
+                        this.drawImage4 = false;
+                    }
+                }
+                else if(this.player2.item_slot2 == 3){ // banana
+                    if(this.drawImage4){
+                        this.player2.item_slotUI2 = this.add.image(-2060, -2450, 'UI_banana').setScale(2.5);
+                        this.drawImage4 = false;
+                    }
+                }
+                else{ // honey
+                    if(this.drawImage4){
+                        this.player2.item_slotUI2 = this.add.image(-2060, -2450, 'UI_honey').setScale(1.4);
+                        this.drawImage4 = false;
+                    }
+                }
+            }
+            else{
+                this.player2.item_slotUI2.destroy(true);
+                this.drawImage4 = true;
+            }
+            
             this.carSpeed2Anim = this.carSpeed2;
 
             //console.log(this.carSpeedAnim);
@@ -1863,7 +2286,7 @@ class PlayS extends Phaser.Scene {
 
     // Reference: https://docs.idew.org/video-game/project-references/phaser-coding/timers#create-count-up-timer
     // Display time for each player.
-    displayTimeElapsed() {
+    displayPlayerTime() {
         //console.log("passed");
         var time = Math.floor(this.timer.getElapsedSeconds());
         var min = Math.floor(time / 60);
@@ -1881,6 +2304,24 @@ class PlayS extends Phaser.Scene {
         }
         if (this.playerMove) { // Only update timeDisplay when racing is happening. 
             this.timerDisplay.text = min + ':' + sec;
+        }
+    }
+
+    displayPlayer2Time() {
+        //console.log("passed");
+        var time = Math.floor(this.timer.getElapsedSeconds());
+        var min = Math.floor(time / 60);
+        var sec = time % 60;
+
+        //console.log("min" + min);
+        //console.log("sec" + sec);
+        //console.log("time " + time);
+
+        if (min < 10) {
+            min = '0' + min;
+        }
+        if (sec < 10) {
+            sec = '0' + sec;
         }
         if (this.player2Move) {
             this.timerDisplay2.text = min + ':' + sec;
