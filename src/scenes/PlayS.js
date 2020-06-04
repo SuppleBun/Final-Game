@@ -897,6 +897,18 @@ class PlayS extends Phaser.Scene {
             loop: true
         })
 
+        this.oil_effect = false;
+        this.water_effect = false;
+        // delay for playing sound for oil 
+        this.time.addEvent({
+            delay: 500,
+            callback: () => {
+                this.oil_effect = true;
+                this.water_effect = true;
+            },
+            loop: true
+        })
+
         // Add item slots for players
         this.player.item_slot = 0;
         this.player.item_slot2 = 0;
@@ -1361,8 +1373,8 @@ class PlayS extends Phaser.Scene {
         // console.log('player2 item_slot: ' + this.player2.item_slot);
         // console.log('player2 item_slot2: ' + this.player2.item_slot2);
         // console.log(this.player);
-        // console.log('x: '+this.player2.x);
-        // console.log('y: '+this.player2.y);
+        //console.log('x: '+this.player.x);
+        //console.log('y: '+this.player.y);
         // console.log("player1: " + this.player_waypoint);
         // console.log("player2: " + this.player2_waypoint);
         // console.log(this.player_waypoint);
@@ -1628,7 +1640,27 @@ class PlayS extends Phaser.Scene {
                 this.drawImage2 = true;
             }
 
-
+            // Water, oil on the track that slow down player
+            if((this.player.x < -580 && this.player.x > -780) && (this.player.y < 1090 && this.player.y > 926)){
+                if(this.oil_effect){
+                    this.sound.play("waterWalk");
+                    this.carSpeed = 1;
+                    this.player.setVelocityX(1.4);
+                    this.player.setVelocityY(1.4);
+                    this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.01 * Math.exp(-speedsquared / 100));
+                    this.oil_effect = false;
+                }
+            }
+            if((this.player.x < 1000 && this.player.x > 930) && (this.player.y < -620 && this.player.y > -760)){
+                if(this.water_effect){
+                    this.sound.play("waterWalk");
+                    this.carSpeed = 1;
+                    this.player.setVelocityX(1.4);
+                    this.player.setVelocityY(1.4);
+                    this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.01 * Math.exp(-speedsquared / 100));
+                    this.water_effect = false;
+                }
+            }
 
             // Change animation for speed meter
             this.carSpeedAnim = this.carSpeed;
@@ -2028,6 +2060,28 @@ class PlayS extends Phaser.Scene {
             else{
                 this.player2.item_slotUI2.destroy(true);
                 this.drawImage4 = true;
+            }
+
+            // Water, oil on the track that slow down player2
+            if((this.player2.x < -580 && this.player2.x > -780) && (this.player2.y < 1090 && this.player2.y > 926)){
+                if(this.oil_effect){
+                    this.sound.play("waterWalk");
+                    this.carSpeed2 = 1;
+                    this.player2.setVelocityX(1.4);
+                    this.player2.setVelocityY(1.4);
+                    this.player2.setAngularVelocity(this.SteeringWheel.rotation * 0.01 * Math.exp(-speedsquared / 100));
+                    this.oil_effect = false;
+                }
+            }
+            if((this.player2.x < 1000 && this.player2.x > 930) && (this.player2.y < -620 && this.player2.y > -760)){
+                if(this.water_effect){
+                    this.sound.play("waterWalk");
+                    this.carSpeed2 = 1;
+                    this.player2.setVelocityX(1.4);
+                    this.player2.setVelocityY(1.4);
+                    this.player2.setAngularVelocity(this.SteeringWheel.rotation * 0.01 * Math.exp(-speedsquared / 100));
+                    this.water_effect = false;
+                }
             }
             
             this.carSpeed2Anim = this.carSpeed2;
