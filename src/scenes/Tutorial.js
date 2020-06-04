@@ -8,7 +8,7 @@ class Tutorial extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(20, 20, "Tdasdasdadadasene");
+        this.add.text(20, 20, "Tdasdsasene");
         this.add.text(20, 40, "press 1 to go back to menu");
 
         // define keys
