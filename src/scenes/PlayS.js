@@ -595,8 +595,8 @@ class PlayS extends Phaser.Scene {
         this.SteeringWheelAnim4 = true;
 
         // Prevent players moving during countdown
-        this.playerMove = false; 
-        this.player2Move = false; 
+        this.playerMove = false;
+        this.player2Move = false;
 
         // Indication if player has finished race.
         this.playerDone = false;
@@ -872,16 +872,17 @@ class PlayS extends Phaser.Scene {
                 } else if (this.player.item_slot != 0 && this.player.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
                     this.player.item_slot2 = item;
                 } else {                                                                    // all slots full
-                    console.log('item slots full');
+                    //console.log('item slots full');
                 }
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
 
-                //this.speedBoost('p1');    // speedboost powerup
-                //this.hammerATK('p1');     // hammer attack powerup
-                //this.bananaSlot = true;     // give player1 the banana item
-                //this.honeySlot = true;
+                // call these functions to activate powerups
+                //this.speedBoost('p1');    // activate speedboost powerup
+                //this.hammerATK('p1');     // activate hammer attack powerup
+                //this.bananaSlot = true;   // give player1 the banana item
+                //this.honeySlot = true;    // give player1 the honey item
                 this.respawnBox(x, y);
             }
 
@@ -893,16 +894,11 @@ class PlayS extends Phaser.Scene {
                 } else if (this.player.item_slot != 0 && this.player.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
                     this.player.item_slot2 = item;
                 } else {                                                                    // all slots full
-                    console.log('item slots full');
+                    //console.log('item slots full');
                 }
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
-
-                //this.speedBoost('p1');    // speedboost powerup
-                //this.hammerATK('p1');     // hammer attack powerup
-                //this.bananaSlot = true;     // give player1 the banana item
-                //this.honeySlot = true;
                 this.respawnBox(x, y);
             }
 
@@ -912,28 +908,34 @@ class PlayS extends Phaser.Scene {
 
             // bodyA = item_box
             if (bodyA.label == 'item_box' && bodyB.label == 'player2') {
-                //console.log('item_box hit player2')
+                var item = Phaser.Math.Between(1, 4);
+                if (this.player2.item_slot == 0 && this.player2.item_slot2 == 0) {            // if slots are empty
+                    this.player2.item_slot = item;
+                } else if (this.player2.item_slot != 0 && this.player2.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
+                    this.player2.item_slot2 = item;
+                } else {                                                                    // all slots full
+                    //console.log('item slots full');
+                }
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
-                //this.speedBoost('p2');
-                //this.hammerATK('p2');
-                //this.bananaSlot2 = true;     
-                //this.honeySlot2 = true;       
                 this.respawnBox(x, y);
             }
 
             // player2 picking up item
             // bodyB = item_box
             if (bodyB.label == 'item_box' && bodyA.label == 'player2') {
-                //console.log('item_box hit player2')
+                var item = Phaser.Math.Between(1, 4);
+                if (this.player2.item_slot == 0 && this.player2.item_slot2 == 0) {            // if slots are empty
+                    this.player2.item_slot = item;
+                } else if (this.player2.item_slot != 0 && this.player2.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
+                    this.player2.item_slot2 = item;
+                } else {                                                                    // all slots full
+                    //console.log('item slots full');
+                }
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
-                //this.speedBoost('p2');
-                //this.hammerATK('p2');
-                //this.bananaSlot2 = true;     
-                //this.honeySlot2 = true;
                 this.respawnBox(x, y);
             }
 
@@ -1096,15 +1098,17 @@ class PlayS extends Phaser.Scene {
     }
 
     update() {
-        console.log('player1 item_slot: ' + this.player.item_slot);
-        console.log('player1 item_slot2: ' + this.player.item_slot2);
-        //console.log(this.player);
-        //console.log('x: '+this.player.x);
-        //console.log('y: '+this.player.y);
-        //console.log("player1: " + this.player_waypoint);
-        //console.log("player2: " + this.player2_waypoint);
+        // console.log('player item_slot: ' + this.player.item_slot);
+        // console.log('player item_slot2: ' + this.player.item_slot2);
+        // console.log('player2 item_slot: ' + this.player2.item_slot);
+        // console.log('player2 item_slot2: ' + this.player2.item_slot2);
+        // console.log(this.player);
+        // console.log('x: '+this.player.x);
+        // console.log('y: '+this.player.y);
+        // console.log("player1: " + this.player_waypoint);
+        // console.log("player2: " + this.player2_waypoint);
         // console.log(this.player_waypoint);
-        //console.log(this.timer.getElapsedSeconds());
+        // console.log(this.timer.getElapsedSeconds());
 
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
@@ -1112,21 +1116,20 @@ class PlayS extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
             this.scene.start("playScene");
         }
-        if(this.playerDone && this.player2Done){ // Both players have finished race, move on. 
+        if (this.playerDone && this.player2Done) { // Both players have finished race, move on. 
             console.log("Both players have finished.")
         }
         //console.log(this.acceleration_play)
         if (this.playerMove) {
             // Update stopwatch when game starts.
             this.displayTimeElapsed();
-
+            var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
+            var speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
             // Player 1 Movement
             // Got help from https://codepen.io/Samid737/pen/GdVZeX
             // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
             //console.log(this.carSpeed);
             // sets maximum forward speed to 5
-            var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
-            var speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
             if (this.carSpeed >= 5 && this.boost == false && this.honey == false) {
                 this.carSpeed = 5;
                 this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
@@ -1148,7 +1151,7 @@ class PlayS extends Phaser.Scene {
                     this.honeySlot = true;
                     this.player.item_slot = 0;
                 }
-                else {}
+                else { }
             }
 
             // if both slots are filled
@@ -1166,7 +1169,7 @@ class PlayS extends Phaser.Scene {
                     this.honeySlot = true;
                     this.player.item_slot2 = 0;
                 }
-                else {}
+                else { }
             }
 
             // player1 activating speedboost
@@ -1449,19 +1452,48 @@ class PlayS extends Phaser.Scene {
         }
         if (this.player2Move) {
             // Player 2 Movement
-            //console.log(this.carSpeed2);
+            // console.log(this.carSpeed2);
             // sets maximum forward speed to 5
-            if (this.carSpeed2 >= 5) {
+            if (this.carSpeed2 >= 5 && this.boost2 == false && this.honey2 == false) {
                 this.carSpeed2 = 5;
                 this.player2.setVelocityX(Math.sin(this.player2.rotation) * 5);
                 this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 5);
             }
 
-            // sets maximum reverse speed to -5
-            if (this.carSpeed2 <= -5) {
-                this.carSpeed2 = -5;
-                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 5);
-                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 5);
+            // if only slot1 is filled
+            if (this.player2.item_slot != 0 && this.player2.item_slot2 == 0 && Phaser.Input.Keyboard.JustDown(keyU)) {
+                if (this.player2.item_slot == 1) {           // speed boost
+                    this.speedBoost('p2');
+                    this.player2.item_slot = 0;
+                } else if (this.player2.item_slot == 2) {    // hammer attack
+                    this.hammerATK('p2');
+                    this.player2.item_slot = 0;
+                } else if (this.player2.item_slot == 3) {    // banana drop
+                    this.bananaSlot2 = true;
+                    this.player2.item_slot = 0;
+                } else if (this.player2.item_slot == 4) {    // honey drop
+                    this.honeySlot2 = true;
+                    this.player2.item_slot = 0;
+                }
+                else { }
+            }
+
+            // if both slots are filled
+            if (this.player2.item_slot != 0 && this.player2.item_slot2 != 0 && Phaser.Input.Keyboard.JustDown(keyU)) {
+                if (this.player2.item_slot2 == 1) {
+                    this.speedBoost('p2');
+                    this.player2.item_slot2 = 0;
+                } else if (this.player2.item_slot2 == 2) {
+                    this.hammerATK('p2');
+                    this.player2.item_slot2 = 0;
+                } else if (this.player2.item_slot2 == 3) {
+                    this.bananaSlot2 = true;
+                    this.player2.item_slot2 = 0;
+                } else if (this.player2.item_slot2 == 4) {
+                    this.honeySlot2 = true;
+                    this.player2.item_slot2 = 0;
+                }
+                else { }
             }
 
             // player2 activating speedboost
@@ -1480,7 +1512,7 @@ class PlayS extends Phaser.Scene {
             }
 
             // player2 deploying banana
-            if (keyU.isDown && this.bananaSlot2 == true) {
+            if (this.bananaSlot2 == true) {
                 this.bananaSpawn(this.player2.x + 50, this.player2.y - 50);
                 this.bananaSlot2 = false;
             }
@@ -1491,17 +1523,25 @@ class PlayS extends Phaser.Scene {
             }
 
             // player2 deploying honey
-            if (keyU.isDown && this.honeySlot2 == true) {
+            if (this.honeySlot2 == true) {
                 this.honeySpawn(this.player2.x + 50, this.player2.y - 50);
                 this.honeySlot2 = false;
             }
 
             // player2 hitting honey
             if (this.honey2 == true) {
+                //console.log('stuck by honey!');
                 this.carSpeed2 = 2;
                 this.player2.setVelocityX(1.4);
                 this.player2.setVelocityY(1.4);
                 this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.01 * Math.exp(-speedsquared2 / 100));
+            }
+
+            // sets maximum reverse speed to -5
+            if (this.carSpeed2 <= -5) {
+                this.carSpeed2 = -5;
+                this.player2.setVelocityX(Math.sin(this.player2.rotation) * 5);
+                this.player2.setVelocityY(-Math.cos(this.player2.rotation) * 5);
             }
 
             // Car Steering
@@ -1811,26 +1851,26 @@ class PlayS extends Phaser.Scene {
 
     // Reference: https://docs.idew.org/video-game/project-references/phaser-coding/timers#create-count-up-timer
     // Display time for each player.
-    displayTimeElapsed(){
+    displayTimeElapsed() {
         //console.log("passed");
-        var time = Math.floor(this.timer.getElapsedSeconds() );
-        var min = Math.floor(time/60);
+        var time = Math.floor(this.timer.getElapsedSeconds());
+        var min = Math.floor(time / 60);
         var sec = time % 60;
 
         //console.log("min" + min);
         //console.log("sec" + sec);
         //console.log("time " + time);
 
-        if(min < 10){
+        if (min < 10) {
             min = '0' + min;
         }
-        if(sec < 10){
+        if (sec < 10) {
             sec = '0' + sec;
         }
-        if(this.playerMove){ // Only update timeDisplay when racing is happening. 
+        if (this.playerMove) { // Only update timeDisplay when racing is happening. 
             this.timerDisplay.text = min + ':' + sec;
         }
-        if(this.player2Move){
+        if (this.player2Move) {
             this.timerDisplay2.text = min + ':' + sec;
         }
     }
