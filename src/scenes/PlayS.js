@@ -789,8 +789,7 @@ class PlayS extends Phaser.Scene {
 
             // bodyA = item_box
             if (bodyA.label == 'item_box' && bodyB.label == 'player1') {
-                //var item = Phaser.Math.Between(1, 4);
-                var item = 3;
+                var item = Phaser.Math.Between(1, 4);
                 if (this.player.item_slot == 0 && this.player.item_slot2 == 0) {            // if slots are empty
                     this.player.item_slot = item;
                 } else if (this.player.item_slot != 0 && this.player.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
@@ -811,8 +810,7 @@ class PlayS extends Phaser.Scene {
 
             // bodyB = item_box
             if (bodyB.label == 'item_box' && bodyA.label == 'player1') {
-                //var item = Phaser.Math.Between(1, 4);
-                var item = 3;
+                var item = Phaser.Math.Between(1, 4);
                 if (this.player.item_slot == 0 && this.player.item_slot2 == 0) {            // if slots are empty
                     this.player.item_slot = item;
                 } else if (this.player.item_slot != 0 && this.player.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
@@ -1060,16 +1058,20 @@ class PlayS extends Phaser.Scene {
 
             // if only slot1 is filled
             if (this.player.item_slot != 0 && this.player.item_slot2 == 0 && Phaser.Input.Keyboard.JustDown(keyT)) {
-                if (this.player.item_slot == 1) {
+                if (this.player.item_slot == 1) {           // speed boost
                     this.speedBoost('p1');
                     this.player.item_slot = 0;
-                } else if (this.player.item_slot == 2) {
+                } else if (this.player.item_slot == 2) {    // hammer attack
                     this.hammerATK('p1');
                     this.player.item_slot = 0;
-                } else if (this.player.item_slot == 3) {
+                } else if (this.player.item_slot == 3) {    // banana drop
                     this.bananaSlot = true;
                     this.player.item_slot = 0;
-                } else {}
+                } else if (this.player.item_slot == 4) {    // honey drop
+                    this.honeySlot = true;
+                    this.player.item_slot = 0;
+                }
+                else {}
             }
 
             // if both slots are filled
@@ -1082,6 +1084,9 @@ class PlayS extends Phaser.Scene {
                     this.player.item_slot2 = 0;
                 } else if (this.player.item_slot2 == 3) {
                     this.bananaSlot = true;
+                    this.player.item_slot2 = 0;
+                } else if (this.player.item_slot2 == 4) {
+                    this.honeySlot = true;
                     this.player.item_slot2 = 0;
                 }
                 else {}
@@ -1114,7 +1119,7 @@ class PlayS extends Phaser.Scene {
             }
 
             // player1 deploying honey
-            if (keyT.isDown && this.honeySlot == true) {
+            if (this.honeySlot == true) {
                 this.honeySpawn(this.player.x + 50, this.player.y - 50);
                 this.honeySlot = false;
             }
