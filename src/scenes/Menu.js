@@ -4,16 +4,36 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-        this.load.audio('brake_sfx', './assets/sound/brake.wav');
-        this.load.audio('drift_sfx', './assets/sound/drift.wav');
-        this.load.audio('engineStart_sfx', './assets/sound/engineStart.wav');
-        this.load.audio('engineIdle_sfx', './assets/sound/engineIdle.wav');
-        this.load.audio('raceStart_sfx', './assets/sound/raceStart.wav');
-        this.load.audio('powerUp_sfx', './assets/sound/powerUp.wav');
-        this.load.audio('collision_sfx', './assets/sound/collision.wav');
+        // PLAYER MOVEMENT
+        this.load.audio('brake', './assets/sound/brake.wav');
+        this.load.audio('drift', './assets/sound/drift.wav');
+        this.load.audio('engineStart', './assets/sound/engineStart.wav');
+        this.load.audio('engineIdle', './assets/sound/engineIdle.wav');
+        this.load.audio('acceleration', './assets/sound/acceleration.wav');
+        // BACKGROUND
         this.load.audio('bgm', './assets/sound/bgm.wav');
-        this.load.audio('acceleration_sfx', './assets/sound/acceleration.wav');
-        
+        this.load.audio('titlebgm', './assets/sound/mainBGM.wav');
+        this.load.audio('raceStart_sfx', './assets/sound/raceStart.wav');
+        this.load.audio('finalLap', './assets/sound/finalLap.wav');
+        this.load.audio('lapTwo', './assets/sound/lapTwo.wav');
+        this.load.audio('raceEnd', './assets/sound/raceEnd.wav');
+        this.load.audio('raceResult', './assets/sound/raceResult.wav');
+        this.load.audio('raceWon', './assets/sound/raceWon.wav');
+        // ITEM
+        this.load.audio('boost', './assets/sound/boost.wav');
+        this.load.audio('usingHammer', './assets/sound/usingHammer.wav');
+        this.load.audio('gettingHammerHit', './assets/sound/gettingHammerHit.wav');
+        this.load.audio('plantingBanana', './assets/sound/plantingBanana.wav');
+        this.load.audio('steppingBanana', './assets/sound/steppingBanana.wav');
+        this.load.audio('plantingHoney', './assets/sound/plantingHoney.wav');
+        this.load.audio('steppingHoney', './assets/sound/steppingHoney.wav');
+        // COLLISION
+        this.load.audio('collideCar', './assets/sound/collideCar.wav');
+        this.load.audio('collideWall', './assets/sound/collideWall.wav');
+        this.load.audio('collision', './assets/sound/collision.wav');
+        // ETC
+        this.load.audio('waterSplash', './assets/sound/waterSplash.wav');
+        this.load.audio('waterWalk', './assets/sound/waterWalk.wav');
     }
 
     create() {

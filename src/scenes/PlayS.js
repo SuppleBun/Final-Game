@@ -4,10 +4,13 @@ class PlayS extends Phaser.Scene {
     }
 
     preload() {
+        // PLAYER MODEL
         this.load.image('player1', './assets/image/Player1.png');
         this.load.image('player2', './assets/image/Player2.png');
+        // MAP
         this.load.image('map', './assets/image/map.png');
         this.load.image('background', './assets/image/background.png');
+        // UI
         this.load.image('UI_item', './assets/image/UI_item.png');
         this.load.image('UI_steeringwheel', './assets/image/UI_steeringwheel.png');
         this.load.image('UI_banana', './assets/image/UI_banana.png');
@@ -27,6 +30,11 @@ class PlayS extends Phaser.Scene {
         this.load.spritesheet('start_light', './assets/image/start_light.png', { frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3 });
         this.load.spritesheet('go_effect', './assets/image/go.png', { frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 6 });
         this.load.spritesheet('firework', './assets/image/firework.png', { frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 2 });
+        // ITEM
+        this.load.image('banana', './assets/image/banana.png');
+        this.load.image('honey', './assets/image/honey.png');
+        this.load.spritesheet('boost', './assets/image/boost.png', { frameWidth: 25, frameHeight: 15, startFrame: 0, endFrame: 29 });
+        this.load.spritesheet('hammer', './assets/image/hammer.png', { frameWidth: 29, frameHeight: 18, startFrame: 0, endFrame: 11 });
         this.load.spritesheet('item_box', './assets/image/item_box.png', { frameWidth: 55, frameHeight: 55, startFrame: 0, endFrame: 7 });
     }
 
