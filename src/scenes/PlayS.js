@@ -20,6 +20,9 @@ class PlayS extends Phaser.Scene {
         this.load.spritesheet('UI_place', './assets/image/UI_place.png', { frameWidth: 30, frameHeight: 54, startFrame: 0, endFrame: 1 });
         this.load.spritesheet('UI_laptwo', './assets/image/UI_laptwo.png', { frameWidth: 68, frameHeight: 19, startFrame: 0, endFrame: 6 });
         this.load.spritesheet('UI_lapfinal', './assets/image/UI_lapfinal.png', { frameWidth: 132, frameHeight: 19, startFrame: 0, endFrame: 6 });
+        this.load.spritesheet('UI_raceone', './assets/image/UI_raceone.png', { frameWidth: 88, frameHeight: 19, startFrame: 0, endFrame: 4 });
+        this.load.spritesheet('UI_racetwo', './assets/image/UI_racetwo.png', { frameWidth: 88, frameHeight: 19, startFrame: 0, endFrame: 4 });
+        this.load.spritesheet('UI_racefinal', './assets/image/UI_racefinal.png', { frameWidth: 150, frameHeight: 19, startFrame: 0, endFrame: 4 });
         this.load.spritesheet('UI_speed', './assets/image/UI_speed.png', { frameWidth: 64, frameHeight: 64, startFrame: 0, endFrame: 14 });
         this.load.spritesheet('start_light', './assets/image/start_light.png', { frameWidth: 137, frameHeight: 66, startFrame: 0, endFrame: 3 });
         this.load.spritesheet('go_effect', './assets/image/go.png', { frameWidth: 200, frameHeight: 200, startFrame: 0, endFrame: 6 });
@@ -102,6 +105,27 @@ class PlayS extends Phaser.Scene {
             key: 'lap_final',
             frames: this.anims.generateFrameNumbers('UI_lapfinal', { start: 0, end: 6, first: 0 }),
             frameRate: 8,
+        })
+
+        // create rotate animation for race one UI
+        this.anims.create({
+            key: 'race_one',
+            frames: this.anims.generateFrameNumbers('UI_raceone', { start: 0, end: 4, first: 0 }),
+            frameRate: 6,
+        })
+
+        // create rotate animation for race two UI
+        this.anims.create({
+            key: 'race_two',
+            frames: this.anims.generateFrameNumbers('UI_racetwo', { start: 0, end: 4, first: 0 }),
+            frameRate: 6,
+        })
+
+        // create rotate animation for final race UI
+        this.anims.create({
+            key: 'race_final',
+            frames: this.anims.generateFrameNumbers('UI_racefinal', { start: 0, end: 4, first: 0 }),
+            frameRate: 6,
         })
 
         this.matter.world.setBounds(-1250, -1250, 2500, 2500);
@@ -693,6 +717,59 @@ class PlayS extends Phaser.Scene {
         // Display For the Timer (Player 2)
         this.add.sprite(-2253, -2490, 'UI_timeboard').setScale(1.55); // Add time board
         this.timerDisplay2 = this.add.text(-2315, -2490, "00:00", timerConfig);
+
+        // Play the race number UI
+        if(game.settings.raceNum == 1){ // Race 1
+            let racenumber = this.add.sprite(-3250, -3260, 'UI_raceone').setScale(3);
+            let racenumber2 = this.add.sprite(-2250, -2260, 'UI_raceone').setScale(3);
+
+            racenumber.anims.play('race_one');
+            racenumber2.anims.play('race_one');
+            racenumber.on('animationcomplete', () => {
+                this.time.addEvent({ // delete the UI after 1.2 sec
+                    delay:1200,
+                    callback: () => {
+                        racenumber.destroy(true);
+                        racenumber2.destroy(true);
+                    },
+                    loop:false
+                })
+            })
+        }
+        else if(game.settings.raceNum == 2){ // Race 2
+            let racenumber = this.add.sprite(-3250, -3260, 'UI_racetwo').setScale(3);
+            let racenumber2 = this.add.sprite(-2250, -2260, 'UI_racetwo').setScale(3);
+
+            racenumber.anims.play('race_two');
+            racenumber2.anims.play('race_two');
+            racenumber.on('animationcomplete', () => {
+                this.time.addEvent({ // delete the UI after 1.2 sec
+                    delay:1200,
+                    callback: () => {
+                        racenumber.destroy(true);
+                        racenumber2.destroy(true);
+                    },
+                    loop:false
+                })
+            })
+        }   
+        else{ // Final Race
+            let racenumber = this.add.sprite(-3250, -3260, 'UI_racefinal').setScale(2.5);
+            let racenumber2 = this.add.sprite(-2250, -2260, 'UI_racefinal').setScale(2.5);
+
+            racenumber.anims.play('race_final');
+            racenumber2.anims.play('race_final');
+            racenumber.on('animationcomplete', () => {
+                this.time.addEvent({ // delete the UI after 1.2 sec
+                    delay:1200,
+                    callback: () => {
+                        racenumber.destroy(true);
+                        racenumber2.destroy(true);
+                    },
+                    loop:false
+                })
+            })
+        }
 
         // Play the countdown animation
         let countdown = this.add.sprite(-3260, -3350, 'start_light').setScale(1);

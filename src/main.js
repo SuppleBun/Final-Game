@@ -19,8 +19,8 @@ let config = {
 let game = new Phaser.Game(config);
 
 // define game settings
-game.setting = {
-
+game.settings = {
+    raceNum: 1
 }
 
 // global variables
