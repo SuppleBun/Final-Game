@@ -795,16 +795,17 @@ class PlayS extends Phaser.Scene {
                 } else if (this.player.item_slot != 0 && this.player.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
                     this.player.item_slot2 = item;
                 } else {                                                                    // all slots full
-                    console.log('item slots full');
+                    //console.log('item slots full');
                 }
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
 
-                //this.speedBoost('p1');    // speedboost powerup
-                //this.hammerATK('p1');     // hammer attack powerup
-                //this.bananaSlot = true;     // give player1 the banana item
-                //this.honeySlot = true;
+                // call these functions to activate powerups
+                //this.speedBoost('p1');    // activate speedboost powerup
+                //this.hammerATK('p1');     // activate hammer attack powerup
+                //this.bananaSlot = true;   // give player1 the banana item
+                //this.honeySlot = true;    // give player1 the honey item
                 this.respawnBox(x, y);
             }
 
@@ -816,16 +817,11 @@ class PlayS extends Phaser.Scene {
                 } else if (this.player.item_slot != 0 && this.player.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
                     this.player.item_slot2 = item;
                 } else {                                                                    // all slots full
-                    console.log('item slots full');
+                    //console.log('item slots full');
                 }
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
-
-                //this.speedBoost('p1');    // speedboost powerup
-                //this.hammerATK('p1');     // hammer attack powerup
-                //this.bananaSlot = true;     // give player1 the banana item
-                //this.honeySlot = true;
                 this.respawnBox(x, y);
             }
 
@@ -835,28 +831,34 @@ class PlayS extends Phaser.Scene {
 
             // bodyA = item_box
             if (bodyA.label == 'item_box' && bodyB.label == 'player2') {
-                //console.log('item_box hit player2')
+                var item = Phaser.Math.Between(1, 4);
+                if (this.player2.item_slot == 0 && this.player2.item_slot2 == 0) {            // if slots are empty
+                    this.player2.item_slot = item;
+                } else if (this.player2.item_slot != 0 && this.player2.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
+                    this.player2.item_slot2 = item;
+                } else {                                                                    // all slots full
+                    //console.log('item slots full');
+                }
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
-                bodyA.gameObject.destroy();
-                //this.speedBoost('p2');
-                //this.hammerATK('p2');
-                //this.bananaSlot2 = true;     
-                //this.honeySlot2 = true;       
+                bodyA.gameObject.destroy();     
                 this.respawnBox(x, y);
             }
 
             // player2 picking up item
             // bodyB = item_box
             if (bodyB.label == 'item_box' && bodyA.label == 'player2') {
-                //console.log('item_box hit player2')
+                var item = Phaser.Math.Between(1, 4);
+                if (this.player2.item_slot == 0 && this.player2.item_slot2 == 0) {            // if slots are empty
+                    this.player2.item_slot = item;
+                } else if (this.player2.item_slot != 0 && this.player2.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
+                    this.player2.item_slot2 = item;
+                } else {                                                                    // all slots full
+                    //console.log('item slots full');
+                }
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
-                //this.speedBoost('p2');
-                //this.hammerATK('p2');
-                //this.bananaSlot2 = true;     
-                //this.honeySlot2 = true;
                 this.respawnBox(x, y);
             }
 
