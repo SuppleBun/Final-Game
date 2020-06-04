@@ -1134,9 +1134,9 @@ class PlayS extends Phaser.Scene {
                 if (this.player.item_slot2 == 1) {
                     this.speedBoost('p1');
                     this.player.item_slot2 = 0;
-                } else if (this.player.item_slot == 2) {
+                } else if (this.player.item_slot2 == 2) {
                     this.hammerATK('p1');
-                    this.player.item_slot2 == 0;
+                    this.player.item_slot2 = 0;
                 } else {}
             }
 
