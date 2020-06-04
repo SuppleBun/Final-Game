@@ -612,7 +612,7 @@ class PlayS extends Phaser.Scene {
 
         // Prevent acceleration sound playing again
         this.acceleration_play = true;
-        this.acceleration = this.sound.add('acceleration_sfx', { volume: 0.3 });
+        this.acceleration = this.sound.add('acceleration', { volume: 0.3 });
         this.acceleration.setRate(0.5);
 
         // Add player UI group
@@ -704,11 +704,11 @@ class PlayS extends Phaser.Scene {
         keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
         keyU = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
 
-        this.engineIdle = this.sound.add('engineIdle_sfx', { volume: 0.25, loop: true });
+        this.engineIdle = this.sound.add('engineIdle', { volume: 0.25, loop: true });
         this.engineIdle.play();
 
         // Play the engine On sound
-        this.engineStart = this.sound.add('engineStart_sfx', { volume: 0.25 });
+        this.engineStart = this.sound.add('engineStart', { volume: 0.25 });
         this.engineStart.play();
 
         // Timer Config
@@ -828,7 +828,7 @@ class PlayS extends Phaser.Scene {
             delay: 1000, // 1 second 
             callback: () => {
                 // Play countdown sound
-                this.raceStart = this.sound.add('raceStart_sfx', { volume: 0.5 });
+                this.raceStart = this.sound.add('raceStart', { volume: 0.5 });
                 this.raceStart.play();
             },
             loop: false

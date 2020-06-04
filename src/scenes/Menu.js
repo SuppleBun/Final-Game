@@ -13,7 +13,7 @@ class Menu extends Phaser.Scene {
         // BACKGROUND
         this.load.audio('bgm', './assets/sound/bgm.wav');
         this.load.audio('titlebgm', './assets/sound/mainBGM.wav');
-        this.load.audio('raceStart_sfx', './assets/sound/raceStart.wav');
+        this.load.audio('raceStart', './assets/sound/raceStart.wav');
         this.load.audio('finalLap', './assets/sound/finalLap.wav');
         this.load.audio('lapTwo', './assets/sound/lapTwo.wav');
         this.load.audio('raceEnd', './assets/sound/raceEnd.wav');
@@ -23,10 +23,10 @@ class Menu extends Phaser.Scene {
         this.load.audio('boost', './assets/sound/boost.wav');
         this.load.audio('usingHammer', './assets/sound/usingHammer.wav');
         this.load.audio('gettingHammerHit', './assets/sound/gettingHammerHit.wav');
-        this.load.audio('plantingBanana', './assets/sound/plantingBanana.wav');
-        this.load.audio('steppingBanana', './assets/sound/steppingBanana.wav');
-        this.load.audio('plantingHoney', './assets/sound/plantingHoney.wav');
-        this.load.audio('steppingHoney', './assets/sound/steppingHoney.wav');
+        this.load.audio('plantingBan', './assets/sound/plantingBan.wav');
+        this.load.audio('steppingBan', './assets/sound/steppingBan.wav');
+        this.load.audio('plantingHon', './assets/sound/plantingHon.wav');
+        this.load.audio('steppingHon', './assets/sound/steppingHon.wav');
         // COLLISION
         this.load.audio('collideCar', './assets/sound/collideCar.wav');
         this.load.audio('collideWall', './assets/sound/collideWall.wav');
