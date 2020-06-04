@@ -15,6 +15,7 @@ class PlayS extends Phaser.Scene {
         this.load.image('UI_hammer', './assets/image/UI_hammer.png');
         this.load.image('UI_honey', './assets/image/UI_honey.png');
         this.load.image('UI_lap', './assets/image/UI_lap.png');
+        this.load.image('UI_timeboard', './assets/image/UI_timeboard.png');
         this.load.spritesheet('UI_lapcount', './assets/image/UI_lapcount.png', { frameWidth: 36, frameHeight: 25, startFrame: 0, endFrame: 2 });
         this.load.spritesheet('UI_place', './assets/image/UI_place.png', { frameWidth: 30, frameHeight: 54, startFrame: 0, endFrame: 1 });
         this.load.spritesheet('UI_laptwo', './assets/image/UI_laptwo.png', { frameWidth: 68, frameHeight: 19, startFrame: 0, endFrame: 6 });
@@ -27,15 +28,19 @@ class PlayS extends Phaser.Scene {
     }
 
     create() {
-        this.carSpeed = 0;
+        this.carSpeed = 0;          // speed of player
         this.carSpeed2 = 0;
-        this.boost = false;
+        this.boost = false;         // boolean for activating p1 speed boost
         this.boost2 = false;
-        this.banana = false;
+        this.bananaSlot = false;    // boolean to tell if banana is in slot for p1
+        this.bananaSlot2 = false;
+        this.banana = false;        // boolean for when player hits a banana 
         this.banana2 = false;
-        this.hammmer = false;
+        this.hammmer = false;       // boolean for activating hammer attack
         this.hammer2 = false;
-        this.honey = false;
+        this.honeySlot = false;     // boolean to tell if honey is in slot for p1
+        this.honeySlot2 = false;
+        this.honey = false;         // boolean for when player hits honey
         this.honey2 = false;
 
         // create animation for countdown-light
@@ -147,7 +152,7 @@ class PlayS extends Phaser.Scene {
             width: 1220,
             height: 10
         })
-        this.wall5.setStatic(true); 
+        this.wall5.setStatic(true);
 
         // Made a mistake of leaving a wall in the middle
         this.wall_middle = this.matter.add.sprite(710, 1070);
@@ -200,7 +205,7 @@ class PlayS extends Phaser.Scene {
             width: 520,
             height: 10,
         })
-        this.wall10.rotation = 1.575; 
+        this.wall10.rotation = 1.575;
         this.wall10.setStatic(true);
 
         this.wall11 = this.matter.add.sprite(1115, -475);
@@ -273,7 +278,7 @@ class PlayS extends Phaser.Scene {
             width: 728,
             height: 10
         })
-        this.wall18.setStatic(true); 
+        this.wall18.setStatic(true);
 
         // inside of the mistake wall
         this.wall_middleinside = this.matter.add.sprite(485, 885);
@@ -317,7 +322,7 @@ class PlayS extends Phaser.Scene {
             width: 35,
             height: 10,
         })
-        this.wall22.rotation = 2.55; 
+        this.wall22.rotation = 2.55;
         this.wall22.setStatic(true);
 
         this.wall23 = this.matter.add.sprite(925, -200);
@@ -326,7 +331,7 @@ class PlayS extends Phaser.Scene {
             width: 230,
             height: 10,
         })
-        this.wall23.rotation = 1.575; 
+        this.wall23.rotation = 1.575;
         this.wall23.setStatic(true);
 
         this.wall24 = this.matter.add.sprite(840, -400);
@@ -376,23 +381,23 @@ class PlayS extends Phaser.Scene {
         this.door2.rotation = 2.97;
         this.door2.setStatic(true);
 
-        this.toy = this.matter.add.sprite(799, 736);
+        this.toy = this.matter.add.sprite(805, 575);
         this.toy.setBody({
-            type: 'rectangle',
-            width: 47,
-            height: 35,
-        })
-        this.toy.setStatic(true);
-
-        this.toy2 = this.matter.add.sprite(805, 575);
-        this.toy2.setBody({
             type: 'rectangle',
             width: 47,
             height: 34,
         })
+        this.toy.setStatic(true);
+
+        this.toy2 = this.matter.add.sprite(749, 136);
+        this.toy2.setBody({
+            type: 'rectangle',
+            width: 47,
+            height: 35,
+        })
         this.toy2.setStatic(true);
 
-        this.toy3 = this.matter.add.sprite(749, 136);
+        this.toy3 = this.matter.add.sprite(598, 1040);
         this.toy3.setBody({
             type: 'rectangle',
             width: 47,
@@ -400,13 +405,55 @@ class PlayS extends Phaser.Scene {
         })
         this.toy3.setStatic(true);
 
-        this.toy4 = this.matter.add.sprite(598, 1040);
-        this.toy4.setBody({
+        this.dishwasher = this.matter.add.sprite(-700, -480);
+        this.dishwasher.setBody({
             type: 'rectangle',
-            width: 47,
-            height: 35,
+            width: 240,
+            height: 10,
         })
-        this.toy4.setStatic(true);
+        this.dishwasher.rotation = 1.5708; // 90 degrees
+        this.dishwasher.setStatic(true);
+
+        this.dishwasher2 = this.matter.add.sprite(-800, -600);
+        this.dishwasher2.setBody({
+            type: 'rectangle',
+            width: 200,
+            height: 10,
+        })
+        this.dishwasher2.setStatic(true);
+
+        this.dishwasher3 = this.matter.add.sprite(-800, -365);
+        this.dishwasher3.setBody({
+            type: 'rectangle',
+            width: 200,
+            height: 10,
+        })
+        this.dishwasher3.setStatic(true);
+
+        this.oiltank = this.matter.add.sprite(-715, 1030);
+        this.oiltank.setBody({
+            type: 'rectangle',
+            width: 60,
+            height: 10,
+        })
+        this.oiltank.rotation = 1.5708; // 90 degrees
+        this.oiltank.setStatic(true);
+
+        this.oiltank2 = this.matter.add.sprite(-780, 1005);
+        this.oiltank2.setBody({
+            type: 'rectangle',
+            width: 130,
+            height: 10,
+        })
+        this.oiltank2.setStatic(true);
+
+        this.oiltank3 = this.matter.add.sprite(-750, 1060);
+        this.oiltank3.setBody({
+            type: 'rectangle',
+            width: 80,
+            height: 10,
+        })
+        this.oiltank3.setStatic(true);
         // OBJECTS ON TRACK ------------------------------------------------
 
         // Add item box (for now)
@@ -414,8 +461,8 @@ class PlayS extends Phaser.Scene {
         this.item_box2 = this.matter.add.sprite(940, -680, 'item_box').setScale(1).setStatic(true).setSensor(true);
         this.item_box3 = this.matter.add.sprite(-513, -890, 'item_box').setScale(1).setStatic(true).setSensor(true);
         this.item_box4 = this.matter.add.sprite(-740, -890, 'item_box').setScale(1).setStatic(true).setSensor(true);
-        this.item_box5 = this.matter.add.sprite(-660, 1050, 'item_box').setScale(1).setStatic(true).setSensor(true);
-        this.item_box6 = this.matter.add.sprite(-500, 950, 'item_box').setScale(1).setStatic(true).setSensor(true);
+        this.item_box5 = this.matter.add.sprite(-700, 550, 'item_box').setScale(1).setStatic(true).setSensor(true);
+        this.item_box6 = this.matter.add.sprite(-550, 550, 'item_box').setScale(1).setStatic(true).setSensor(true);
         this.item_box7 = this.matter.add.sprite(620, 860, 'item_box').setScale(1).setStatic(true).setSensor(true);
         this.item_box8 = this.matter.add.sprite(775, 860, 'item_box').setScale(1).setStatic(true).setSensor(true);
         //this.item_box.setStatic(true);
@@ -480,6 +527,7 @@ class PlayS extends Phaser.Scene {
 
         // Add player
         this.player = this.matter.add.sprite(650, 399.9, 'player1').setOrigin(0.5, 0).setScale(2);
+        //this.player = this.matter.add.sprite(-650, 800, 'player1').setOrigin(0.5, 0).setScale(2);
 
         // Hitbox for player
         this.player.setBody({
@@ -523,7 +571,12 @@ class PlayS extends Phaser.Scene {
         this.SteeringWheelAnim4 = true;
 
         // Prevent players moving during countdown
-        this.canMove = false; // should be false
+        this.playerMove = false; 
+        this.player2Move = false; 
+
+        // Indication if player has finished race.
+        this.playerDone = false;
+        this.player2Done = false;
 
         // Prevent acceleration sound playing again
         this.acceleration_play = true;
@@ -541,10 +594,10 @@ class PlayS extends Phaser.Scene {
             this.UI1_speed.anims.load('speed_increase');
 
             // lap text
-            this.UI1_lap = this.add.image(-3450, -3462, 'UI_lap').setScale(2);
+            this.UI1_lap = this.add.image(-3460, -3462, 'UI_lap').setScale(1.75);
 
             // lap count
-            this.UI1_lapcount = this.add.sprite(-3370, -3462, 'UI_lapcount').setScale(2.25);
+            this.UI1_lapcount = this.add.sprite(-3390, -3462, 'UI_lapcount').setScale(1.75);
             this.UI1_lapcount.anims.load('lap_count');
 
             // place
@@ -567,10 +620,10 @@ class PlayS extends Phaser.Scene {
             this.UI2_speed.anims.load('speed_increase');
 
             // lap text
-            this.UI2_lap = this.add.image(-2450, -2462, 'UI_lap').setScale(2);
+            this.UI2_lap = this.add.image(-2460, -2462, 'UI_lap').setScale(1.75);
 
             // lap count
-            this.UI2_lapcount = this.add.sprite(-2370, -2462, 'UI_lapcount').setScale(2.25);
+            this.UI2_lapcount = this.add.sprite(-2390, -2462, 'UI_lapcount').setScale(1.75);
             this.UI2_lapcount.anims.load('lap_count');
 
             // place
@@ -616,6 +669,8 @@ class PlayS extends Phaser.Scene {
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+        keyU = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
 
         this.engineIdle = this.sound.add('engineIdle_sfx', { volume: 0.25, loop: true });
         this.engineIdle.play();
@@ -623,6 +678,21 @@ class PlayS extends Phaser.Scene {
         // Play the engine On sound
         this.engineStart = this.sound.add('engineStart_sfx', { volume: 0.25 });
         this.engineStart.play();
+
+        // Timer Config
+        let timerConfig = {
+            fontFamily: 'font1',
+            fontSize: '25px',
+            color: "white",
+        }
+
+        // Display For the Timer (Player 1)
+        this.add.sprite(-3253, -3490, 'UI_timeboard').setScale(1.55); // Add time board
+        this.timerDisplay = this.add.text(-3315, -3490, "00:00", timerConfig);
+
+        // Display For the Timer (Player 2)
+        this.add.sprite(-2253, -2490, 'UI_timeboard').setScale(1.55); // Add time board
+        this.timerDisplay2 = this.add.text(-2315, -2490, "00:00", timerConfig);
 
         // Play the countdown animation
         let countdown = this.add.sprite(-3260, -3350, 'start_light').setScale(1);
@@ -633,7 +703,8 @@ class PlayS extends Phaser.Scene {
             countdown.destroy(true);
             countdown2.destroy(true);
             // Players can now move
-            this.canMove = true;
+            this.playerMove = true;
+            this.player2Move = true;
 
             // Play bgm
             this.bgm = this.sound.add('bgm', { volume: 0.3 });
@@ -660,6 +731,11 @@ class PlayS extends Phaser.Scene {
                 firework_effect2.destroy(true);
             })
 
+            // Make Timer run when the race starts.
+            this.timer = this.time.addEvent({
+                loop: true
+            })
+
         })
 
         // delay before game starts
@@ -672,21 +748,6 @@ class PlayS extends Phaser.Scene {
             },
             loop: false
         })
-
-        // Stopwatch to track player's time.
-        let stopwatchConfig = {
-            fontFamily: 'Press Start 2P',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: "#843605",
-        }
-
-        this.timer = this.time.addEvent({
-            delay: 0,
-            loop: false
-        })
-
-       // console.log(this.timer.getElapsed());
 
         // To prevent players entering finish line repeatedly.
         this.lineEnter = false;
@@ -721,56 +782,133 @@ class PlayS extends Phaser.Scene {
         // collision detection between item box and the players
         // got help from https://www.html5gamedevs.com/topic/38484-matter-and-collisions/
         this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-            // player1 picking up item
-            if(bodyA.label == 'item_box' && bodyB.label == 'player1') {
-                //console.log('item_box hit player1');
-                //var item = Phaser.Math.Between(1,4);
+
+            /////////////////////////////
+            // player1 picking up item //
+            /////////////////////////////
+
+            // bodyA = item_box
+            if (bodyA.label == 'item_box' && bodyB.label == 'player1') {
+                var item = Phaser.Math.Between(1, 4);
+                if (this.player.item_slot == 0 && this.player.item_slot2 == 0) {            // if slots are empty
+                    this.player.item_slot = item;
+                } else if (this.player.item_slot != 0 && this.player.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
+                    this.player.item_slot2 = item;
+                } else {                                                                    // all slots full
+                    console.log('item slots full');
+                }
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
-                //this.speedBoost('p1');
-                //this.hammerATK('p1');
-                this.respawnBox(x,y);
+
+                //this.speedBoost('p1');    // speedboost powerup
+                //this.hammerATK('p1');     // hammer attack powerup
+                //this.bananaSlot = true;     // give player1 the banana item
+                //this.honeySlot = true;
+                this.respawnBox(x, y);
             }
 
-            // player1 picking up item
-            if(bodyB.label == 'item_box' && bodyA.label == 'player1') {
-                //console.log('item_box hit player1');
+            // bodyB = item_box
+            if (bodyB.label == 'item_box' && bodyA.label == 'player1') {
+                var item = Phaser.Math.Between(1, 4);
+                if (this.player.item_slot == 0 && this.player.item_slot2 == 0) {            // if slots are empty
+                    this.player.item_slot = item;
+                } else if (this.player.item_slot != 0 && this.player.item_slot2 == 0) {     // if slot1 is filled but slot2 isnt
+                    this.player.item_slot2 = item;
+                } else {                                                                    // all slots full
+                    console.log('item slots full');
+                }
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
-                //this.speedBoost('p1');
-                //this.hammerATK('p1');
-                this.respawnBox(x,y);
-            }   
 
-            // player2 picking up item
-            if(bodyA.label == 'item_box' && bodyB.label == 'player2') {
+                //this.speedBoost('p1');    // speedboost powerup
+                //this.hammerATK('p1');     // hammer attack powerup
+                //this.bananaSlot = true;     // give player1 the banana item
+                //this.honeySlot = true;
+                this.respawnBox(x, y);
+            }
+
+            /////////////////////////////
+            // player2 picking up item //
+            /////////////////////////////
+
+            // bodyA = item_box
+            if (bodyA.label == 'item_box' && bodyB.label == 'player2') {
                 //console.log('item_box hit player2')
                 var x = bodyA.position.x;
                 var y = bodyA.position.y;
                 bodyA.gameObject.destroy();
                 //this.speedBoost('p2');
-                this.hammerATK('p2');
-                this.respawnBox(x,y);
+                //this.hammerATK('p2');
+                //this.bananaSlot2 = true;     
+                //this.honeySlot2 = true;       
+                this.respawnBox(x, y);
             }
 
             // player2 picking up item
-            if(bodyB.label == 'item_box' && bodyA.label == 'player2') {
+            // bodyB = item_box
+            if (bodyB.label == 'item_box' && bodyA.label == 'player2') {
                 //console.log('item_box hit player2')
                 var x = bodyB.position.x;
                 var y = bodyB.position.y;
                 bodyB.gameObject.destroy();
                 //this.speedBoost('p2');
-                this.hammerATK('p2');
-                this.respawnBox(x,y);
+                //this.hammerATK('p2');
+                //this.bananaSlot2 = true;     
+                //this.honeySlot2 = true;
+                this.respawnBox(x, y);
+            }
+
+            // player1 colliding with banana
+            if ((bodyA.label == 'banana' && bodyB.label == 'player1') || (bodyB.label == 'banana' && bodyA.label == 'player1')) {
+                if (bodyA.label == 'player1') {
+                    this.bananaHit('p1');
+                    bodyB.gameObject.destroy();
+                } else {
+                    this.bananaHit('p1');
+                    bodyA.gameObject.destroy();
+                }
+            }
+
+            // player1 colliding with honey
+            if ((bodyA.label == 'honey' && bodyB.label == 'player1') || (bodyB.label == 'honey' && bodyA.label == 'player1')) {
+                if (bodyA.label == 'player1') {
+                    this.honeyHit('p1');
+                    bodyB.gameObject.destroy();
+                } else {
+                    this.honeyHit('p1');
+                    bodyA.gameObject.destroy();
+                }
+            }
+
+            // player2 colliding with banana
+            if ((bodyA.label == 'banana' && bodyB.label == 'player2') || (bodyB.label == 'banana' && bodyA.label == 'player2')) {
+                if (bodyA.label == 'player2') {
+                    this.bananaHit('p2');
+                    bodyB.gameObject.destroy();
+                } else {
+                    this.bananaHit('p2');
+                    bodyA.gameObject.destroy();
+                }
+            }
+
+            // player2 colliding with honey
+            if ((bodyA.label == 'honey' && bodyB.label == 'player2') || (bodyB.label == 'honey' && bodyA.label == 'player2')) {
+                if (bodyA.label == 'player2') {
+                    this.honeyHit('p2');
+                    bodyB.gameObject.destroy();
+                } else {
+                    this.honeyHit('p2');
+                    bodyA.gameObject.destroy();
+                }
             }
         }, this);
     }
 
-    respawnBox(x,y) {
+    respawnBox(x, y) {
         this.time.addEvent({
-            delay: 3000, 
+            delay: 3000,
             callback: () => {
                 this.item_box = this.matter.add.sprite(x, y, 'item_box').setScale(1).setStatic(true).setSensor(true);
                 this.item_box.setBody({
@@ -783,7 +921,7 @@ class PlayS extends Phaser.Scene {
             loop: false
         })
     }
-    
+
     // function that activates the speed boost
     // passes in either 'p1' or 'p2' for which car to boost
     speedBoost(player) {
@@ -793,7 +931,7 @@ class PlayS extends Phaser.Scene {
             this.boost2 = true;
         }
         this.time.addEvent({
-            delay: 1700, 
+            delay: 1700,
             callback: () => {
                 //console.log("stopped boosting");
                 if (player == 'p1') {
@@ -806,22 +944,61 @@ class PlayS extends Phaser.Scene {
         })
     }
 
-    bananaATK(player) {
+    // function that deploys the banana with given coordinates
+    bananaSpawn(x, y) {
+        this.bananaSprite = this.matter.add.sprite(x, y, 'UI_banana').setScale(1).setStatic(true).setSensor(true);
+        this.bananaSprite.body.label = 'banana';
+        //console.log(this.bananaSprite);
+    }
+
+    // function that causes player to spin out after hitting banana
+    bananaHit(player) {
         if (player == 'p1') {
             this.banana = true;
         } else {
             this.banana2 = true;
         }
+        this.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                if (player == 'p1') {
+                    this.banana = false;
+                } else {
+                    this.banana2 = false;
+                }
+            },
+            loop: false
+        })
     }
 
-    honeyATK(player) {
+    // function that deploys the honey with given coordinates
+    honeySpawn(x, y) {
+        this.honeySprite = this.matter.add.sprite(x, y, 'UI_honey').setScale(1).setStatic(true).setSensor(true);
+        this.honeySprite.body.label = 'honey';
+        //console.log(this.honeySprite);
+    }
+
+    // function that causes player to slow down in honey
+    honeyHit(player) {
         if (player == 'p1') {
             this.honey = true;
         } else {
             this.honey2 = true;
         }
+        this.time.addEvent({
+            delay: 1500,
+            callback: () => {
+                if (player == 'p1') {
+                    this.honey = false;
+                } else {
+                    this.honey2 = false;
+                }
+            },
+            loop: false
+        })
     }
 
+    // function that stuns player's enemy
     hammerATK(player) {
         if (player == 'p1') {
             this.hammer = true;
@@ -829,9 +1006,8 @@ class PlayS extends Phaser.Scene {
             this.hammer2 = true;
         }
         this.time.addEvent({
-            delay: 1700, 
+            delay: 1700,
             callback: () => {
-                //console.log("stopped boosting");
                 if (player == 'p1') {
                     this.hammer = false;
                 } else {
@@ -843,29 +1019,77 @@ class PlayS extends Phaser.Scene {
     }
 
     update() {
+        console.log('player1 item_slot: ' + this.player.item_slot);
+        console.log('player1 item_slot2: ' + this.player.item_slot2);
+        //console.log(this.player);
         //console.log('x: '+this.player.x);
         //console.log('y: '+this.player.y);
         //console.log("player1: " + this.player_waypoint);
         //console.log("player2: " + this.player2_waypoint);
-       // console.log(this.player_waypoint);
-       console.log(this.timer.getElapsedSeconds());
+        // console.log(this.player_waypoint);
+        //console.log(this.timer.getElapsedSeconds());
+
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
             this.scene.start("playScene");
         }
+        if(this.playerDone && this.player2Done){ // Both players have finished race, move on. 
+            console.log("Both players have finished.")
+        }
         //console.log(this.acceleration_play)
-        if (this.canMove) {
+        if (this.playerMove) {
+            // Update stopwatch when game starts.
+            this.displayTimeElapsed();
+
             // Player 1 Movement
             // Got help from https://codepen.io/Samid737/pen/GdVZeX
             // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
             //console.log(this.carSpeed);
             // sets maximum forward speed to 5
-            if (this.carSpeed >= 5 && this.boost == false) {
+            var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
+            var speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
+            if (this.carSpeed >= 5 && this.boost == false && this.honey == false) {
                 this.carSpeed = 5;
                 this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
                 this.player.setVelocityY(-Math.cos(this.player.rotation) * 5);
+            }
+
+            // if only slot1 is filled
+            if (this.player.item_slot != 0 && this.player.item_slot2 == 0 && Phaser.Input.Keyboard.JustDown(keyT)) {
+                if (this.player.item_slot == 1) {           // speed boost
+                    this.speedBoost('p1');
+                    this.player.item_slot = 0;
+                } else if (this.player.item_slot == 2) {    // hammer attack
+                    this.hammerATK('p1');
+                    this.player.item_slot = 0;
+                } else if (this.player.item_slot == 3) {    // banana drop
+                    this.bananaSlot = true;
+                    this.player.item_slot = 0;
+                } else if (this.player.item_slot == 4) {    // honey drop
+                    this.honeySlot = true;
+                    this.player.item_slot = 0;
+                }
+                else {}
+            }
+
+            // if both slots are filled
+            if (this.player.item_slot != 0 && this.player.item_slot2 != 0 && Phaser.Input.Keyboard.JustDown(keyT)) {
+                if (this.player.item_slot2 == 1) {
+                    this.speedBoost('p1');
+                    this.player.item_slot2 = 0;
+                } else if (this.player.item_slot2 == 2) {
+                    this.hammerATK('p1');
+                    this.player.item_slot2 = 0;
+                } else if (this.player.item_slot2 == 3) {
+                    this.bananaSlot = true;
+                    this.player.item_slot2 = 0;
+                } else if (this.player.item_slot2 == 4) {
+                    this.honeySlot = true;
+                    this.player.item_slot2 = 0;
+                }
+                else {}
             }
 
             // player1 activating speedboost
@@ -881,6 +1105,32 @@ class PlayS extends Phaser.Scene {
                 this.player2.setVelocityX(0);
                 this.player2.setVelocityY(0);
                 this.SteeringWheel2.rotation = 0;
+            }
+
+            // player1 deploying banana
+            if (this.bananaSlot == true) {
+                this.bananaSpawn(this.player.x + 50, this.player.y - 50);
+                this.bananaSlot = false;
+            }
+
+            // player1 hitting banana
+            if (this.banana == true) {
+                this.player.setAngularVelocity(50);
+            }
+
+            // player1 deploying honey
+            if (this.honeySlot == true) {
+                this.honeySpawn(this.player.x + 50, this.player.y - 50);
+                this.honeySlot = false;
+            }
+
+            // player1 hitting honey
+            if (this.honey == true) {
+                //console.log('stuck by honey!');
+                this.carSpeed = 2;
+                this.player.setVelocityX(1.4);
+                this.player.setVelocityY(1.4);
+                this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.01 * Math.exp(-speedsquared / 100));
             }
 
             // sets maximum reverse speed to -5
@@ -937,8 +1187,10 @@ class PlayS extends Phaser.Scene {
                 this.SteeringWheel.rotation = 0;
             }
 
-            var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
-            this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.15 * Math.exp(-speedsquared / 100));
+            // if the car isnt hit by the banana or honey, then it rotates normally
+            if (this.banana == false && this.honey == false) {
+                this.player.setAngularVelocity(this.SteeringWheel.rotation * 0.15 * Math.exp(-speedsquared / 100));
+            }
 
             // no drift 
             this.player.setVelocityX(Math.sin(this.player.rotation) * this.carSpeed);
@@ -1036,63 +1288,63 @@ class PlayS extends Phaser.Scene {
                 this.UI1_speed.anims.load('speed_increase', 14);
             }
 
-            if((this.player.x >= -830 && this.player.x <= 850) && (this.player.y >= 850 && this.player.y <= 1200)){
-                if(this.player_waypoint == 4 || this.player_waypoint == 5){ // check if player is coming from right direction
+            if ((this.player.x >= -830 && this.player.x <= 850) && (this.player.y >= 850 && this.player.y <= 1200)) {
+                if (this.player_waypoint == 4 || this.player_waypoint == 5) { // check if player is coming from right direction
                     this.player_waypoint = 5;
                 }
-                else{ // wrong way
+                else { // wrong way
                     console.log("player 1 wrong way")
-                }   
+                }
             }
-            else if((this.player.x >= 400 && this.player.x <= 850) && (this.player.y > 400 && this.player.y <= 850)){ // to goal
-                if(this.player_waypoint == 5 || this.player_waypoint == 6){
+            else if ((this.player.x >= 400 && this.player.x <= 850) && (this.player.y > 400 && this.player.y <= 850)) { // to goal
+                if (this.player_waypoint == 5 || this.player_waypoint == 6) {
                     this.player_waypoint = 6;
                 }
-                else{ // wrong way
+                else { // wrong way
                     console.log("player 1 wrong way")
-                } 
+                }
             }
-            else if((this.player.x >= 400 && this.player.x <= 850) && (this.player.y < 350 && this.player.y >= 0)){ 
-                if(this.player_waypoint == 6 || this.player_waypoint == 1){
+            else if ((this.player.x >= 400 && this.player.x <= 850) && (this.player.y < 350 && this.player.y >= 0)) {
+                if (this.player_waypoint == 6 || this.player_waypoint == 1) {
                     this.player_waypoint = 1;
                 }
-                else{ // wrong way
+                else { // wrong way
                     console.log("player 1 wrong way")
-                } 
+                }
             }
-            else if((this.player.x >= 780 && this.player.x <= 1200) && (this.player.y >= -940 && this.player.y <= 180)){
-                if(this.player_waypoint == 1 || this.player_waypoint == 2){
+            else if ((this.player.x >= 780 && this.player.x <= 1200) && (this.player.y >= -940 && this.player.y <= 180)) {
+                if (this.player_waypoint == 1 || this.player_waypoint == 2) {
                     this.player_waypoint = 2;
                 }
-                else{ // wrong way
+                else { // wrong way
                     console.log("player 1 wrong way")
-                } 
+                }
             }
-            else if((this.player.x >= -830 && this.player.x <= 970) && (this.player.y >= -1220 && this.player.y <= -940)){
-                if(this.player_waypoint == 2 || this.player_waypoint == 3){
+            else if ((this.player.x >= -830 && this.player.x <= 970) && (this.player.y >= -1220 && this.player.y <= -940)) {
+                if (this.player_waypoint == 2 || this.player_waypoint == 3) {
                     this.player_waypoint = 3;
                 }
-                else{ // wrong way
+                else { // wrong way
                     console.log("player 1 wrong way")
-                } 
+                }
             }
-            else{
-                if(!(this.player.x >= 400 && this.player.x <= 850) && (this.player.y <= 400 && this.player.y >= 350)){
-                    if(this.player_waypoint == 3 || this.player_waypoint == 4){
+            else {
+                if (!(this.player.x >= 400 && this.player.x <= 850) && (this.player.y <= 400 && this.player.y >= 350)) {
+                    if (this.player_waypoint == 3 || this.player_waypoint == 4) {
                         this.player_waypoint = 4;
                     }
-                    else{ // wrong way
+                    else { // wrong way
                         console.log("player 1 wrong way")
-                    } 
+                    }
                 }
             }
 
-            if(this.lineEnter){
-                if((this.player.x >= 400 && this.player.x <= 850) && (this.player.y <= 400 && this.player.y >= 350)){ // goal line
-                    if(this.player_waypoint == 6){
+            if (this.lineEnter) {
+                if ((this.player.x >= 400 && this.player.x <= 850) && (this.player.y <= 400 && this.player.y >= 350)) { // goal line
+                    if (this.player_waypoint == 6) {
                         this.player_lap += 1;
                         this.lineEnter = false;
-                        if(this.player_lap == 2){ // Lap 2
+                        if (this.player_lap == 2) { // Lap 2
                             this.UI1_lapcount.anims.load('lap_count', 1);
                             let UI1_laptwo = this.add.sprite(-3260, -3350, 'UI_laptwo').setScale(2.5);
                             UI1_laptwo.anims.play("lap_two");
@@ -1100,7 +1352,7 @@ class PlayS extends Phaser.Scene {
                                 UI1_laptwo.destroy(true);
                             })
                         }
-                        if(this.player_lap == 3){ // Last lap
+                        if (this.player_lap == 3) { // Last lap
                             this.UI1_lapcount.anims.load('lap_count', 2);
                             let UI1_lapfinal = this.add.sprite(-3260, -3350, 'UI_lapfinal').setScale(2.5);
                             UI1_lapfinal.anims.play("lap_final");
@@ -1108,14 +1360,17 @@ class PlayS extends Phaser.Scene {
                                 UI1_lapfinal.destroy(true);
                             })
                         }
-                        if(this.player_lap == 4){ // Over
-                            
+                        if (this.player_lap == 4) { // Player1 finished race
+                            this.playerMove = false; // Player1 can't move anymore.
+                            this.playerDone = true; // Indicate player1 has finished.
+                            console.log("Player1 has finished");
                         }
                     }
 
                 }
             }
-
+        }
+        if (this.player2Move) {
             // Player 2 Movement
             //console.log(this.carSpeed2);
             // sets maximum forward speed to 5
@@ -1145,6 +1400,31 @@ class PlayS extends Phaser.Scene {
                 this.player.setVelocityX(0);
                 this.player.setVelocityY(0);
                 this.SteeringWheel.rotation = 0;
+            }
+
+            // player2 deploying banana
+            if (keyU.isDown && this.bananaSlot2 == true) {
+                this.bananaSpawn(this.player2.x + 50, this.player2.y - 50);
+                this.bananaSlot2 = false;
+            }
+
+            // player2 hitting banana
+            if (this.banana2 == true) {
+                this.player2.setAngularVelocity(50);
+            }
+
+            // player2 deploying honey
+            if (keyU.isDown && this.honeySlot2 == true) {
+                this.honeySpawn(this.player2.x + 50, this.player2.y - 50);
+                this.honeySlot2 = false;
+            }
+
+            // player2 hitting honey
+            if (this.honey2 == true) {
+                this.carSpeed2 = 2;
+                this.player2.setVelocityX(1.4);
+                this.player2.setVelocityY(1.4);
+                this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.01 * Math.exp(-speedsquared2 / 100));
             }
 
             // Car Steering
@@ -1185,8 +1465,10 @@ class PlayS extends Phaser.Scene {
                 this.SteeringWheel2.rotation = 0;
             }
 
-            var speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
-            this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.15 * Math.exp(-speedsquared2 / 100));
+            // if not hit by banana or honey, rotatation is normal
+            if (this.banana2 == false && this.honey2 == false) {
+                this.player2.setAngularVelocity(this.SteeringWheel2.rotation * 0.15 * Math.exp(-speedsquared2 / 100));
+            }
 
             // no drift 
             this.player2.setVelocityX(Math.sin(this.player2.rotation) * this.carSpeed2);
@@ -1199,85 +1481,85 @@ class PlayS extends Phaser.Scene {
             this.carSpeed2Anim = this.carSpeed2;
 
             //console.log(this.carSpeedAnim);
-            if (this.carSpeed2 < 0.67/2 && this.carSpeed2 > -0.67/2) {
+            if (this.carSpeed2 < 0.67 / 2 && this.carSpeed2 > -0.67 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 0);
             }
-            else if (this.carSpeed2Anim <= -0.67/2 && this.carSpeed2 > -1.34/2) {
+            else if (this.carSpeed2Anim <= -0.67 / 2 && this.carSpeed2 > -1.34 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 1);
             }
-            else if (this.carSpeed2Anim >= 0.67/2 && this.carSpeed2 < 1.34/2) {
+            else if (this.carSpeed2Anim >= 0.67 / 2 && this.carSpeed2 < 1.34 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 1);
             }
-            else if (this.carSpeed2Anim <= -1.34/2 && this.carSpeed2 > -2.01/2) {
+            else if (this.carSpeed2Anim <= -1.34 / 2 && this.carSpeed2 > -2.01 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 2);
             }
-            else if (this.carSpeed2Anim >= 1.34/2 && this.carSpeed2 < 2.01/2) {
+            else if (this.carSpeed2Anim >= 1.34 / 2 && this.carSpeed2 < 2.01 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 2);
             }
-            else if (this.carSpeed2Anim <= -2.01/2 && this.carSpeed2 > -2.68/2) {
+            else if (this.carSpeed2Anim <= -2.01 / 2 && this.carSpeed2 > -2.68 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 3);
             }
-            else if (this.carSpeed2Anim >= 2.01/2 && this.carSpeed2 < 2.68/2) {
+            else if (this.carSpeed2Anim >= 2.01 / 2 && this.carSpeed2 < 2.68 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 3);
             }
-            else if (this.carSpeed2Anim <= -2.68/2 && this.carSpeed2 > -3.35/2) {
+            else if (this.carSpeed2Anim <= -2.68 / 2 && this.carSpeed2 > -3.35 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 4);
             }
-            else if (this.carSpeed2Anim >= 2.68/2 && this.carSpeed2 < 3.35/2) {
+            else if (this.carSpeed2Anim >= 2.68 / 2 && this.carSpeed2 < 3.35 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 4);
             }
-            else if (this.carSpeed2Anim <= -3.35/2 && this.carSpeed2 > -4.02/2) {
+            else if (this.carSpeed2Anim <= -3.35 / 2 && this.carSpeed2 > -4.02 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 5);
             }
-            else if (this.carSpeed2Anim >= 3.35/2 && this.carSpeed2 < 4.02/2) {
+            else if (this.carSpeed2Anim >= 3.35 / 2 && this.carSpeed2 < 4.02 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 5);
             }
-            else if (this.carSpeed2Anim <= -4.02/2 && this.carSpeed2 > -4.69/2) {
+            else if (this.carSpeed2Anim <= -4.02 / 2 && this.carSpeed2 > -4.69 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 6);
             }
-            else if (this.carSpeed2Anim >= 4.02/2 && this.carSpeed2 < 4.69/2) {
+            else if (this.carSpeed2Anim >= 4.02 / 2 && this.carSpeed2 < 4.69 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 6);
             }
-            else if (this.carSpeed2Anim <= -4.69/2 && this.carSpeed2 > -5.36/2) {
+            else if (this.carSpeed2Anim <= -4.69 / 2 && this.carSpeed2 > -5.36 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 7);
             }
-            else if (this.carSpeed2Anim >= 4.69/2 && this.carSpeed2 < 5.36/2) {
+            else if (this.carSpeed2Anim >= 4.69 / 2 && this.carSpeed2 < 5.36 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 7);
             }
-            else if (this.carSpeed2Anim <= -5.36/2 && this.carSpeed2 > -6.03/2) {
+            else if (this.carSpeed2Anim <= -5.36 / 2 && this.carSpeed2 > -6.03 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 8);
             }
-            else if (this.carSpeed2Anim >= 5.36/2 && this.carSpeed2 < 6.03/2) {
+            else if (this.carSpeed2Anim >= 5.36 / 2 && this.carSpeed2 < 6.03 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 8);
             }
-            else if (this.carSpeed2Anim <= -6.03/2 && this.carSpeed2 > -6.7/2) {
+            else if (this.carSpeed2Anim <= -6.03 / 2 && this.carSpeed2 > -6.7 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 9);
             }
-            else if (this.carSpeed2Anim >= 6.03/2 && this.carSpeed2 < 6.7/2) {
+            else if (this.carSpeed2Anim >= 6.03 / 2 && this.carSpeed2 < 6.7 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 9);
             }
-            else if (this.carSpeed2Anim <= -6.7/2 && this.carSpeed2 > -7.37/2) {
+            else if (this.carSpeed2Anim <= -6.7 / 2 && this.carSpeed2 > -7.37 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 10);
             }
-            else if (this.carSpeed2Anim >= 6.7/2 && this.carSpeed2 < 7.37/2) {
+            else if (this.carSpeed2Anim >= 6.7 / 2 && this.carSpeed2 < 7.37 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 10);
             }
-            else if (this.carSpeed2Anim <= -7.37/2 && this.carSpeed2 > -8.04/2) {
+            else if (this.carSpeed2Anim <= -7.37 / 2 && this.carSpeed2 > -8.04 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 11);
             }
-            else if (this.carSpeed2Anim >= 7.37/2 && this.carSpeed2 < 8.04/2) {
+            else if (this.carSpeed2Anim >= 7.37 / 2 && this.carSpeed2 < 8.04 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 11);
             }
-            else if (this.carSpeed2Anim <= -8.04/2 && this.carSpeed2 > -8.71/2) {
+            else if (this.carSpeed2Anim <= -8.04 / 2 && this.carSpeed2 > -8.71 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 12);
             }
-            else if (this.carSpeed2Anim >= 8.04/2 && this.carSpeed2 < 8.71/2) {
+            else if (this.carSpeed2Anim >= 8.04 / 2 && this.carSpeed2 < 8.71 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 12);
             }
-            else if (this.carSpeed2Anim <= -8.71/2 && this.carSpeed2 > -9.38/2) {
+            else if (this.carSpeed2Anim <= -8.71 / 2 && this.carSpeed2 > -9.38 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 13);
             }
-            else if (this.carSpeed2Anim >= 8.71/2 && this.carSpeed2 < 9.38/2) {
+            else if (this.carSpeed2Anim >= 8.71 / 2 && this.carSpeed2 < 9.38 / 2) {
                 this.UI2_speed.anims.load('speed_increase', 13);
             }
             else {
@@ -1285,63 +1567,63 @@ class PlayS extends Phaser.Scene {
             }
         }
 
-        if((this.player2.x >= -830 && this.player2.x <= 850) && (this.player2.y >= 850 && this.player2.y <= 1200)){
-            if(this.player2_waypoint == 4 || this.player2_waypoint == 5){ // check if player2 is coming from right direction
+        if ((this.player2.x >= -830 && this.player2.x <= 850) && (this.player2.y >= 850 && this.player2.y <= 1200)) {
+            if (this.player2_waypoint == 4 || this.player2_waypoint == 5) { // check if player2 is coming from right direction
                 this.player2_waypoint = 5;
             }
-            else{ // wrong way
+            else { // wrong way
                 console.log("player 2 wrong way")
-            }   
+            }
         }
-        else if((this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y > 400 && this.player2.y <= 850)){ // to goal
-            if(this.player2_waypoint == 5 || this.player2_waypoint == 6){
+        else if ((this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y > 400 && this.player2.y <= 850)) { // to goal
+            if (this.player2_waypoint == 5 || this.player2_waypoint == 6) {
                 this.player2_waypoint = 6;
             }
-            else{ // wrong way
+            else { // wrong way
                 console.log("player2 1 wrong way")
-            } 
+            }
         }
-        else if((this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y < 350 && this.player2.y >= 0)){ 
-            if(this.player2_waypoint == 6 || this.player2_waypoint == 1){
+        else if ((this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y < 350 && this.player2.y >= 0)) {
+            if (this.player2_waypoint == 6 || this.player2_waypoint == 1) {
                 this.player2_waypoint = 1;
             }
-            else{ // wrong way
+            else { // wrong way
                 console.log("player 1 wrong way")
-            } 
+            }
         }
-        else if((this.player2.x >= 780 && this.player2.x <= 1200) && (this.player2.y >= -940 && this.player2.y <= 180)){
-            if(this.player2_waypoint == 1 || this.player2_waypoint == 2){
+        else if ((this.player2.x >= 780 && this.player2.x <= 1200) && (this.player2.y >= -940 && this.player2.y <= 180)) {
+            if (this.player2_waypoint == 1 || this.player2_waypoint == 2) {
                 this.player2_waypoint = 2;
             }
-            else{ // wrong way
+            else { // wrong way
                 console.log("player 2 wrong way")
-            } 
+            }
         }
-        else if((this.player2.x >= -830 && this.player2.x <= 970) && (this.player2.y >= -1220 && this.player2.y <= -940)){
-            if(this.player2_waypoint == 2 || this.player2_waypoint == 3){
+        else if ((this.player2.x >= -830 && this.player2.x <= 970) && (this.player2.y >= -1220 && this.player2.y <= -940)) {
+            if (this.player2_waypoint == 2 || this.player2_waypoint == 3) {
                 this.player2_waypoint = 3;
             }
-            else{ // wrong way
+            else { // wrong way
                 console.log("player 2 wrong way")
-            } 
+            }
         }
-        else{
-            if(!(this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y <= 400 && this.player2.y >= 350)){
-                if(this.player2_waypoint == 3 || this.player2_waypoint == 4){
+        else {
+            if (!(this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y <= 400 && this.player2.y >= 350)) {
+                if (this.player2_waypoint == 3 || this.player2_waypoint == 4) {
                     this.player2_waypoint = 4;
                 }
-                else{ // wrong way
+                else { // wrong way
                     console.log("player 2 wrong way")
-                } 
+                }
             }
         }
 
-        if(this.lineEnter2){
-            if((this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y <= 400 && this.player2.y >= 350)){ // goal line
-                if(this.player2_waypoint == 6){
+        if (this.lineEnter2) {
+            if ((this.player2.x >= 400 && this.player2.x <= 850) && (this.player2.y <= 400 && this.player2.y >= 350)) { // goal line
+                if (this.player2_waypoint == 6) {
                     this.player2_lap += 1;
                     this.lineEnter2 = false;
-                    if(this.player2_lap == 2){ // Lap 2
+                    if (this.player2_lap == 2) { // Lap 2
                         this.UI2_lapcount.anims.load('lap_count', 1);
                         let UI2_laptwo = this.add.sprite(-2260, -2350, 'UI_laptwo').setScale(2.5);
                         UI2_laptwo.anims.play("lap_two");
@@ -1349,7 +1631,7 @@ class PlayS extends Phaser.Scene {
                             UI2_laptwo.destroy(true);
                         })
                     }
-                    if(this.player2_lap == 3){ // Last lap
+                    if (this.player2_lap == 3) { // Last lap
                         this.UI2_lapcount.anims.load('lap_count', 2);
                         let UI2_lapfinal = this.add.sprite(-2260, -2350, 'UI_lapfinal').setScale(2.5);
                         UI2_lapfinal.anims.play("lap_final");
@@ -1357,94 +1639,122 @@ class PlayS extends Phaser.Scene {
                             UI2_lapfinal.destroy(true);
                         })
                     }
-                    if(this.player2_lap == 4){ // Over
-                        
+                    if (this.player2_lap == 4) { // Player2 has finished the race.
+                        this.player2Move = false;
+                        this.player2Done = true;
+                        console.log("Player2 has finished");
                     }
 
                 }
-                
+
             }
         }
 
-        if(this.player_lap == this.player2_lap){ // only check if players are on same lap.
-            if(this.player_waypoint == this.player2_waypoint){ // players are in same box
-                if(this.player_waypoint == 1){
-                    if(this.player.y < this.player2.y){ // player 1 is ahead
+        if (this.player_lap == this.player2_lap) { // only check if players are on same lap.
+            if (this.player_waypoint == this.player2_waypoint) { // players are in same box
+                if (this.player_waypoint == 1) {
+                    if (this.player.y < this.player2.y) { // player 1 is ahead
                         this.UI1_place.anims.load('UI_place', 0);
                         this.UI2_place.anims.load('UI_place', 1);
                     }
-                    else{ // player 2 is ahead
+                    else { // player 2 is ahead
                         this.UI1_place.anims.load('UI_place', 1);
                         this.UI2_place.anims.load('UI_place', 0);
                     }
                 }
-                else if(this.player_waypoint == 2){
-                    if(this.player.y < this.player2.y){ // player 1 is ahead
+                else if (this.player_waypoint == 2) {
+                    if (this.player.y < this.player2.y) { // player 1 is ahead
                         this.UI1_place.anims.load('UI_place', 0);
                         this.UI2_place.anims.load('UI_place', 1);
                     }
-                    else{ // player 2 is ahead
+                    else { // player 2 is ahead
                         this.UI1_place.anims.load('UI_place', 1);
                         this.UI2_place.anims.load('UI_place', 0);
                     }
                 }
-                else if(this.player_waypoint == 3){ 
-                    if(this.player.x < this.player2.x){ // player 1 is ahead
+                else if (this.player_waypoint == 3) {
+                    if (this.player.x < this.player2.x) { // player 1 is ahead
                         this.UI1_place.anims.load('UI_place', 0);
                         this.UI2_place.anims.load('UI_place', 1);
                     }
-                    else{ // player 2 is ahead
+                    else { // player 2 is ahead
                         this.UI1_place.anims.load('UI_place', 1);
                         this.UI2_place.anims.load('UI_place', 0);
                     }
                 }
-                else if(this.player_waypoint == 4){
-                    if(this.player.y > this.player2.y){ // player 1 is ahead
+                else if (this.player_waypoint == 4) {
+                    if (this.player.y > this.player2.y) { // player 1 is ahead
                         this.UI1_place.anims.load('UI_place', 0);
                         this.UI2_place.anims.load('UI_place', 1);
                     }
-                    else{ // player 2 is ahead
+                    else { // player 2 is ahead
                         this.UI1_place.anims.load('UI_place', 1);
                         this.UI2_place.anims.load('UI_place', 0);
                     }
                 }
-                else if(this.player_waypoint == 5){
-                    if(this.player.x > this.player2.x){ // player 1 is ahead
+                else if (this.player_waypoint == 5) {
+                    if (this.player.x > this.player2.x) { // player 1 is ahead
                         this.UI1_place.anims.load('UI_place', 0);
                         this.UI2_place.anims.load('UI_place', 1);
                     }
-                    else{ // player 2 is ahead
+                    else { // player 2 is ahead
                         this.UI1_place.anims.load('UI_place', 1);
                         this.UI2_place.anims.load('UI_place', 0);
                     }
                 }
-                else{ // waypoint == 6
-                    if(this.player.y < this.player2.y){ // player 1 is ahead
+                else { // waypoint == 6
+                    if (this.player.y < this.player2.y) { // player 1 is ahead
                         this.UI1_place.anims.load('UI_place', 0);
                         this.UI2_place.anims.load('UI_place', 1);
                     }
-                    else{ // player 2 is ahead
+                    else { // player 2 is ahead
                         this.UI1_place.anims.load('UI_place', 1);
                         this.UI2_place.anims.load('UI_place', 0);
                     }
                 }
             }
-            else if(this.player_waypoint > this.player2_waypoint){ // player 1 is ahead
+            else if (this.player_waypoint > this.player2_waypoint) { // player 1 is ahead
                 this.UI1_place.anims.load('UI_place', 0);
                 this.UI2_place.anims.load('UI_place', 1);
             }
-            else{ // player 2 is ahead
+            else { // player 2 is ahead
                 this.UI1_place.anims.load('UI_place', 1);
                 this.UI2_place.anims.load('UI_place', 0);
             }
         }
-        else if(this.player_lap > this.player2_lap){ // player 1 has lap lead
+        else if (this.player_lap > this.player2_lap) { // player 1 has lap lead
             this.UI1_place.anims.load('UI_place', 0);
             this.UI2_place.anims.load('UI_place', 1);
         }
-        else{ // player 2 has lap lead
+        else { // player 2 has lap lead
             this.UI1_place.anims.load('UI_place', 1);
             this.UI2_place.anims.load('UI_place', 0);
+        }
+    }
+
+    // Reference: https://docs.idew.org/video-game/project-references/phaser-coding/timers#create-count-up-timer
+    // Display time for each player.
+    displayTimeElapsed(){
+        //console.log("passed");
+        var time = Math.floor(this.timer.getElapsedSeconds() );
+        var min = Math.floor(time/60);
+        var sec = time % 60;
+
+        //console.log("min" + min);
+        //console.log("sec" + sec);
+        //console.log("time " + time);
+
+        if(min < 10){
+            min = '0' + min;
+        }
+        if(sec < 10){
+            sec = '0' + sec;
+        }
+        if(this.playerMove){ // Only update timeDisplay when racing is happening. 
+            this.timerDisplay.text = min + ':' + sec;
+        }
+        if(this.player2Move){
+            this.timerDisplay2.text = min + ':' + sec;
         }
     }
 }
