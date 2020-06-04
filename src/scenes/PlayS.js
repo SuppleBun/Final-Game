@@ -15,6 +15,7 @@ class PlayS extends Phaser.Scene {
         this.load.image('UI_hammer', './assets/image/UI_hammer.png');
         this.load.image('UI_honey', './assets/image/UI_honey.png');
         this.load.image('UI_lap', './assets/image/UI_lap.png');
+        this.load.image('UI_timeboard', './assets/image/UI_timeboard.png');
         this.load.spritesheet('UI_lapcount', './assets/image/UI_lapcount.png', { frameWidth: 36, frameHeight: 25, startFrame: 0, endFrame: 2 });
         this.load.spritesheet('UI_place', './assets/image/UI_place.png', { frameWidth: 30, frameHeight: 54, startFrame: 0, endFrame: 1 });
         this.load.spritesheet('UI_laptwo', './assets/image/UI_laptwo.png', { frameWidth: 68, frameHeight: 19, startFrame: 0, endFrame: 6 });
@@ -570,7 +571,12 @@ class PlayS extends Phaser.Scene {
         this.SteeringWheelAnim4 = true;
 
         // Prevent players moving during countdown
-        this.canMove = false; // should be false
+        this.playerMove = false; 
+        this.player2Move = false; 
+
+        // Indication if player has finished race.
+        this.playerDone = false;
+        this.player2Done = false;
 
         // Prevent acceleration sound playing again
         this.acceleration_play = true;
@@ -588,10 +594,10 @@ class PlayS extends Phaser.Scene {
             this.UI1_speed.anims.load('speed_increase');
 
             // lap text
-            this.UI1_lap = this.add.image(-3450, -3462, 'UI_lap').setScale(2);
+            this.UI1_lap = this.add.image(-3460, -3462, 'UI_lap').setScale(1.75);
 
             // lap count
-            this.UI1_lapcount = this.add.sprite(-3370, -3462, 'UI_lapcount').setScale(2.25);
+            this.UI1_lapcount = this.add.sprite(-3390, -3462, 'UI_lapcount').setScale(1.75);
             this.UI1_lapcount.anims.load('lap_count');
 
             // place
@@ -614,10 +620,10 @@ class PlayS extends Phaser.Scene {
             this.UI2_speed.anims.load('speed_increase');
 
             // lap text
-            this.UI2_lap = this.add.image(-2450, -2462, 'UI_lap').setScale(2);
+            this.UI2_lap = this.add.image(-2460, -2462, 'UI_lap').setScale(1.75);
 
             // lap count
-            this.UI2_lapcount = this.add.sprite(-2370, -2462, 'UI_lapcount').setScale(2.25);
+            this.UI2_lapcount = this.add.sprite(-2390, -2462, 'UI_lapcount').setScale(1.75);
             this.UI2_lapcount.anims.load('lap_count');
 
             // place
@@ -673,6 +679,21 @@ class PlayS extends Phaser.Scene {
         this.engineStart = this.sound.add('engineStart_sfx', { volume: 0.25 });
         this.engineStart.play();
 
+        // Timer Config
+        let timerConfig = {
+            fontFamily: 'font1',
+            fontSize: '25px',
+            color: "white",
+        }
+
+        // Display For the Timer (Player 1)
+        this.add.sprite(-3253, -3490, 'UI_timeboard').setScale(1.55); // Add time board
+        this.timerDisplay = this.add.text(-3315, -3490, "00:00", timerConfig);
+
+        // Display For the Timer (Player 2)
+        this.add.sprite(-2253, -2490, 'UI_timeboard').setScale(1.55); // Add time board
+        this.timerDisplay2 = this.add.text(-2315, -2490, "00:00", timerConfig);
+
         // Play the countdown animation
         let countdown = this.add.sprite(-3260, -3350, 'start_light').setScale(1);
         let countdown2 = this.add.sprite(-2260, -2350, 'start_light').setScale(1);
@@ -682,7 +703,8 @@ class PlayS extends Phaser.Scene {
             countdown.destroy(true);
             countdown2.destroy(true);
             // Players can now move
-            this.canMove = true;
+            this.playerMove = true;
+            this.player2Move = true;
 
             // Play bgm
             this.bgm = this.sound.add('bgm', { volume: 0.3 });
@@ -709,6 +731,11 @@ class PlayS extends Phaser.Scene {
                 firework_effect2.destroy(true);
             })
 
+            // Make Timer run when the race starts.
+            this.timer = this.time.addEvent({
+                loop: true
+            })
+
         })
 
         // delay before game starts
@@ -721,21 +748,6 @@ class PlayS extends Phaser.Scene {
             },
             loop: false
         })
-
-        // Stopwatch to track player's time.
-        let stopwatchConfig = {
-            fontFamily: 'Press Start 2P',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: "#843605",
-        }
-
-        this.timer = this.time.addEvent({
-            delay: 0,
-            loop: false
-        })
-
-        // console.log(this.timer.getElapsed());
 
         // To prevent players entering finish line repeatedly.
         this.lineEnter = false;
@@ -1077,21 +1089,28 @@ class PlayS extends Phaser.Scene {
         //console.log("player2: " + this.player2_waypoint);
         // console.log(this.player_waypoint);
         //console.log(this.timer.getElapsedSeconds());
+
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
             this.scene.start("playScene");
         }
+        if(this.playerDone && this.player2Done){ // Both players have finished race, move on. 
+            console.log("Both players have finished.")
+        }
         //console.log(this.acceleration_play)
-        if (this.canMove) {
+        if (this.playerMove) {
+            // Update stopwatch when game starts.
+            this.displayTimeElapsed();
+
             // Player 1 Movement
             // Got help from https://codepen.io/Samid737/pen/GdVZeX
             // and also from https://anexia.com/blog/en/introduction-to-the-phaser-framework/
             //console.log(this.carSpeed);
             // sets maximum forward speed to 5
-            let speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
-            let speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
+            var speedsquared = (this.player.body.velocity.x * this.player.body.velocity.x) + (this.player.body.velocity.y * this.player.body.velocity.y);
+            var speedsquared2 = (this.player2.body.velocity.x * this.player2.body.velocity.x) + (this.player2.body.velocity.y * this.player2.body.velocity.y);
             if (this.carSpeed >= 5 && this.boost == false && this.honey == false) {
                 this.carSpeed = 5;
                 this.player.setVelocityX(Math.sin(this.player.rotation) * 5);
@@ -1389,14 +1408,17 @@ class PlayS extends Phaser.Scene {
                                 UI1_lapfinal.destroy(true);
                             })
                         }
-                        if (this.player_lap == 4) { // Over
-
+                        if (this.player_lap == 4) { // Player1 finished race
+                            this.playerMove = false; // Player1 can't move anymore.
+                            this.playerDone = true; // Indicate player1 has finished.
+                            console.log("Player1 has finished");
                         }
                     }
 
                 }
             }
-
+        }
+        if (this.player2Move) {
             // Player 2 Movement
             //console.log(this.carSpeed2);
             // sets maximum forward speed to 5
@@ -1665,8 +1687,10 @@ class PlayS extends Phaser.Scene {
                             UI2_lapfinal.destroy(true);
                         })
                     }
-                    if (this.player2_lap == 4) { // Over
-
+                    if (this.player2_lap == 4) { // Player2 has finished the race.
+                        this.player2Move = false;
+                        this.player2Done = true;
+                        console.log("Player2 has finished");
                     }
 
                 }
@@ -1753,6 +1777,32 @@ class PlayS extends Phaser.Scene {
         else { // player 2 has lap lead
             this.UI1_place.anims.load('UI_place', 1);
             this.UI2_place.anims.load('UI_place', 0);
+        }
+    }
+
+    // Reference: https://docs.idew.org/video-game/project-references/phaser-coding/timers#create-count-up-timer
+    // Display time for each player.
+    displayTimeElapsed(){
+        //console.log("passed");
+        var time = Math.floor(this.timer.getElapsedSeconds() );
+        var min = Math.floor(time/60);
+        var sec = time % 60;
+
+        //console.log("min" + min);
+        //console.log("sec" + sec);
+        //console.log("time " + time);
+
+        if(min < 10){
+            min = '0' + min;
+        }
+        if(sec < 10){
+            sec = '0' + sec;
+        }
+        if(this.playerMove){ // Only update timeDisplay when racing is happening. 
+            this.timerDisplay.text = min + ':' + sec;
+        }
+        if(this.player2Move){
+            this.timerDisplay2.text = min + ':' + sec;
         }
     }
 }
