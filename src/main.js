@@ -9,18 +9,20 @@ let config = {
     physics: {
         default: 'matter',
         matter: {
-            debug: true, // allows to see the hitbox of sprites
+            debug: false, // allows to see the hitbox of sprites
             gravity: { y: 0}
         }
     },
-    scene:  [ Menu, Play, PlayS, Tutorial],
+    scene:  [ Menu, Play, Test, Tutorial],
 };
 
 let game = new Phaser.Game(config);
 
 // define game settings
 game.settings = {
-    raceNum: 1
+    raceNum: 1,
+    playerWon: 0,
+    player2Won: 0
 }
 
 // global variables
