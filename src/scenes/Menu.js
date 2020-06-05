@@ -11,6 +11,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('engineIdle', './assets/sound/engineIdle.wav');
         this.load.audio('acceleration', './assets/sound/acceleration.wav');
         // BACKGROUND
+        this.load.image('backgroundMap', './assets/image/menuBackground.png');
         this.load.audio('bgm', './assets/sound/bgm.wav');
         this.load.audio('titlebgm', './assets/sound/mainBGM.wav');
         this.load.audio('raceStart', './assets/sound/raceStart.wav');
@@ -38,12 +39,29 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        // menu display
-        let menuConfig = {
-            fontFamily: 'BIZ UDMincho Medium',
-            fontSize: '28px',
-            color: "#FFFFFF",
+        this.background = this.add.tileSprite(0, 0, 960, 480, 'backgroundMap').setOrigin(0, 0);
+        // title display
+        let titleConfig = {
+            fontFamily: 'Impact',
+            fontSize: '65px',
+            color: '#ffffff',
             align: 'right',
+            stroke: '#000000',
+            strokeThickness: 6,
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWith: 0
+        }
+
+        let optionsConfig = {
+            fontFamily: 'Impact',
+            fontSize: '40px',
+            color: '#ffffff',
+            align: 'right',
+            stroke: '#000000',
+            strokeThickness: 6,
             padding: {
                 top: 5,
                 bottom: 5,
@@ -56,17 +74,17 @@ class Menu extends Phaser.Scene {
         let centerY = game.config.height / 2;
         let textSpacer = 100;
 
-        this.add.text(centerX, centerY - textSpacer, 'Final Game Project', menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY - textSpacer/3, 'press 1 to go to play scene', menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY - textSpacer/9, 'press 2 to go to tutorial scene', menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY - textSpacer, 'Micro Racers', titleConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + 10, 'Press 1 to play, optionsConfig').setOrigin(0.5);
+        this.add.text(centerX, centerY + 50, 'Press 2 for tutorial', optionsConfig).setOrigin(0.5);
 
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
         keyTWO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
     }
 
-    update(){
-        if(Phaser.Input.Keyboard.JustDown(keyONE)){
+    update() {
+        if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             game.settings = {
                 raceNum: 1,
                 playerWon: 0,
@@ -75,7 +93,7 @@ class Menu extends Phaser.Scene {
             this.scene.start("playScene");
         }
 
-        if(Phaser.Input.Keyboard.JustDown(keyTWO)){
+        if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
             this.scene.start("tutorialScene");
         }
     }
