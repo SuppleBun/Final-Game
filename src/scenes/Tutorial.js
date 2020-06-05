@@ -27,7 +27,7 @@ class Tutorial extends Phaser.Scene {
         this.add.text(20, 340, "Down Arrow: Reverse");
         this.add.text(20, 360, "Left Arrow: Left Steer & Right Arrow: Right Steer");
         
-        this.add.text(20, 400, "Player 2 Item Slot 1: Letter O");
+        this.add.text(20, 400, "Player 2 Item Slot 1: O");
         this.add.text(20, 420, "Player 2 Item Slot 2: P");
 
         // define keys
