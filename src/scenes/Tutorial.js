@@ -21,7 +21,7 @@ class Tutorial extends Phaser.Scene {
         this.add.text(20, 140, "Race Ends When Both Players Have Finished The Race");
         this.add.text(20, 160, "Each Race Grants A Coin   To A Winner");
         this.add.image(265, 165, "wincoin");
-        this.add.text(20, 180, "3 Laps per Race & Best of 3 Wins");
+        this.add.text(20, 180, "3 Laps per Race & Best of 3 Races Wins");
        
         this.add.text(20, 220, "Player Movement & Controls: ");
         this.add.text(20, 240, "Player 1: Acceleration, S: Reverse, A: Left Steer, D: Right Steer");
