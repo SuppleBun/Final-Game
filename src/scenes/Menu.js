@@ -44,7 +44,7 @@ class Menu extends Phaser.Scene {
         let titleConfig = {
             fontFamily: 'Impact',
             fontSize: '65px',
-            color: '#c91616',
+            color: '#ffffff',
             align: 'right',
             stroke: '#000000',
             strokeThickness: 6,
@@ -58,7 +58,7 @@ class Menu extends Phaser.Scene {
         let optionsConfig = {
             fontFamily: 'Impact',
             fontSize: '40px',
-            color: '#c91616',
+            color: '#ffffff',
             align: 'right',
             stroke: '#000000',
             strokeThickness: 6,
