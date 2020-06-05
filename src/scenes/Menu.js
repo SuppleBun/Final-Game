@@ -75,8 +75,8 @@ class Menu extends Phaser.Scene {
         let textSpacer = 100;
 
         this.add.text(centerX, centerY - textSpacer, 'Micro Racers', titleConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY + 10, 'press 1 to go to play scene', optionsConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY + 50, 'press 2 to go to tutorial scene', optionsConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + 10, 'Press 1 to play, optionsConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + 50, 'Press 2 for tutorial', optionsConfig).setOrigin(0.5);
 
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
