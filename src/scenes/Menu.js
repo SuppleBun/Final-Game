@@ -67,6 +67,11 @@ class Menu extends Phaser.Scene {
 
     update(){
         if(Phaser.Input.Keyboard.JustDown(keyONE)){
+            game.settings = {
+                raceNum: 1,
+                playerWon: 0,
+                player2Won: 0
+            }
             this.scene.start("playScene");
         }
 
