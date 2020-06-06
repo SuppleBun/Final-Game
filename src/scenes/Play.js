@@ -891,6 +891,7 @@ class Play extends Phaser.Scene {
         let countdown2 = this.add.sprite(-2260, -2350, 'start_light').setScale(1);
         countdown.anims.play('countdown');
         countdown2.anims.play('countdown');
+        this.bgm = this.sound.add('bgm', { volume: 0.3 });
         countdown.on('animationcomplete', () => {
             countdown.destroy(true);
             countdown2.destroy(true);
@@ -899,7 +900,6 @@ class Play extends Phaser.Scene {
             this.player2Move = true;
 
             // Play bgm
-            this.bgm = this.sound.add('bgm', { volume: 0.3 });
             this.bgm.setLoop(true);
             this.bgm.play();
 
@@ -1470,6 +1470,7 @@ class Play extends Phaser.Scene {
 
         // Go back to main menu
         if(Phaser.Input.Keyboard.JustDown(keyONE)){
+            this.bgm.stop();
             this.scene.start("menuScene");
         }
         

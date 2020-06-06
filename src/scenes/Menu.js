@@ -39,6 +39,9 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
+        this.menuBGM = this.sound.add('titlebgm', { volume: 0.3 });
+        this.menuBGM.setLoop(true);
+        this.menuBGM.play();
         this.background = this.add.tileSprite(0, 0, 960, 480, 'backgroundMap').setOrigin(0, 0);
         // title display
         let titleConfig = {
@@ -85,6 +88,7 @@ class Menu extends Phaser.Scene {
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
+            this.menuBGM.stop();
             game.settings = {
                 raceNum: 1,
                 playerWon: 0,
@@ -94,6 +98,7 @@ class Menu extends Phaser.Scene {
         }
 
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
+            this.menuBGM.stop();
             this.scene.start("tutorialScene");
         }
     }
