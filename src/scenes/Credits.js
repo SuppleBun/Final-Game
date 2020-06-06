@@ -53,6 +53,7 @@ class Credits extends Phaser.Scene {
     }
 
     update() {
+        // Press 1 to go to menu
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }

@@ -106,6 +106,7 @@ class Menu extends Phaser.Scene {
     }
 
     update() {
+        // Press 1 to play the game
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.titlebgm.stop();
             game.settings = {
@@ -116,11 +117,13 @@ class Menu extends Phaser.Scene {
             this.scene.start("playScene");
         }
 
+        // Press 2 to see tutorial
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
             this.titlebgm.stop();
             this.scene.start("tutorialScene");
         }
 
+        // Press 3 to see the credits
         if (Phaser.Input.Keyboard.JustDown(keyTHREE)) {
             this.titlebgm.stop();
             this.scene.start("creditsScene");
