@@ -36,8 +36,8 @@ class Play extends Phaser.Scene {
         // ITEM
         this.load.image('banana', './assets/image/banana.png');
         this.load.image('honey', './assets/image/honey.png');
-        this.load.spritesheet('player1_boost', './assets/image/player1_boost.png', { frameWidth: 64, frameHeight: 74, startFrame: 0, endFrame: 10 });
-        this.load.spritesheet('player2_boost', './assets/image/player2_boost.png', { frameWidth: 64, frameHeight: 74, startFrame: 0, endFrame: 10 });
+        this.load.spritesheet('player1_boost', './assets/image/Player1_boost.png', { frameWidth: 64, frameHeight: 74, startFrame: 0, endFrame: 10 });
+        this.load.spritesheet('player2_boost', './assets/image/Player2_boost.png', { frameWidth: 64, frameHeight: 74, startFrame: 0, endFrame: 10 });
         this.load.spritesheet('hammer', './assets/image/hammer.png', { frameWidth: 29, frameHeight: 18, startFrame: 0, endFrame: 11 });
         this.load.spritesheet('item_box', './assets/image/item_box.png', { frameWidth: 55, frameHeight: 55, startFrame: 0, endFrame: 7 });
         this.load.spritesheet('item_collecting', './assets/image/item_collecting.png', { frameWidth: 55, frameHeight: 55, startFrame: 0, endFrame: 3 });
