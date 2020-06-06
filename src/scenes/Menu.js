@@ -85,6 +85,7 @@ class Menu extends Phaser.Scene {
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
         keyTWO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+        keyTHREE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     }
 
     update() {
@@ -101,6 +102,11 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
             this.titlebgm.stop();
             this.scene.start("tutorialScene");
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(keyTHREE)) {
+            this.titlebgm.stop();
+            this.scene.start("creditsScene");
         }
     }
 }
