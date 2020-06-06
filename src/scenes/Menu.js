@@ -39,9 +39,9 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        this.menuBGM = this.sound.add('titlebgm', { volume: 0.3 });
-        this.menuBGM.setLoop(true);
-        this.menuBGM.play();
+        this.titlebgm = this.sound.add('titlebgm', { volume: 0.3 });
+        this.titlebgm.setLoop(true);
+        this.titlebgm.play();
         this.background = this.add.tileSprite(0, 0, 960, 480, 'backgroundMap').setOrigin(0, 0);
         // title display
         let titleConfig = {
@@ -79,7 +79,8 @@ class Menu extends Phaser.Scene {
 
         this.add.text(centerX, centerY - textSpacer, 'Micro Racers', titleConfig).setOrigin(0.5);
         this.add.text(centerX, centerY + 10, 'Press 1 to play', optionsConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY + 50, 'Press 2 for tutorial', optionsConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + 55, 'Press 2 for tutorial', optionsConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + 100, 'Press 3 for credits', optionsConfig).setOrigin(0.5);
 
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
@@ -88,7 +89,7 @@ class Menu extends Phaser.Scene {
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
-            this.menuBGM.stop();
+            this.titlebgm.stop();
             game.settings = {
                 raceNum: 1,
                 playerWon: 0,
@@ -98,7 +99,7 @@ class Menu extends Phaser.Scene {
         }
 
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
-            this.menuBGM.stop();
+            this.titlebgm.stop();
             this.scene.start("tutorialScene");
         }
     }
