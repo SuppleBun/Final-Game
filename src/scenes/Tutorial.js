@@ -18,7 +18,7 @@ class Tutorial extends Phaser.Scene {
         this.add.text(20, 80, "Map: Living Room -> Bathrrom -> Kitchen -> Garage");
         this.add.text(20, 100, "Dodge Obstacles & Pick Up Items: Speed Boost, Banana, Honey, Hammer");
         this.add.text(20, 120, "Objective: Collect Win Coins By Winning Each Race");
-        this.add.text(20, 140, "3 Laps per Race & 3 Races Total");
+        this.add.text(20, 140, "3 Laps per Race & Best of 3 Wins");
         this.add.text(20, 160, "Each Race Grants A Win Coin   To The Winner");
         this.add.image(305, 165, "wincoin");
         this.add.text(20, 180, "***The Race Ends Only When Both Players Have Finished The Race***");
