@@ -97,7 +97,7 @@ class Menu extends Phaser.Scene {
         this.add.text(centerX, centerY + 10, 'Press 1 to play', optionsConfig).setOrigin(0.5);
         this.add.text(centerX, centerY + 55, 'Press 2 for tutorial', optionsConfig).setOrigin(0.5);
         this.add.text(centerX, centerY + 100, 'Press 3 for credits', optionsConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY + 200, '*Click on the screen if background music fails to play', asteriskConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + 200, '*Click on the screen if background music fails to play*', asteriskConfig).setOrigin(0.5);
 
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
