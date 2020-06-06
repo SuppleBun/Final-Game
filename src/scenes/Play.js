@@ -36,8 +36,8 @@ class Play extends Phaser.Scene {
         // ITEM
         this.load.image('banana', './assets/image/banana.png');
         this.load.image('honey', './assets/image/honey.png');
-        this.load.spritesheet('player1_boost', './assets/image/player1_boost.png', { frameWidth: 64, frameHeight: 74, startFrame: 0, endFrame: 10 });
-        this.load.spritesheet('player2_boost', './assets/image/player2_boost.png', { frameWidth: 64, frameHeight: 74, startFrame: 0, endFrame: 10 });
+        this.load.spritesheet('player1_boost', './assets/image/Player1_boost.png', { frameWidth: 64, frameHeight: 74, startFrame: 0, endFrame: 10 });
+        this.load.spritesheet('player2_boost', './assets/image/Player2_boost.png', { frameWidth: 64, frameHeight: 74, startFrame: 0, endFrame: 10 });
         this.load.spritesheet('hammer', './assets/image/hammer.png', { frameWidth: 29, frameHeight: 18, startFrame: 0, endFrame: 11 });
         this.load.spritesheet('item_box', './assets/image/item_box.png', { frameWidth: 55, frameHeight: 55, startFrame: 0, endFrame: 7 });
         this.load.spritesheet('item_collecting', './assets/image/item_collecting.png', { frameWidth: 55, frameHeight: 55, startFrame: 0, endFrame: 3 });
@@ -891,6 +891,7 @@ class Play extends Phaser.Scene {
         let countdown2 = this.add.sprite(-2260, -2350, 'start_light').setScale(1);
         countdown.anims.play('countdown');
         countdown2.anims.play('countdown');
+        this.bgm = this.sound.add('bgm', { volume: 0.3 });
         countdown.on('animationcomplete', () => {
             countdown.destroy(true);
             countdown2.destroy(true);
@@ -899,7 +900,6 @@ class Play extends Phaser.Scene {
             this.player2Move = true;
 
             // Play bgm
-            this.bgm = this.sound.add('bgm', { volume: 0.3 });
             this.bgm.setLoop(true);
             this.bgm.play();
 
@@ -1470,6 +1470,7 @@ class Play extends Phaser.Scene {
 
         // Go back to main menu
         if(Phaser.Input.Keyboard.JustDown(keyONE)){
+            this.bgm.stop();
             this.scene.start("menuScene");
         }
         
