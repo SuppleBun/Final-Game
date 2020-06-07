@@ -960,7 +960,7 @@ class Play extends Phaser.Scene {
 
         // delay for entering goal line
         this.time.addEvent({
-            delay: 10000, // 10 seconds 
+            delay: 15000, // 15 seconds 
             callback: () => {
                 this.lineEnter = true;
             },
@@ -969,7 +969,7 @@ class Play extends Phaser.Scene {
 
         // delay for entering goal line
         this.time.addEvent({
-            delay: 10000, // 10 seconds 
+            delay: 15000, // 15 seconds 
             callback: () => {
                 this.lineEnter2 = true;
             },
