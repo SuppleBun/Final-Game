@@ -1460,8 +1460,8 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        // Go back to main menu
-        if (Phaser.Input.Keyboard.JustDown(keyONE)) {
+        // Go back to main menu when game is over
+        if ((this.playerDone && this.player2Done) && (Phaser.Input.Keyboard.JustDown(keyONE))) {
             this.bgm.stop();
             this.scene.start("menuScene");
         }
