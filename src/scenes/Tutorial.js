@@ -18,8 +18,8 @@ class Tutorial extends Phaser.Scene {
         this.add.text(10, 100, "Dodge Obstacles & Pick Up Items: Speed Boost, Banana, Honey, Hammer");
         this.add.text(10, 120, "Objective: Collect Win Coins By Winning Each Race");
         this.add.text(10, 140, "3 Laps per Race");
-        this.add.text(10, 160, "Each Race Grants A Win Coin   To The Winner");
-        this.add.image(305, 165, "wincoin");
+        this.add.text(10, 160, "Each Race Grants A Win Coin     To The Winner");
+        this.add.image(295, 165, "wincoin");
         this.add.text(10, 180, "***The Race Ends Only When Both Players Have Finished The Race***");
         this.add.text(10, 200, "Win Condition: First To Collect 2 Win Coins Wins");
        
@@ -37,7 +37,7 @@ class Tutorial extends Phaser.Scene {
         this.add.image(450, 350, "UI_hammer");
         this.add.text(475, 345, "Hammer Stuns Opposing Player For A Second");
         this.add.image(20, 420, "UI_honey");
-        this.add.text(40, 410, "Honey Slows Down Opposing Player When Stepped On For A Short Time");
+        this.add.text(40, 410, "Honey Slows Down A Player When Stepped On For A Short Time");
 
 
         // define keys
