@@ -45,6 +45,7 @@ class Tutorial extends Phaser.Scene {
     }
 
     update() {
+        // Press 1 to go to Menu
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.scene.start("menuScene");
         }

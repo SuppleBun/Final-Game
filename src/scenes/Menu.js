@@ -58,6 +58,7 @@ class Menu extends Phaser.Scene {
             fixedWith: 0
         }
 
+        // options display
         let optionsConfig = {
             fontFamily: 'Impact',
             fontSize: '40px',
@@ -72,6 +73,21 @@ class Menu extends Phaser.Scene {
             fixedWith: 0
         }
 
+
+        // asterisk display
+        let asteriskConfig = {
+            fontFamily: 'Impact',
+            fontSize: '20px',
+            color: '#ffffff',
+            align: 'right',
+            stroke: '#000000',
+            strokeThickness: 6,
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWith: 0
+        }
         // display menu text
         let centerX = game.config.width / 2;
         let centerY = game.config.height / 2;
@@ -81,6 +97,7 @@ class Menu extends Phaser.Scene {
         this.add.text(centerX, centerY + 10, 'Press 1 to play', optionsConfig).setOrigin(0.5);
         this.add.text(centerX, centerY + 55, 'Press 2 for tutorial', optionsConfig).setOrigin(0.5);
         this.add.text(centerX, centerY + 100, 'Press 3 for credits', optionsConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + 200, '*Click on the screen if background music fails to play*', asteriskConfig).setOrigin(0.5);
 
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
@@ -89,6 +106,7 @@ class Menu extends Phaser.Scene {
     }
 
     update() {
+        // Press 1 to play the game
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
             this.titlebgm.stop();
             game.settings = {
@@ -99,11 +117,13 @@ class Menu extends Phaser.Scene {
             this.scene.start("playScene");
         }
 
+        // Press 2 to see tutorial
         if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
             this.titlebgm.stop();
             this.scene.start("tutorialScene");
         }
 
+        // Press 3 to see the credits
         if (Phaser.Input.Keyboard.JustDown(keyTHREE)) {
             this.titlebgm.stop();
             this.scene.start("creditsScene");
