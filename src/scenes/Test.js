@@ -1,4 +1,4 @@
-
+// TEST SCENE, ONLY USED FOR EXPERIMENTING WITH PLAYER MOVEMENT
 class Test extends Phaser.Scene {
     constructor() {
         super("testScene");

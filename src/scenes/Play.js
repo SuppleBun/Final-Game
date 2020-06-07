@@ -1210,9 +1210,10 @@ class Play extends Phaser.Scene {
     }
 
     // function that deploys the banana with given coordinates
+    // Checks where the player is facing (rotation value) and plant behind 
     bananaSpawn(x, y, z) { // z = rotation value
         this.sound.play("plantingBan");
-        z = z / 6.3;
+        z = z / 6.3; // one 360 degrees rotation is about 6.3 
         if (z < 0) {
             z = z % 1; // remove whole number
             //console.log("z: " + z);
@@ -1298,7 +1299,7 @@ class Play extends Phaser.Scene {
 
         if (player == 'p1') {
             this.banana = true;
-            var prevRotation1 = number;
+            var prevRotation1 = number; // save the previous rotation value before getting hit by banana to prevent changing offset 
         } else {
             this.banana2 = true;
             var prevRotation2 = number;
@@ -1319,6 +1320,7 @@ class Play extends Phaser.Scene {
     }
 
     // function that deploys the honey with given coordinates
+    // Spawn function is same as banana Spawn.
     honeySpawn(x, y, z) {
         this.sound.play("plantingHon");
         z = z / 6.3;
@@ -1443,6 +1445,7 @@ class Play extends Phaser.Scene {
             },
             loop: false
         })
+        // Stun for 1 second
         this.time.addEvent({
             delay: 1000,
             callback: () => {
@@ -1466,7 +1469,7 @@ class Play extends Phaser.Scene {
         if ((this.playerDone && this.player2Done) && this.result) { // Both players have finished race, move on. 
             console.log("Both players have finished.")
             this.displayResult();
-            this.result = false;
+            this.result = false; // Only display result once
         }
         //console.log(this.acceleration_play)
         if (this.playerMove) {
@@ -1612,15 +1615,6 @@ class Play extends Phaser.Scene {
             // Car acceleration and deceleration
             if (keyW.isDown) {
                 this.carSpeed += 0.05;
-
-                /*// Play the acceleration sound
-                if (this.acceleration_play) {
-                    this.acceleration.play();
-                    this.acceleration_play = false;
-                    this.acceleration.on('complete', () => {
-                        this.acceleration_play = true;
-                    })
-                }*/
             }
             else {
                 if (this.carSpeed >= 0) {
@@ -1651,7 +1645,7 @@ class Play extends Phaser.Scene {
             this.player.setVelocityX(Math.sin(this.player.rotation) * this.carSpeed);
             this.player.setVelocityY(-Math.cos(this.player.rotation) * this.carSpeed);
 
-            // UI Item Slots
+            // Making UI Item visible on Item slots 
             if (this.player.item_slot != 0) {
                 if (this.player.item_slot == 1) { // boost
                     if (this.drawImage) {
@@ -1678,7 +1672,7 @@ class Play extends Phaser.Scene {
                     }
                 }
             }
-            else { // delete the image
+            else { // delete the image when used
                 this.player.item_slotUI.destroy(true);
                 this.drawImage = true;
 
@@ -1709,14 +1703,14 @@ class Play extends Phaser.Scene {
                     }
                 }
             }
-            else {
+            else {// delete the image when used
                 this.player.item_slotUI2.destroy(true);
                 this.drawImage2 = true;
             }
 
             // Water, oil on the track that slow down player
             if ((this.player.x < -580 && this.player.x > -780) && (this.player.y < 1090 && this.player.y > 926)) {
-                if (this.oil_effect) {
+                if (this.oil_effect) { // Same effect from honey item
                     this.sound.play("waterWalk");
                     this.carSpeed = 1;
                     this.player.setVelocityX(1.4);
@@ -1726,7 +1720,7 @@ class Play extends Phaser.Scene {
                 }
             }
             if ((this.player.x < 1000 && this.player.x > 930) && (this.player.y < -620 && this.player.y > -760)) {
-                if (this.water_effect) {
+                if (this.water_effect) { // Same effect from honey item
                     this.sound.play("waterWalk");
                     this.carSpeed = 1;
                     this.player.setVelocityX(1.4);
@@ -1823,6 +1817,7 @@ class Play extends Phaser.Scene {
                 this.UI1_speed.anims.load('speed_increase', 14);
             }
 
+            // Divide map into small rectangles to track player's position on the map.
             if ((this.player.x >= -830 && this.player.x <= 850) && (this.player.y >= 850 && this.player.y <= 1200)) {
                 if (this.player_waypoint == 4 || this.player_waypoint == 5) { // check if player is coming from right direction
                     this.player_waypoint = 5;
@@ -1863,7 +1858,7 @@ class Play extends Phaser.Scene {
                         this.player_lap += 1;
                         this.lineEnter = false;
                         if (this.player_lap == 2) { // Lap 2
-                            this.sound.play("lapTwo");
+                            this.sound.play("lapTwo"); // Play effect and audio
                             this.UI1_lapcount.anims.load('lap_count', 1);
                             let UI1_laptwo = this.add.sprite(-3260, -3350, 'UI_laptwo').setScale(2.5);
                             UI1_laptwo.anims.play("lap_two");
@@ -1872,7 +1867,7 @@ class Play extends Phaser.Scene {
                             })
                         }
                         if (this.player_lap == 3) { // Last lap
-                            this.sound.play("finalLap");
+                            this.sound.play("finalLap"); // Play effect and audio
                             this.UI1_lapcount.anims.load('lap_count', 2);
                             let UI1_lapfinal = this.add.sprite(-3260, -3350, 'UI_lapfinal').setScale(2.5);
                             UI1_lapfinal.anims.play("lap_final");
@@ -1891,6 +1886,7 @@ class Play extends Phaser.Scene {
                 }
             }
         }
+        // Codes for player2 movement are exactly identical with player 1 movement with different variable name.
         if (this.player2Move) {
             // Update stopwatch when game starts.
             this.displayPlayer2Time();
@@ -2302,6 +2298,7 @@ class Play extends Phaser.Scene {
             }
         }
 
+        // Tracking who is ahead.
         if (this.player_lap == this.player2_lap) { // only check if players are on same lap.
             if (this.player_waypoint == this.player2_waypoint) { // players are in same box
                 if (this.player_waypoint == 1) {
@@ -2405,7 +2402,7 @@ class Play extends Phaser.Scene {
         if (this.playerMove) { // Only update timeDisplay when racing is happening. 
             this.timerDisplay.text = min + ':' + sec;
         }
-        if (!this.playerDone) {
+        if (!this.playerDone) { // Track the total race time
             this.playerTotalTime = this.playerTotalTime + this.timer.getElapsedSeconds();
         }
     }
