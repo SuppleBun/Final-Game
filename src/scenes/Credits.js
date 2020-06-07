@@ -47,6 +47,7 @@ class Credits extends Phaser.Scene {
         this.add.text(centerX, centerY + 10, 'Created by Tekkaden', optionsConfig).setOrigin(0.5);
         this.add.text(centerX, centerY + 55, 'Mingun Cho, Joonsu Jun, Sean Kang', optionsConfig).setOrigin(0.5);
         this.add.text(centerX, centerY + 100, 'UCSC Spring 2020 CMPM/ARTG 120', optionsConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + 155, 'Press 1 to go back to Menu', optionsConfig).setOrigin(0.5);
 
         // define keys
         keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
